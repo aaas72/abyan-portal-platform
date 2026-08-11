@@ -8,9 +8,15 @@ export interface ApiResponse<T = any> {
   error?: any;
 }
 
+let baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+// Ensure the URL ends with /api (useful for Render Blueprint which only provides the base URL)
+if (baseURL && !baseURL.endsWith('/api')) {
+  baseURL = `${baseURL}/api`;
+}
+
 // Create the Axios instance
 const apiClient: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api',
+  baseURL,
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
