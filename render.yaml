@@ -4,7 +4,7 @@ services:
     name: abyan-backend
     env: node
     rootDir: abyan-backend
-    buildCommand: npm install --legacy-peer-deps && npm run build
+    buildCommand: npm install --legacy-peer-deps --include=dev && npm run build
     startCommand: npm run start:prod
     envVars:
       - key: NODE_ENV
@@ -29,7 +29,7 @@ services:
     name: abyan-portal
     env: node
     rootDir: abyan-portal
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
