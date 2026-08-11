@@ -18,19 +18,29 @@ interface CultureClientProps {
   folkAudioTracks: AudioTrack[];
 }
 
+const hasContent = (c: CultureCategory) => {
+  return (c.items && c.items.length > 0) || (c.details && c.details.length > 0);
+};
+
 export default function CultureClient({ initialCategories, folkAudioTracks }: CultureClientProps) {
-  const [activeCategoryTab, setActiveCategoryTab] = useState<string>("dan");
+  const [activeCategoryTab, setActiveCategoryTab] = useState<string>(() => {
+    const valid = initialCategories.find(hasContent);
+    return valid ? valid.id : "dan";
+  });
   const [selectedCultureModal, setSelectedCultureModal] = useState<MediaItem | null>(null);
 
   const categoryTabs = useMemo(() => {
-    return initialCategories.map((c) => ({
-      id: c.id,
-      label: c.categoryName,
-    }));
+    return initialCategories
+      .filter(hasContent)
+      .map((c) => ({
+        id: c.id,
+        label: c.categoryName,
+      }));
   }, [initialCategories]);
 
   const currentCategory = useMemo(() => {
-    return initialCategories.find((c) => c.id === activeCategoryTab) || initialCategories[0];
+    const validData = initialCategories.filter(hasContent);
+    return validData.find((c) => c.id === activeCategoryTab) || validData[0];
   }, [initialCategories, activeCategoryTab]);
 
   if (!initialCategories || initialCategories.length === 0 || !currentCategory) {

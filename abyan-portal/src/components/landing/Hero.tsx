@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { sectionFadeUpVariants, itemFadeInRight } from "@/lib/animations";
 import { AdminLandingSection } from "@/types/admin.types";
@@ -67,14 +68,14 @@ export default function Hero({ data }: { data?: AdminLandingSection }) {
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-6 sm:p-10 lg:p-12 max-w-4xl mx-auto space-y-4 sm:space-y-6">
           <motion.h1
             {...itemFadeInRight(0.2)}
-            className="font-abyan-title text-3xl sm:text-4xl lg:text-5xl text-white drop-shadow-md leading-relaxed font-normal"
+            className="font-abyan-title text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white drop-shadow-md leading-relaxed font-normal"
           >
             {title}
           </motion.h1>
 
           <motion.div
             {...itemFadeInRight(0.35)}
-            className="text-sm sm:text-base lg:text-lg max-w-2xl mx-auto font-normal drop-shadow-sm leading-relaxed block"
+            className="text-base md:text-lg lg:text-xl max-w-2xl mx-auto font-normal drop-shadow-sm leading-relaxed block"
             style={{
               fontFamily: "ThmanyahSerifRegular, serif",
               color: "rgba(255, 255, 255, 0.9)",
@@ -88,11 +89,23 @@ export default function Hero({ data }: { data?: AdminLandingSection }) {
         <div className="absolute bottom-4 sm:bottom-6 lg:bottom-8 left-4 sm:left-6 lg:left-8 z-20">
           <motion.div
             {...itemFadeInRight(0.35)}
-            className="font-abyan-title text-sky-400 text-xs sm:text-sm lg:text-base drop-shadow-md tracking-wide font-normal"
+            className="font-abyan-title text-sky-400 text-sm md:text-base lg:text-lg drop-shadow-md tracking-wide font-normal"
             style={{ color: "#38bdf8" }}
           >
             {currentDateString || "الخميس، 6 أغسطس 2026"}
           </motion.div>
+        </div>
+
+        {/* Bottom Right: Motivational Link to Admin Login */}
+        <div className="absolute bottom-4 sm:bottom-6 lg:bottom-8 right-4 sm:right-6 lg:right-8 z-20">
+          <Link href="/admin-login" className="no-underline">
+            <motion.div
+              {...itemFadeInRight(0.35)}
+              className="font-abyan-title text-[#10b981] hover:text-sky-300 transition-colors text-sm md:text-base lg:text-lg drop-shadow-md tracking-wide font-normal cursor-pointer"
+            >
+              ابدأ بكتابة وتوثيق تاريخ أبين
+            </motion.div>
+          </Link>
         </div>
       </motion.div>
     </section>

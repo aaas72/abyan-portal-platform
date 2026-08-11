@@ -39,7 +39,7 @@ export default function TagList({
   return (
     <div className={`space-y-1.5 text-right ${className}`}>
       {title && (
-        <h4 className="font-abyan-title text-base sm:text-lg font-normal text-slate-900 block mb-2">
+        <h4 className="font-abyan-title text-lg md:text-xl font-normal text-slate-900 block mb-2">
 {title}
 </h4>
       )}
@@ -49,7 +49,7 @@ export default function TagList({
           {items.map((item, idx) => (
             <span
               key={idx}
-              className={`text-xs font-abyan-title font-normal transition-colors cursor-default ${
+              className={`text-xs md:text-sm font-abyan-title font-normal transition-colors cursor-default ${
                 variant === "pill" ? "px-3 py-1 rounded-full" : "px-2.5 py-1 rounded-lg"
               } ${pillColors[color]}`}
             >
@@ -59,7 +59,7 @@ export default function TagList({
         </div>
       ) : (
         /* Pure Text List separated by dots */
-        <p className={`text-xs sm:text-sm font-abyan-body font-normal leading-relaxed ${textColors[color]}`}>
+        <p className={`text-sm md:text-base font-abyan-body font-normal leading-relaxed ${textColors[color]}`}>
           {items.join(` ${separator} `)}
         </p>
       )}

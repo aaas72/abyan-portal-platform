@@ -41,10 +41,10 @@ export default function TimelineSection({ eras = [], sectionData }: { eras?: His
           {...sectionFadeUpVariants}
           className="text-center space-y-2 pointer-events-auto"
         >
-          <h2 className="font-abyan-title text-2xl sm:text-3xl lg:text-4xl text-slate-900 leading-normal font-normal">
+          <h2 className="font-abyan-title text-2xl md:text-3xl lg:text-4xl text-slate-900 leading-normal font-normal">
             {title}
           </h2>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto font-abyan-body font-normal leading-relaxed">
+          <p className="text-sm md:text-base leading-relaxed text-slate-600 max-w-xl mx-auto font-abyan-body font-normal">
             {subtitle}
           </p>
         </motion.div>
@@ -77,7 +77,7 @@ export default function TimelineSection({ eras = [], sectionData }: { eras?: His
                   {/* Top: Era Name */}
                   <div className="flex-1 flex flex-col justify-end pb-3">
                     <span
-                      className={`font-abyan-title text-xs sm:text-sm lg:text-base font-normal transition-colors duration-300 text-center whitespace-nowrap ${
+                      className={`font-abyan-title text-sm md:text-base lg:text-lg font-normal transition-colors duration-300 text-center whitespace-nowrap ${
                         isActive
                           ? "text-sky-600 font-medium"
                           : "text-slate-800 group-hover:text-sky-600"
@@ -100,7 +100,7 @@ export default function TimelineSection({ eras = [], sectionData }: { eras?: His
 
                   {/* Bottom: Period Tag */}
                   <div className="flex-1 flex flex-col justify-start pt-3">
-                    <span className="font-abyan-title text-[10px] sm:text-xs text-slate-500 font-normal whitespace-nowrap text-center">
+                    <span className="font-abyan-title text-xs md:text-sm text-slate-500 font-normal whitespace-nowrap text-center">
                       {era.startYear}&nbsp;&nbsp;-&nbsp;&nbsp;{era.endYear}
                     </span>
                   </div>

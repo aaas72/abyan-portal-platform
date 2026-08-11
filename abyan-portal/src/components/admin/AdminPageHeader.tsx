@@ -1,44 +1,35 @@
 "use client";
 
-import React from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import React from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface AdminPageHeaderProps {
   title: string;
   description?: string;
+  primaryAction?: {
+    label: string;
+    onClick: () => void;
+    disabled?: boolean;
+  };
 }
 
 export default function AdminPageHeader({
   title,
-  description
+  description,
 }: AdminPageHeaderProps) {
   const { user } = useAuth();
-  
+
   return (
-    <div className="sticky top-0 z-40 -mt-5 h-[84px] shrink-0 bg-white/80 backdrop-blur-xl flex items-center justify-between mb-4 px-10 -mx-10 border-b border-slate-200">
-      <div>
-        <h3 className="font-abyan-title text-base sm:text-lg text-slate-900 font-normal leading-none">
+    <div className="sticky top-0 z-40 lg:-mt-5 min-h-[84px] py-3 sm:py-0 shrink-0 bg-white/80 backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0 mb-4 px-4 sm:px-6 lg:px-10 -mx-4 sm:-mx-6 lg:-mx-10 border-b border-slate-200">
+      <div className="flex-1 min-w-0">
+        <h1 className="font-abyan-title text-xl sm:text-2xl text-slate-900 font-normal leading-none m-0">
           {title}
-        </h3>
+        </h1>
         {description && (
-          <p className="font-abyan-body text-xs sm:text-sm text-slate-500 mt-2">
+          <p className="font-abyan-body text-sm text-slate-500 mt-2 m-0">
             {description}
           </p>
         )}
-      </div>
-
-      <div className="flex items-center gap-6">
-        <div className="flex items-center gap-3 border-r border-slate-200 pr-6">
-
-          <div className="flex flex-col justify-center text-right">
-            <p className="font-abyan-title font-normal text-sm text-slate-900 leading-none">
-              {user?.name || 'مستخدم النظام'}
-            </p>
-            <p className="font-abyan-body text-[11px] text-[#10b981] leading-none -mt-0.5">
-              {user?.role === 'admin' ? 'مدير النظام' : 'كاتب محتوى'}
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );

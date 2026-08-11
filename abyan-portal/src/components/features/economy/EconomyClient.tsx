@@ -17,18 +17,24 @@ interface EconomyClientProps {
 }
 
 export default function EconomyClient({ initialPillars }: EconomyClientProps) {
-  const [activeEconomyTab, setActiveEconomyTab] = useState<string>("cotton");
+  const [activeEconomyTab, setActiveEconomyTab] = useState<string>(() => {
+    const valid = initialPillars.find((p) => (p.photoCards && p.photoCards.length > 0) || (p.keyProducts && p.keyProducts.length > 0) || (p.details && p.details.length > 0));
+    return valid ? valid.id : "cotton";
+  });
   const [selectedEconomyModal, setSelectedEconomyModal] = useState<MediaItem | null>(null);
 
   const pillarTabs = useMemo(() => {
-    return initialPillars.map((p) => ({
-      id: p.id,
-      label: p.pillarName,
-    }));
+    return initialPillars
+      .filter((p) => (p.photoCards && p.photoCards.length > 0) || (p.keyProducts && p.keyProducts.length > 0) || (p.details && p.details.length > 0))
+      .map((p) => ({
+        id: p.id,
+        label: p.pillarName,
+      }));
   }, [initialPillars]);
 
   const currentPillar = useMemo(() => {
-    return initialPillars.find((p) => p.id === activeEconomyTab) || initialPillars[0];
+    const validData = initialPillars.filter((p) => (p.photoCards && p.photoCards.length > 0) || (p.keyProducts && p.keyProducts.length > 0) || (p.details && p.details.length > 0));
+    return validData.find((p) => p.id === activeEconomyTab) || validData[0];
   }, [initialPillars, activeEconomyTab]);
 
   if (!initialPillars || initialPillars.length === 0 || !currentPillar) {

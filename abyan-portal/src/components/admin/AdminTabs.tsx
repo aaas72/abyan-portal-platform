@@ -21,30 +21,29 @@ export default function AdminTabs<T extends string = string>({
   actionLabel,
   onAction,
 }: AdminTabsProps<T>) {
-  
   return (
-    <div className="sticky top-[84px] h-[44px] shrink-0 z-30 bg-white/90 backdrop-blur-xl flex items-center justify-between gap-4 -mt-4 mb-6 px-10 -mx-10 pt-2 border-b border-slate-200">
-      <div className="flex items-center gap-4">
-      {tabs.map((tab) => (
-        <button
-          key={tab.id}
-          onClick={() => onTabChange(tab.id)}
-          className={`pb-2 px-2 font-abyan-title text-sm transition-colors cursor-pointer ${
-            activeTab === tab.id
-              ? 'text-sky-600'
-              : 'text-slate-500 hover:text-sky-600'
-          }`}
-        >
-          {tab.label}
-        </button>
-      ))}
+    <div className="sticky top-[84px] min-h-[44px] shrink-0 z-30 bg-white/90 backdrop-blur-xl flex items-center justify-between gap-4 -mt-4 mb-6 px-4 sm:px-6 lg:px-10 -mx-4 sm:-mx-6 lg:-mx-10 pt-2 border-b border-slate-200">
+      <div className="flex-1 min-w-0 flex items-center gap-4 overflow-x-auto no-scrollbar">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => onTabChange(tab.id)}
+            className={`pb-2 px-2 font-abyan-title text-[13px] sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
+              activeTab === tab.id
+                ? "text-sky-600"
+                : "text-slate-500 hover:text-sky-600"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
-      
+
       {actionLabel && onAction && (
         <button
           type="button"
           onClick={onAction}
-          className="font-abyan-title text-base text-slate-800 hover:text-[#10b981] transition-colors bg-transparent border-none cursor-pointer pb-2"
+          className="font-abyan-title text-[13px] sm:text-sm shrink-0 whitespace-nowrap text-slate-800 hover:text-[#10b981] transition-colors bg-transparent border-none cursor-pointer pb-2"
         >
           {actionLabel}
         </button>

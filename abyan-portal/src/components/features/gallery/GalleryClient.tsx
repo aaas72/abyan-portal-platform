@@ -21,6 +21,12 @@ export default function GalleryClient({ initialCategories, galleryItems }: Galle
   const [activeCategoryTab, setActiveCategoryTab] = useState<string>("all");
   const [selectedGalleryModal, setSelectedGalleryModal] = useState<MediaItem | null>(null);
 
+  const validTabs = useMemo(() => {
+    return initialCategories.filter((c) => 
+      c.id === "all" || galleryItems.some((item) => item.category === c.id)
+    );
+  }, [initialCategories, galleryItems]);
+
   const filteredItems = useMemo(() => {
     if (activeCategoryTab === "all") return galleryItems;
     return galleryItems.filter((item) => item.category === activeCategoryTab);
@@ -47,7 +53,7 @@ export default function GalleryClient({ initialCategories, galleryItems }: Galle
 
       {/* REUSABLE CATEGORY TAB SELECTOR */}
       <CategoryTabSelector
-        tabs={initialCategories}
+        tabs={validTabs}
         activeTab={activeCategoryTab}
         onSelectTab={setActiveCategoryTab}
       />

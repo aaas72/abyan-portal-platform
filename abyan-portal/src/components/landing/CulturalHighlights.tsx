@@ -27,10 +27,10 @@ export default function CulturalHighlights({ highlights, sectionData }: { highli
           {...sectionFadeUpVariants}
           className="text-center space-y-2"
         >
-          <h2 className="font-abyan-title text-2xl sm:text-3xl lg:text-4xl text-slate-900 leading-normal font-normal">
+          <h2 className="font-abyan-title text-2xl md:text-3xl lg:text-4xl text-slate-900 leading-normal font-normal">
             {title}
           </h2>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto font-abyan-body font-normal leading-relaxed">
+          <p className="text-sm md:text-base leading-relaxed text-slate-600 max-w-xl mx-auto font-abyan-body font-normal">
             {subtitle}
           </p>
         </motion.div>

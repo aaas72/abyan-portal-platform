@@ -72,12 +72,12 @@ export default function AdminDataTable<T extends { _id?: string }>({
   }
 
   return (
-    <div className="w-full">
-      <table className="w-full text-right border-collapse">
-        <thead className="bg-white border-b border-slate-200 sticky top-32 z-30">
+    <div className="w-full overflow-x-auto pb-4">
+      <table className="w-full text-right border-collapse min-w-full sm:min-w-max">
+        <thead className="bg-white border-b border-slate-200 sm:sticky sm:top-32 z-30">
           <tr>
-            <th className="pt-3 pb-3 px-4 text-right align-middle w-12">
-              <span className="font-abyan-title text-slate-900 font-normal text-[13px]">
+            <th className="hidden sm:table-cell pt-3 pb-3 px-4 text-right align-middle w-12">
+              <span className="font-abyan-title text-slate-900 font-normal text-sm">
                 #
               </span>
             </th>
@@ -91,9 +91,9 @@ export default function AdminDataTable<T extends { _id?: string }>({
               return (
                 <th
                   key={col.key}
-                  className={`pt-3 pb-3 px-4 align-middle ${alignClass}`}
+                  className={`pt-3 pb-3 px-4 align-middle ${alignClass} ${!col.isPrimary ? 'hidden sm:table-cell' : ''}`}
                 >
-                  <span className="font-abyan-title text-slate-900 font-normal text-[13px]">
+                  <span className="font-abyan-title text-slate-900 font-normal text-sm">
                     {col.header}
                   </span>
                 </th>
@@ -101,7 +101,7 @@ export default function AdminDataTable<T extends { _id?: string }>({
             })}
             {(onEdit || onDelete) && (
               <th className="pt-3 pb-3 px-4 text-left align-middle w-28">
-                <span className="font-abyan-title text-slate-900 font-normal text-[13px]">
+                <span className="font-abyan-title text-slate-900 font-normal text-sm">
                   الإجراءات
                 </span>
               </th>
@@ -114,7 +114,7 @@ export default function AdminDataTable<T extends { _id?: string }>({
               key={item._id || index}
               className="border-b border-slate-100 hover:bg-slate-50/80 transition-colors"
             >
-              <td className="font-abyan-body text-slate-400 text-sm py-4 px-4 align-middle text-right w-12">
+              <td className="hidden sm:table-cell font-abyan-body text-slate-400 text-sm py-4 px-4 align-middle text-right w-12">
                 {index + 1}
               </td>
               {columns.map((col) => {
@@ -127,13 +127,13 @@ export default function AdminDataTable<T extends { _id?: string }>({
                 return (
                   <td
                     key={`${item._id}-${col.key}`}
-                    className={`py-4 px-4 align-middle ${alignClass} ${
+                    className={`py-4 px-4 align-middle ${alignClass} ${!col.isPrimary ? 'hidden sm:table-cell' : ''} ${
                       col.isPrimary
-                        ? "font-abyan-title text-[#059669] text-sm"
+                        ? "font-abyan-title text-[#059669] text-sm sm:text-base"
                         : "font-abyan-body text-slate-700 text-sm"
                     }`}
                   >
-                    <div className="truncate max-w-[280px]">
+                    <div className="truncate max-w-[200px] sm:max-w-[280px]">
                       {col.render ? col.render(item, index) : (item as any)[col.key]}
                     </div>
                   </td>
@@ -141,7 +141,7 @@ export default function AdminDataTable<T extends { _id?: string }>({
               })}
 
               {(onEdit || onDelete) && (
-                <td className="py-4 px-4 text-left align-middle w-28">
+                <td className="py-4 px-2 sm:px-4 text-left align-middle w-24 sm:w-28">
                   <div className="flex items-center justify-end gap-3">
                     {onEdit && (
                       <button

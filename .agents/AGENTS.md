@@ -51,10 +51,10 @@
    - **تذييل الكروت (`Card Footer Prompt Text`)**: يُكتب في تذييل كافة الكروت حصرياً وبصراحة: `معاينة ←`.
 
 ## ✒️ الخطوط ونظام الطباعة الهرمية الموحدة (Typography & Font Hierarchy Rules)
-1. **`h1` (عنوان الصفحة الرئيسي)**: `text-3xl sm:text-4xl lg:text-5xl` بـ `font-abyan-title font-normal text-slate-900`.
-2. **`h2` (عنوان الحقبة أو البطاقة الرئيسية)**: `text-2xl sm:text-3xl lg:text-4xl` بـ `font-abyan-title font-normal text-slate-900`.
-3. **`h3` / `h4` (العناوين الفرعية والمحاور والمكون الموحد `TagList`)**: **`text-base sm:text-lg`** بـ `font-abyan-title font-normal text-slate-900`.
-4. **`p` / `li` (الفقرات وعناصر القوائم والنقاط الشارحة)**: **`text-xs sm:text-sm`** (14px) باللون الرمادي الصخري الداكن الموحد **`#1e293b`** بخط **`font-abyan-body`** حصراً ووزن 400 ناعم (`font-normal`). يُمنع منعاً باتاً استخدام `font-abyan-title` مع الفقرات أو القوائم لتجنب التغليظ المزعج للقراءة.
+1. **`h1` (عنوان الصفحة الرئيسي)**: `text-3xl md:text-4xl lg:text-5xl xl:text-6xl` بـ `font-abyan-title font-normal text-slate-900`.
+2. **`h2` (عنوان الحقبة أو البطاقة الرئيسية)**: `text-2xl md:text-3xl lg:text-4xl` بـ `font-abyan-title font-normal text-slate-900`.
+3. **`h3` / `h4` (العناوين الفرعية والمحاور والمكون الموحد `TagList`)**: **`text-lg md:text-xl`** بـ `font-abyan-title font-normal text-slate-900`.
+4. **`p` / `li` (الفقرات وعناصر القوائم والنقاط الشارحة)**: **`text-sm md:text-base leading-relaxed`** باللون الرمادي الصخري الداكن الموحد **`#1e293b`** بخط **`font-abyan-body`** حصراً ووزن 400 ناعم (`font-normal`). يُمنع منعاً باتاً استخدام `font-abyan-title` مع الفقرات أو القوائم لتجنب التغليظ المزعج للقراءة.
 
 ## 📐 النافبار وتخطيط صفحة المديريات (Navbar & Layout Rules)
 1. **النافبار (Navbar)**:

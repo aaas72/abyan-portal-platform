@@ -46,7 +46,7 @@ export default function EraDetailOverlay({
             {/* Era Capital Sub-heading */}
             <motion.span
               {...itemFadeInRight(0.08)}
-              className="font-abyan-title text-[#10b981] text-base sm:text-lg block font-normal break-words whitespace-normal"
+              className="font-abyan-title text-[#10b981] text-lg md:text-xl block font-normal break-words whitespace-normal"
             >
               {era.historicalCapital}
             </motion.span>
@@ -54,7 +54,7 @@ export default function EraDetailOverlay({
             {/* Main Era Title */}
             <motion.h3
               {...itemFadeInRight(0.12)}
-              className="font-abyan-title text-xl sm:text-2xl lg:text-3xl text-slate-900 leading-snug font-normal break-words whitespace-normal"
+              className="font-abyan-title text-xl md:text-2xl lg:text-3xl text-slate-900 leading-snug font-normal break-words whitespace-normal"
             >
               {era.eraTitle}
             </motion.h3>
@@ -62,7 +62,7 @@ export default function EraDetailOverlay({
             {/* Description */}
             <motion.p
               {...itemFadeInRight(0.16)}
-              className="text-xs sm:text-sm text-slate-700 font-abyan-body font-normal leading-relaxed pt-0.5 max-w-xl break-words"
+              className="text-sm md:text-base leading-relaxed text-slate-700 font-abyan-body font-normal pt-0.5 max-w-xl break-words"
             >
               {era.shortSummary}
             </motion.p>

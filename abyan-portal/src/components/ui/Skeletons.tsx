@@ -537,34 +537,6 @@ export function AboutPageSkeleton() {
 }
 
 /* =============================================================================
-   📜 COPYRIGHT PAGE SKELETON (/copyright)
-   ============================================================================= */
-export function CopyrightPageSkeleton() {
-  return (
-    <div dir="rtl" className="w-full space-y-12">
-      <SubpageHeroSkeleton />
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div className="max-w-4xl mx-auto space-y-6">
-          <div className="space-y-1">
-            <SkeletonTextLine height="h-3.5" width="w-28" className="rounded-md" />
-            <SkeletonTextLine height="h-7 sm:h-8" width="w-1/3" className="rounded-lg" />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="p-5 sm:p-6 bg-slate-50/60 rounded-2xl space-y-3">
-                <SkeletonTextLine height="h-5" width="w-2/5" className="rounded-md" />
-                <SkeletonParagraph lines={3} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* =============================================================================
    🕰️ HISTORY PAGE SKELETON (/history)
    ============================================================================= */
 export function HistoryPageSkeleton() {
@@ -655,4 +627,92 @@ export function PageSkeleton({
   if (gridType === "pioneers") return <PioneersPageSkeleton />;
   if (gridType === "food") return <EconomyPageSkeleton />;
   return <LandmarksPageSkeleton />;
+}
+
+/* =============================================================================
+   📞 CONTACT PAGE SKELETON
+   ============================================================================= */
+
+export function ContactPageSkeleton() {
+  return (
+    <>
+      <SubpageHeroSkeleton />
+      <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-16 md:gap-32">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="flex flex-col items-center justify-start text-center space-y-4">
+              <SkeletonTextLine height="h-6" width="w-24" className="mx-auto" />
+              <SkeletonTextLine height="h-3" width="w-48" className="mx-auto" />
+              <div className="space-y-2 pt-2">
+                <SkeletonTextLine height="h-5" width="w-32" className="mx-auto rounded-md" />
+                <SkeletonTextLine height="h-5" width="w-32" className="mx-auto rounded-md" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* =============================================================================
+   ©️ COPYRIGHT PAGE SKELETON
+   ============================================================================= */
+
+export function CopyrightPageSkeleton() {
+  return (
+    <>
+      <SubpageHeroSkeleton />
+      
+      {/* Section 1: Declarations Grid */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-8 mt-12 text-right" dir="rtl">
+        <div className="space-y-4">
+          <SkeletonTextLine height="h-3" width="w-24" />
+          <SkeletonTextLine height="h-8" width="w-64" />
+          <SkeletonParagraph lines={3} />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="p-5 sm:p-6 bg-slate-50/60 rounded-2xl space-y-3">
+              <SkeletonTextLine height="h-5" width="w-40" />
+              <SkeletonParagraph lines={2} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Section 2: Pillars Grid */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-6 mt-16 text-right" dir="rtl">
+        <div className="space-y-3">
+          <SkeletonTextLine height="h-3" width="w-24" />
+          <SkeletonTextLine height="h-6" width="w-56" />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="p-5 bg-slate-50/60 rounded-2xl space-y-3">
+              <SkeletonTextLine height="h-3" width="w-16" />
+              <SkeletonTextLine height="h-5" width="w-32" />
+              <SkeletonParagraph lines={3} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Section 3 & 4: General Grid */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-6 mt-16 text-right" dir="rtl">
+        <div className="space-y-3">
+          <SkeletonTextLine height="h-3" width="w-24" />
+          <SkeletonTextLine height="h-6" width="w-56" />
+        </div>
+        <div className="grid grid-cols-1 gap-4">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="p-6 bg-slate-50/60 rounded-2xl space-y-3">
+              <SkeletonTextLine height="h-6" width="w-48" />
+              <SkeletonParagraph lines={2} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
 }

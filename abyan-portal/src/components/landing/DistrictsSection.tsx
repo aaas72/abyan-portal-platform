@@ -83,10 +83,10 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
           {...sectionFadeUpVariants}
           className="text-center space-y-1.5"
         >
-          <h2 className="font-abyan-title text-2xl sm:text-3xl lg:text-4xl text-slate-900 leading-normal font-normal">
+          <h2 className="font-abyan-title text-2xl md:text-3xl lg:text-4xl text-slate-900 leading-normal font-normal">
             {title}
           </h2>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto font-abyan-body font-normal leading-relaxed">
+          <p className="text-sm md:text-base text-slate-600 max-w-xl mx-auto font-abyan-body font-normal leading-relaxed">
             {subtitle}
           </p>
         </motion.div>
@@ -238,14 +238,14 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
 
                 <motion.span
                   {...itemFadeInRight(0.08)}
-                  className="font-abyan-title text-[#10b981] text-sm sm:text-base block font-normal"
+                  className="font-abyan-title text-[#10b981] text-base md:text-lg block font-normal"
                 >
                   المركز الإداري: {activeDistrict.capital}
                 </motion.span>
                 <div className="mb-8">
                 <motion.h3
                   {...itemFadeInRight(0.12)}
-                  className="text-2xl sm:text-3xl font-abyan-title text-slate-900 mb-2"
+                  className="text-2xl md:text-3xl lg:text-4xl font-abyan-title text-slate-900 mb-2"
                 >
                   مديرية <span className="text-sky-600">{activeDistrict.displayName}</span>
                 </motion.h3>
@@ -253,14 +253,14 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
                 {activeDistrict.description ? (
                   <motion.p
                     {...itemFadeInRight(0.16)}
-                    className="text-xs sm:text-sm text-slate-700 font-abyan-body font-normal leading-relaxed pt-0.5 max-w-2xl"
+                    className="text-sm md:text-base text-slate-700 font-abyan-body font-normal leading-relaxed pt-0.5 max-w-2xl"
                   >
                     {activeDistrict.description}
                   </motion.p>
                 ) : (
                   <motion.p
                     {...itemFadeInRight(0.16)}
-                    className="text-xs sm:text-sm text-slate-400 font-abyan-body font-normal leading-relaxed pt-0.5 max-w-2xl italic"
+                    className="text-sm md:text-base text-slate-400 font-abyan-body font-normal leading-relaxed pt-0.5 max-w-2xl italic"
                   >
                     تفاصيل هذه المديرية لم تتوفر بعد.
                   </motion.p>
@@ -274,7 +274,7 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
                   <span className="text-xs text-slate-900 font-abyan-title font-normal block">
                     المحاصيل والخيرات الإنتاجية:
                   </span>
-                  <p className="text-xs sm:text-sm text-sky-600 font-abyan-body font-normal leading-relaxed">
+                  <p className="text-sm md:text-base text-sky-600 font-abyan-body font-normal leading-relaxed">
                     {activeDistrict.crops.length > 0 ? activeDistrict.crops.join(" • ") : "غير محددة"}
                   </p>
                 </motion.div>
@@ -286,7 +286,7 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
                   <span className="text-xs text-slate-900 font-abyan-title font-normal block">
                     أبرز المعالم والجغرافيا:
                   </span>
-                  <p className="text-xs sm:text-sm text-sky-600 font-abyan-body font-normal leading-relaxed">
+                  <p className="text-sm md:text-base text-sky-600 font-abyan-body font-normal leading-relaxed">
                     {activeDistrict.landmarks.length > 0 ? activeDistrict.landmarks.join(" • ") : "غير محددة"}
                   </p>
                 </motion.div>
@@ -297,7 +297,7 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
                 >
                   <Link
                     href={`/districts?id=${activeDistrict.id}`}
-                    className="inline-flex items-center text-xs sm:text-sm font-normal text-sky-600 hover:text-[#10b981] font-abyan-title transition-colors no-underline cursor-pointer group"
+                    className="inline-flex items-center text-sm md:text-base font-normal text-sky-600 hover:text-[#10b981] font-abyan-title transition-colors no-underline cursor-pointer group"
                   >
                     استكشف المزيد عن مديرية {activeDistrict.displayName}
                     <span className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300">←</span>

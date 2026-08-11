@@ -551,3 +551,9 @@ export const UserFormDataSchema = z.object({
 });
 export type UserFormData = z.infer<typeof UserFormDataSchema>;
 
+// Contact Info Schema
+export const ContactInfoSchema = z.object({
+  emails: z.array(z.string().email("يجب إدخال بريد إلكتروني صحيح")).max(5, "لا يمكن إضافة أكثر من 5 إيميلات").default([]),
+  phones: z.array(z.string().min(6, "رقم الهاتف قصير جداً")).max(5, "لا يمكن إضافة أكثر من 5 أرقام").default([]),
+});
+export type ContactInfo = z.infer<typeof ContactInfoSchema>;

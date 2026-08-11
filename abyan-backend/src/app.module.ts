@@ -24,6 +24,7 @@ import { AnalyticsModule } from './analytics/analytics.module';
 import { LogsModule } from './logs/logs.module';
 import { HealthModule } from './health/health.module';
 import { UploadModule } from './upload/upload.module';
+import { ContactModule } from './contact/contact.module';
 @Module({
   imports: [
     // Configuration
@@ -91,6 +92,7 @@ import { UploadModule } from './upload/upload.module';
     AnalyticsModule,
     LogsModule,
     HealthModule,
+    ContactModule,
   ],
   controllers: [AppController],
   providers: [

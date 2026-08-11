@@ -44,7 +44,7 @@ export default function AdminDrawer({ isOpen, onClose, title, children, formId, 
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: '-100%', opacity: 0.5 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed top-0 left-0 h-screen w-[60%] bg-white shadow-2xl z-[70] flex flex-col border-r border-slate-200"
+            className="fixed top-0 left-0 h-screen w-full sm:w-[60%] bg-white shadow-2xl z-[70] flex flex-col border-r border-slate-200"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-3 border-b border-slate-100 bg-slate-50/50">

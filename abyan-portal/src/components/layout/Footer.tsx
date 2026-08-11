@@ -42,17 +42,17 @@ export default function Footer() {
           {/* الشعار والوصف مع دعوة المشاركة */}
           <motion.div {...itemFadeInRight(0.1)} className="w-full flex flex-col md:flex-row justify-between items-start gap-6">
             <div className="space-y-1">
-              <h3 className="font-abyan-title text-2xl sm:text-3xl text-white font-normal leading-snug drop-shadow-md">
+              <h3 className="font-abyan-title text-2xl md:text-3xl lg:text-4xl text-white font-normal leading-snug drop-shadow-md">
                 بوابة أَبيَن الثقافية
               </h3>
-              <p className="text-xs sm:text-sm text-white/90 font-abyan-body font-normal leading-relaxed">
+              <p className="text-sm md:text-base text-white/90 font-abyan-body font-normal leading-relaxed">
                 منصة توثيق التراث، الحضارة، والجغرافيا الأبينية العريقة
               </p>
             </div>
             
             <div className="text-right md:text-left">
-              <p className="text-sm sm:text-base text-white/90 font-abyan-body font-normal leading-relaxed">
-                إن كنت تعرف عن أبين وتريد المشاركة في الكتابة، <span className="text-white font-abyan-title hover:text-sky-200 transition-colors cursor-pointer mr-1">تواصل معنا</span>
+              <p className="text-base md:text-lg text-white/90 font-abyan-body font-normal leading-relaxed">
+                إن كنت تعرف عن أبين وتريد المشاركة في الكتابة، <Link href="/contact" className="text-white font-abyan-title hover:text-sky-200 transition-colors cursor-pointer mr-1 no-underline">تواصل معنا</Link>
               </p>
             </div>
           </motion.div>
@@ -73,7 +73,7 @@ export default function Footer() {
                 <Link
                   key={`marquee-${idx}`}
                   href={item.href}
-                  className="text-xs sm:text-sm text-white hover:text-sky-200 font-abyan-title font-normal transition-colors no-underline whitespace-nowrap shrink-0"
+                  className="text-sm md:text-base text-white hover:text-sky-200 font-abyan-title font-normal transition-colors no-underline whitespace-nowrap shrink-0"
                 >
                   {item.label}
                 </Link>

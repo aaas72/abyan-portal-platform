@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -56,7 +57,7 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
           <Link href="/" className="no-underline">
             <motion.h1
               {...subtleMicroHover}
-              className={`font-abyan-title text-3xl sm:text-4xl lg:text-5xl leading-none py-0 overflow-visible drop-shadow-md cursor-pointer ${
+              className={`font-abyan-title text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-none py-0 overflow-visible drop-shadow-md cursor-pointer ${
                 isHomePage ? "text-white" : "text-slate-900"
               }`}
             >
@@ -79,7 +80,7 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
                     whileHover={{ scale: 1.05, color: "#10b981" }}
                     whileTap={{ scale: 0.95 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
-                    className={`font-abyan-title text-xs sm:text-sm lg:text-base transition-colors cursor-pointer drop-shadow-sm font-normal block ${
+                    className={`font-abyan-title text-sm md:text-base lg:text-lg transition-colors cursor-pointer drop-shadow-sm font-normal block ${
                       isActive
                         ? "text-[#10b981] font-normal opacity-100"
                         : isHomePage
@@ -99,7 +100,7 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="فتح القائمة"
-              className={`font-abyan-title text-lg sm:text-xl font-normal bg-transparent border-none cursor-pointer px-2 py-1 transition-colors select-none ${
+              className={`font-abyan-title text-xl md:text-2xl font-normal bg-transparent border-none cursor-pointer px-2 py-1 transition-colors select-none ${
                 isHomePage
                   ? "text-white drop-shadow-md hover:text-emerald-300"
                   : "text-slate-900 hover:text-sky-600"
@@ -136,13 +137,13 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
               <div className="space-y-8 text-right w-full">
                 {/* Header Row in Drawer: Logo Right + Close Button Left */}
                 <div className="flex items-center justify-between border-b border-white/20 pb-5 text-right">
-                  <h2 className="font-abyan-title text-3xl text-white font-normal">
+                  <h2 className="font-abyan-title text-3xl md:text-4xl text-white font-normal">
                     أَبيَن
                   </h2>
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
-                    aria-label="إغلاق القائمة"
-                    className="font-abyan-title text-base sm:text-lg text-white/90 hover:text-white bg-transparent border-none cursor-pointer p-1 font-normal"
+                    aria-label="Close menu"
+                    className="font-abyan-title text-lg md:text-xl text-white/90 hover:text-white bg-transparent border-none cursor-pointer p-1 font-normal"
                   >
                     إغلاق
                   </button>
@@ -165,7 +166,7 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
                         className="no-underline"
                       >
                         <span
-                          className={`font-abyan-title text-lg font-normal transition-colors block ${
+                          className={`font-abyan-title text-lg md:text-xl font-normal transition-colors block ${
                             isActive
                               ? "text-amber-200 font-medium"
                               : "text-white/90 hover:text-white"
@@ -176,6 +177,43 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
                       </Link>
                     );
                   })}
+                  
+                  {/* Extra Pages (Mobile Only) */}
+                  <div className="pt-4 mt-2 border-t border-white/20">
+                    <Link
+                      href="/about"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="no-underline block mb-4"
+                    >
+                      <span className={`font-abyan-title text-lg md:text-xl font-normal transition-colors block ${
+                        (pathname || "").replace(/\/$/, "") === "/about" ? "text-amber-200 font-medium" : "text-white/90 hover:text-white"
+                      }`}>
+                        عن المنصة
+                      </span>
+                    </Link>
+                    <Link
+                      href="/copyright"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="no-underline block mb-4"
+                    >
+                      <span className={`font-abyan-title text-lg md:text-xl font-normal transition-colors block ${
+                        (pathname || "").replace(/\/$/, "") === "/copyright" ? "text-amber-200 font-medium" : "text-white/90 hover:text-white"
+                      }`}>
+                        شروط الاستخدام وحماية الحقوق
+                      </span>
+                    </Link>
+                    <Link
+                      href="/contact"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="no-underline block"
+                    >
+                      <span className={`font-abyan-title text-lg md:text-xl font-normal transition-colors block ${
+                        (pathname || "").replace(/\/$/, "") === "/contact" ? "text-amber-200 font-medium" : "text-white/90 hover:text-white"
+                      }`}>
+                        تواصل معنا
+                      </span>
+                    </Link>
+                  </div>
                 </nav>
               </div>
 

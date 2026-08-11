@@ -22,21 +22,25 @@ interface PioneersClientProps {
 }
 
 export default function PioneersClient({ initialData }: PioneersClientProps) {
-  const [activeTabId, setActiveTabId] = useState<string>(
-    initialData[0]?.id || "poets",
-  );
+  const [activeTabId, setActiveTabId] = useState<string>(() => {
+    const valid = initialData.find((c) => c.figures && c.figures.length > 0);
+    return valid ? valid.id : "poets";
+  });
   const [selectedPioneerModal, setSelectedPioneerModal] =
     useState<MediaItem | null>(null);
 
   const categoryTabs = useMemo(() => {
-    return initialData.map((c) => ({
-      id: c.id,
-      label: c.title,
-    }));
+    return initialData
+      .filter((c) => c.figures && c.figures.length > 0)
+      .map((c) => ({
+        id: c.id,
+        label: c.title,
+      }));
   }, [initialData]);
 
   const currentCategory = useMemo(() => {
-    return initialData.find((p) => p.id === activeTabId) || initialData[0];
+    const validData = initialData.filter((c) => c.figures && c.figures.length > 0);
+    return validData.find((p) => p.id === activeTabId) || validData[0];
   }, [initialData, activeTabId]);
 
   const handleOpenPioneerModal = (fig: PioneerFigure) => {

@@ -17,20 +17,24 @@ interface LandmarksClientProps {
 }
 
 export default function LandmarksClient({ initialData }: LandmarksClientProps) {
-  const [activeTabId, setActiveTabId] = useState<string>(
-    initialData[0]?.id || "delta"
-  );
+  const [activeTabId, setActiveTabId] = useState<string>(() => {
+    const valid = initialData.find((c) => (c.photoCards && c.photoCards.length > 0) || (c.keyLandmarks && c.keyLandmarks.length > 0));
+    return valid ? valid.id : "delta";
+  });
   const [selectedMediaModal, setSelectedMediaModal] = useState<MediaItem | null>(null);
 
   const categoryTabs = useMemo(() => {
-    return initialData.map((cat) => ({
-      id: cat.id,
-      label: cat.categoryName,
-    }));
+    return initialData
+      .filter((c) => (c.photoCards && c.photoCards.length > 0) || (c.keyLandmarks && c.keyLandmarks.length > 0))
+      .map((cat) => ({
+        id: cat.id,
+        label: cat.categoryName,
+      }));
   }, [initialData]);
 
   const currentCategory = useMemo(() => {
-    return initialData.find((cat) => cat.id === activeTabId) || initialData[0];
+    const validData = initialData.filter((c) => (c.photoCards && c.photoCards.length > 0) || (c.keyLandmarks && c.keyLandmarks.length > 0));
+    return validData.find((cat) => cat.id === activeTabId) || validData[0];
   }, [initialData, activeTabId]);
 
   const handleOpenLandmarkModal = (photoCard: ImageShowcaseData) => {

@@ -46,7 +46,7 @@ export default function UniversalCard({
             {data.category}
           </span>
         )}
-        <span className="block font-abyan-title text-2xl sm:text-3xl text-slate-900 font-normal leading-none group-hover:text-sky-600 transition-colors">
+        <span className="block font-abyan-title text-2xl md:text-3xl lg:text-4xl text-slate-900 font-normal leading-none group-hover:text-sky-600 transition-colors">
           {data.title}
         </span>
         <p className="text-sm text-slate-600 font-abyan-body font-normal">
@@ -88,7 +88,7 @@ export default function UniversalCard({
               {data.category}
             </span>
           )}
-          <h3 className="font-abyan-title text-base sm:text-lg font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
+          <h3 className="font-abyan-title text-lg md:text-xl font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
             {data.title}
           </h3>
           {data.location && (
@@ -138,7 +138,7 @@ export default function UniversalCard({
                   {data.category}
                 </span>
               )}
-              <h3 className="font-abyan-title text-base sm:text-lg font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
+              <h3 className="font-abyan-title text-lg md:text-xl font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
                 {data.title}
               </h3>
               {data.subtitle && (
@@ -181,24 +181,24 @@ export default function UniversalCard({
     >
       <div className="space-y-1 overflow-hidden">
         {data.category && (
-          <span className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block">
+          <span className="text-sm md:text-base font-normal text-[#10b981] font-abyan-title block">
             {data.category}
           </span>
         )}
-        <h3 className="font-abyan-title text-base sm:text-lg text-slate-900 font-normal group-hover:text-sky-600 transition-colors leading-snug">
+        <h3 className="font-abyan-title text-lg md:text-xl text-slate-900 font-normal group-hover:text-sky-600 transition-colors leading-snug">
           {data.title}
         </h3>
       </div>
 
       <div className="space-y-2 overflow-hidden w-full">
-        <p className="text-xs sm:text-sm text-slate-700 font-abyan-body font-normal leading-relaxed line-clamp-3 overflow-hidden break-words">
+        <p className="text-sm md:text-base leading-relaxed text-slate-700 font-abyan-body font-normal line-clamp-3 overflow-hidden break-words">
           {data.description}
         </p>
       </div>
 
       {data.linkText && (
         <div className="pt-2">
-          <span className="text-xs sm:text-sm text-sky-600 font-abyan-title font-normal group-hover:translate-x-[-4px] transition-transform inline-block">
+          <span className="text-sm md:text-base leading-relaxed text-sky-600 font-abyan-title font-normal group-hover:translate-x-[-4px] transition-transform inline-block">
             {data.linkText}
           </span>
         </div>
