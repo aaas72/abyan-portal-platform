@@ -1,0 +1,637 @@
+{
+  "scannedAt": "2026-08-09T18:39:22.036Z",
+  "checksRun": 11,
+  "total": 65,
+  "counts": {
+    "high": 3,
+    "medium": 39,
+    "low": 7,
+    "info": 16
+  },
+  "findings": [
+    {
+      "id": "AC-LOGIN-THROTTLE",
+      "severity": "high",
+      "category": "access-control",
+      "title": "مسارات المصادقة بلا تحديد معدّل مخصّص",
+      "detail": "login / forgot-password / reset-password تعتمد على الحد العام (100 طلب/دقيقة) وهو واسع جداً لتخمين كلمات المرور.",
+      "file": "abyan-backend/src/auth/auth.controller.ts",
+      "fix": "أضف @Throttle({ default: { limit: 5, ttl: 60000 } }) على login و forgot-password، وفعّل قفل الحساب بعد محاولات فاشلة متتالية."
+    },
+    {
+      "id": "CFG-CORS-HARDCODED",
+      "severity": "high",
+      "category": "configuration",
+      "title": "إعداد CORS مثبّت على localhost",
+      "detail": "قائمة الأصول المسموحة مكتوبة داخل الشيفرة، ما يكسر الإنتاج ويمنع ضبط النطاق الحقيقي دون إعادة بناء.",
+      "file": "abyan-backend/src/main.ts",
+      "fix": "اقرأ الأصول من CORS_ORIGINS في متغيرات البيئة، وارفض ما عداها."
+    },
+    {
+      "id": "FE-NO-CSP",
+      "severity": "high",
+      "category": "frontend",
+      "title": "لا توجد سياسة أمان محتوى (CSP) ولا رؤوس أمان للواجهة",
+      "detail": "المشروع مُصدَّر ساكناً (output: 'export')، لذا لا تعمل headers() في Next.js — يجب ضبط الرؤوس على مستوى الخادم/CDN. غيابها يترك الواجهة بلا دفاع في العمق ضد XSS و clickjacking.",
+      "file": "abyan-portal/next.config.mjs",
+      "fix": "اضبط في Nginx/CDN: Content-Security-Policy, X-Frame-Options: DENY, X-Content-Type-Options: nosniff, Referrer-Policy, Strict-Transport-Security, Permissions-Policy."
+    },
+    {
+      "id": "VCS-MISSING",
+      "severity": "medium",
+      "category": "process",
+      "title": "مجلد abyan-backend غير خاضع لإدارة إصدارات Git",
+      "detail": "لا يوجد مستودع Git — لا مراجعة شيفرة، ولا إمكانية تتبّع أو استرجاع للتغييرات.",
+      "fix": "git init وأضف .gitignore قبل أول commit (تأكد من استثناء .env)."
+    },
+    {
+      "id": "AC-NO-ROLES",
+      "severity": "medium",
+      "category": "access-control",
+      "title": "مسار تعديل محمي بالمصادقة فقط دون تحديد الدور",
+      "detail": "Put /api/about يسمح لأي مستخدم مسجّل (بما فيهم writer) بالتعديل.",
+      "file": "abyan-backend/src/about/about.controller.ts",
+      "line": 24,
+      "fix": "أضف RolesGuard و @Roles للتحكم الدقيق بالصلاحيات."
+    },
+    {
+      "id": "AC-NO-GUARD",
+      "severity": "medium",
+      "category": "access-control",
+      "title": "مسار Get بلا حماية",
+      "detail": "Get /api/gallery/categories لا يملك @UseGuards ولا يبدو مساراً عاماً مقصوداً.",
+      "file": "abyan-backend/src/gallery/gallery.controller.ts",
+      "line": 66,
+      "fix": "أضف @UseGuards(JwtAuthGuard, RolesGuard) + @Roles(...) أو أضفه إلى قائمة INTENTIONAL_PUBLIC بعد مراجعة."
+    },
+    {
+      "id": "CFG-TRUST-PROXY",
+      "severity": "medium",
+      "category": "configuration",
+      "title": "لم يتم ضبط trust proxy",
+      "detail": "عناوين IP المستخدمة في التحليلات وتحديد المعدل تُقرأ من x-forwarded-for القابل للتزوير خلف بروكسي.",
+      "file": "abyan-backend/src/main.ts",
+      "fix": "app.set('trust proxy', 1) عند التشغيل خلف Nginx/Cloudflare."
+    },
+    {
+      "id": "CFG-BODY-LIMIT",
+      "severity": "medium",
+      "category": "configuration",
+      "title": "لا يوجد حد صريح لحجم جسم الطلب",
+      "detail": "الاعتماد على الافتراضي دون تحديد صريح يجعل حدود الرفع غير موثّقة وعرضة لطلبات ضخمة عند تغيّرها.",
+      "file": "abyan-backend/src/main.ts",
+      "fix": "app.use(express.json({ limit: '1mb' })) بما يناسب حجم المحتوى المتوقع."
+    },
+    {
+      "id": "LOG-CSV-INJECTION",
+      "severity": "medium",
+      "category": "logging",
+      "title": "حقن صيغ CSV (CSV Formula Injection)",
+      "detail": "يتم تهريب علامات الاقتباس والفواصل فقط. قيمة يتحكم بها المهاجم تبدأ بـ = أو + أو - أو @ ستُنفَّذ كصيغة عند فتح ملف السجل في Excel.",
+      "file": "abyan-backend/src/logs/logs.service.ts",
+      "fix": "أضف مسافة أو ' كبادئة لأي قيمة تبدأ بـ =+-@ قبل الكتابة، أو استخدم JSON Lines بدل CSV."
+    },
+    {
+      "id": "LOG-NO-ROTATION",
+      "severity": "medium",
+      "category": "logging",
+      "title": "ملف السجل ينمو بلا تدوير أو حد أقصى",
+      "detail": "كتابة مستمرة في ملف واحد قد تملأ القرص وتوقف الخدمة (نوع من DoS ذاتي).",
+      "file": "abyan-backend/src/logs/logs.service.ts",
+      "fix": "استخدم winston-daily-rotate-file أو أرسل السجلات إلى نظام مركزي."
+    },
+    {
+      "id": "LOG-ERROR-LEAK",
+      "severity": "medium",
+      "category": "logging",
+      "title": "رسائل الأخطاء الداخلية تُعاد للعميل",
+      "detail": "الأخطاء غير المعالجة (مثل أخطاء Mongoose) تُعاد رسالتها الأصلية، ما قد يكشف أسماء الحقول وبنية القاعدة.",
+      "file": "abyan-backend/src/common/filters/http-exception.filter.ts",
+      "fix": "أعد رسالة عامة للحالة 500 في الإنتاج وسجّل التفاصيل داخلياً فقط."
+    },
+    {
+      "id": "VAL-RAW-BODY-PARAM",
+      "severity": "medium",
+      "category": "validation",
+      "title": "استخراج حقل خام من الجسم بدون DTO: @Body('section')",
+      "detail": "التقاط الحقول فرادى يتجاوز ValidationPipe الخاص بالـ DTO، فلا يوجد ضمان للنوع ولا حد للطول — بوابة محتملة لحقن NoSQL أو تخزين بيانات ضخمة.",
+      "file": "abyan-backend/src/analytics/analytics.controller.ts",
+      "line": 14,
+      "fix": "عرّف DTO مع class-validator (@IsString, @MaxLength, @IsMongoId) واستقبل الجسم كاملاً."
+    },
+    {
+      "id": "VAL-RAW-BODY-PARAM",
+      "severity": "medium",
+      "category": "validation",
+      "title": "استخراج حقل خام من الجسم بدون DTO: @Body('entityId')",
+      "detail": "التقاط الحقول فرادى يتجاوز ValidationPipe الخاص بالـ DTO، فلا يوجد ضمان للنوع ولا حد للطول — بوابة محتملة لحقن NoSQL أو تخزين بيانات ضخمة.",
+      "file": "abyan-backend/src/analytics/analytics.controller.ts",
+      "line": 15,
+      "fix": "عرّف DTO مع class-validator (@IsString, @MaxLength, @IsMongoId) واستقبل الجسم كاملاً."
+    },
+    {
+      "id": "VAL-RAW-BODY-PARAM",
+      "severity": "medium",
+      "category": "validation",
+      "title": "استخراج حقل خام من الجسم بدون DTO: @Body('entityName')",
+      "detail": "التقاط الحقول فرادى يتجاوز ValidationPipe الخاص بالـ DTO، فلا يوجد ضمان للنوع ولا حد للطول — بوابة محتملة لحقن NoSQL أو تخزين بيانات ضخمة.",
+      "file": "abyan-backend/src/analytics/analytics.controller.ts",
+      "line": 16,
+      "fix": "عرّف DTO مع class-validator (@IsString, @MaxLength, @IsMongoId) واستقبل الجسم كاملاً."
+    },
+    {
+      "id": "VAL-NO-MAXLENGTH",
+      "severity": "medium",
+      "category": "validation",
+      "title": "248 حقلاً نصياً بلا حد أقصى للطول في 31 ملف DTO",
+      "detail": "غياب @MaxLength يسمح بتخزين نصوص ضخمة تستنزف الذاكرة والقاعدة وتبطئ الاستجابات.",
+      "fix": "أضف @MaxLength بحدود منطقية لكل حقل نصي (مثلاً 200 للعناوين، 5000 للمحتوى)."
+    },
+    {
+      "id": "VAL-WEAK-PASSWORD-POLICY",
+      "severity": "medium",
+      "category": "validation",
+      "title": "سياسة كلمة مرور ضعيفة (حد أدنى 6 أحرف)",
+      "detail": "المعيار الحالي (NIST 800-63B) يوصي بـ 8 أحرف كحد أدنى مع فحص كلمات المرور المسرّبة.",
+      "file": "abyan-backend/src/auth/dto/auth.dto.ts",
+      "line": 20,
+      "fix": "ارفع الحد إلى 12 حرفاً للمدراء، وأضف فحصاً مقابل قوائم كلمات المرور الشائعة."
+    },
+    {
+      "id": "VAL-WEAK-PASSWORD-POLICY",
+      "severity": "medium",
+      "category": "validation",
+      "title": "سياسة كلمة مرور ضعيفة (حد أدنى 6 أحرف)",
+      "detail": "المعيار الحالي (NIST 800-63B) يوصي بـ 8 أحرف كحد أدنى مع فحص كلمات المرور المسرّبة.",
+      "file": "abyan-backend/src/auth/dto/auth.dto.ts",
+      "line": 37,
+      "fix": "ارفع الحد إلى 12 حرفاً للمدراء، وأضف فحصاً مقابل قوائم كلمات المرور الشائعة."
+    },
+    {
+      "id": "VAL-WEAK-PASSWORD-POLICY",
+      "severity": "medium",
+      "category": "validation",
+      "title": "سياسة كلمة مرور ضعيفة (حد أدنى 6 أحرف)",
+      "detail": "المعيار الحالي (NIST 800-63B) يوصي بـ 8 أحرف كحد أدنى مع فحص كلمات المرور المسرّبة.",
+      "file": "abyan-backend/src/users/dto/create-user.dto.ts",
+      "line": 26,
+      "fix": "ارفع الحد إلى 12 حرفاً للمدراء، وأضف فحصاً مقابل قوائم كلمات المرور الشائعة."
+    },
+    {
+      "id": "VAL-WEAK-PASSWORD-POLICY",
+      "severity": "medium",
+      "category": "validation",
+      "title": "سياسة كلمة مرور ضعيفة (حد أدنى 6 أحرف)",
+      "detail": "المعيار الحالي (NIST 800-63B) يوصي بـ 8 أحرف كحد أدنى مع فحص كلمات المرور المسرّبة.",
+      "file": "abyan-backend/src/users/dto/update-user.dto.ts",
+      "line": 21,
+      "fix": "ارفع الحد إلى 12 حرفاً للمدراء، وأضف فحصاً مقابل قوائم كلمات المرور الشائعة."
+    },
+    {
+      "id": "FE-TOKEN-STORAGE",
+      "severity": "medium",
+      "category": "frontend",
+      "title": "رمز JWT مخزَّن في localStorage",
+      "detail": "أي ثغرة XSS أو سكربت طرف ثالث يستطيع قراءة الرمز وسرقة الجلسة؛ الرمز صالح 7 أيام بلا إبطال من جهة الخادم.",
+      "file": "abyan-portal/src/app/(admin)/admin-about/page.tsx",
+      "line": 79,
+      "fix": "انقل الرمز إلى كوكي httpOnly + SameSite=Strict + Secure، أو قلّص صلاحيته مع refresh token قابل للإبطال."
+    },
+    {
+      "id": "FE-TOKEN-STORAGE",
+      "severity": "medium",
+      "category": "frontend",
+      "title": "رمز JWT مخزَّن في localStorage",
+      "detail": "أي ثغرة XSS أو سكربت طرف ثالث يستطيع قراءة الرمز وسرقة الجلسة؛ الرمز صالح 7 أيام بلا إبطال من جهة الخادم.",
+      "file": "abyan-portal/src/services/api/api.client.ts",
+      "line": 26,
+      "fix": "انقل الرمز إلى كوكي httpOnly + SameSite=Strict + Secure، أو قلّص صلاحيته مع refresh token قابل للإبطال."
+    },
+    {
+      "id": "FE-TOKEN-STORAGE",
+      "severity": "medium",
+      "category": "frontend",
+      "title": "رمز JWT مخزَّن في localStorage",
+      "detail": "أي ثغرة XSS أو سكربت طرف ثالث يستطيع قراءة الرمز وسرقة الجلسة؛ الرمز صالح 7 أيام بلا إبطال من جهة الخادم.",
+      "file": "abyan-portal/src/services/auth.service.ts",
+      "line": 38,
+      "fix": "انقل الرمز إلى كوكي httpOnly + SameSite=Strict + Secure، أو قلّص صلاحيته مع refresh token قابل للإبطال."
+    },
+    {
+      "id": "FE-TOKEN-STORAGE",
+      "severity": "medium",
+      "category": "frontend",
+      "title": "رمز JWT مخزَّن في localStorage",
+      "detail": "أي ثغرة XSS أو سكربت طرف ثالث يستطيع قراءة الرمز وسرقة الجلسة؛ الرمز صالح 7 أيام بلا إبطال من جهة الخادم.",
+      "file": "abyan-portal/src/services/auth.service.ts",
+      "line": 50,
+      "fix": "انقل الرمز إلى كوكي httpOnly + SameSite=Strict + Secure، أو قلّص صلاحيته مع refresh token قابل للإبطال."
+    },
+    {
+      "id": "FE-401-NOOP",
+      "severity": "medium",
+      "category": "frontend",
+      "title": "معالجة استجابة 401 معطّلة (شيفرة معلّقة)",
+      "detail": "عند انتهاء صلاحية الرمز لا يُمسح ولا يُعاد التوجيه لتسجيل الدخول؛ تبقى الواجهة في حالة \"مسجّل دخول\" وهمية.",
+      "file": "abyan-portal/src/services/api/api.client.ts",
+      "fix": "فعّل مسح الرمز وإعادة التوجيه إلى /admin-login عند 401."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/culture/culture.service.ts",
+      "line": 105,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/culture/culture.service.ts",
+      "line": 135,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/districts/districts.service.ts",
+      "line": 135,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/districts/districts.service.ts",
+      "line": 141,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/economy/economy.service.ts",
+      "line": 88,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/economy/economy.service.ts",
+      "line": 118,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/gallery/gallery.service.ts",
+      "line": 73,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/gallery/gallery.service.ts",
+      "line": 102,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/highlights/highlights.service.ts",
+      "line": 67,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/highlights/highlights.service.ts",
+      "line": 77,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/history/history.service.ts",
+      "line": 58,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/landmarks/landmarks.service.ts",
+      "line": 88,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/landmarks/landmarks.service.ts",
+      "line": 118,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/pioneers/pioneers.service.ts",
+      "line": 91,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-UNBOUNDED-QUERY",
+      "severity": "medium",
+      "category": "performance",
+      "title": "استعلام يجلب كل المستندات بلا حد أو ترقيم صفحات",
+      "detail": "find() بدون limit/pagination ينمو خطياً مع البيانات ويستهلك ذاكرة الخادم وحزمة الشبكة.",
+      "file": "abyan-backend/src/pioneers/pioneers.service.ts",
+      "line": 121,
+      "fix": "أضف ترقيم صفحات (limit/skip أو cursor) و .lean() للقراءة فقط."
+    },
+    {
+      "id": "PERF-NO-CACHE",
+      "severity": "medium",
+      "category": "performance",
+      "title": "لا يوجد تخزين مؤقت لمسارات المحتوى العامة",
+      "detail": "مسارات /frontend تقرأ من قاعدة البيانات في كل طلب رغم أن محتواها شبه ثابت.",
+      "fix": "أضف CacheModule (أو Redis) مع TTL قصير + رؤوس Cache-Control/ETag على مسارات القراءة العامة."
+    },
+    {
+      "id": "QLT-NO-TESTS",
+      "severity": "medium",
+      "category": "quality",
+      "title": "تغطية اختبارات شبه معدومة في الواجهة الخلفية (1 ملف اختبار)",
+      "detail": "لا توجد اختبارات للمصادقة أو الحراس أو الصلاحيات — أي انحدار أمني سيمر دون اكتشاف.",
+      "fix": "أضف اختبارات e2e لكل مسار محمي تتحقق من 401/403، وهي أسرع شبكة أمان ضد ثغرات التحكم بالوصول."
+    },
+    {
+      "id": "QLT-STRAY-SCRIPTS",
+      "severity": "medium",
+      "category": "quality",
+      "title": "9 سكربت تشغيلي متناثر في جذر المشروع",
+      "detail": "check-db.ts, fix-imports.js, fix-mappings.js, fix-regions.js, fix_legacy_images.js, import-csv.ts, seed-11-districts.ts, seed-regions.ts, seed_eras.js — سكربتات تتصل بقاعدة البيانات مباشرة وتُنسخ مع الشيفرة، بعضها يحمل بيانات اعتماد.",
+      "fix": "انقلها إلى scripts/ خارج مسار البناء، واجعلها تقرأ الاتصال من متغيرات البيئة."
+    },
+    {
+      "id": "CFG-SHUTDOWN",
+      "severity": "low",
+      "category": "configuration",
+      "title": "لا يوجد إغلاق رشيق (graceful shutdown)",
+      "detail": "قد تُقطع الطلبات الجارية واتصالات قاعدة البيانات عند إعادة النشر.",
+      "file": "abyan-backend/src/main.ts",
+      "fix": "app.enableShutdownHooks() ومعالجة SIGTERM."
+    },
+    {
+      "id": "QLT-NO-API-DOCS",
+      "severity": "low",
+      "category": "quality",
+      "title": "لا يوجد توثيق OpenAPI/Swagger للـ API",
+      "detail": "يصعّب المراجعة الأمنية والاختبار الآلي لسطح الـ API.",
+      "file": "abyan-backend/src/main.ts",
+      "fix": "أضف @nestjs/swagger وولّد التوثيق في بيئة غير الإنتاج."
+    },
+    {
+      "id": "QLT-CONSOLE-LOG",
+      "severity": "low",
+      "category": "quality",
+      "title": "استخدام console.log بدل مسجّل منظّم",
+      "detail": "سجلات غير منظّمة يصعب تجميعها ومراقبتها في الإنتاج.",
+      "file": "abyan-backend/src/main.ts",
+      "fix": "استخدم Logger من NestJS أو pino مع مستويات ومعرّف ارتباط للطلب."
+    },
+    {
+      "id": "QLT-NO-HEALTH",
+      "severity": "low",
+      "category": "quality",
+      "title": "لا يوجد مسار فحص صحة (/health)",
+      "detail": "يحتاجه موازن الحمل والمراقبة لاكتشاف تعطّل الخدمة أو انقطاع قاعدة البيانات.",
+      "file": "abyan-backend/src/app.controller.ts",
+      "fix": "أضف @nestjs/terminus مع فحص اتصال Mongo."
+    },
+    {
+      "id": "PERF-NO-LEAN",
+      "severity": "low",
+      "category": "performance",
+      "title": "استعلامات قراءة بدون .lean()",
+      "detail": "إنشاء مستندات Mongoose كاملة لعمليات القراءة فقط يضاعف استهلاك الذاكرة ووقت المعالجة.",
+      "file": "abyan-backend/src/users/users.service.ts",
+      "fix": "استخدم .lean() في كل استعلام لا يحتاج توابع المستند."
+    },
+    {
+      "id": "PERF-NO-COMPRESSION",
+      "severity": "low",
+      "category": "performance",
+      "title": "لا يوجد ضغط للاستجابات (gzip/brotli)",
+      "detail": "استجابات JSON الكبيرة تُرسل غير مضغوطة.",
+      "file": "abyan-backend/src/main.ts",
+      "fix": "app.use(compression()) أو فعّل الضغط على مستوى البروكسي."
+    },
+    {
+      "id": "QLT-TS-NOT-STRICT",
+      "severity": "low",
+      "category": "quality",
+      "title": "الوضع الصارم في TypeScript غير مفعّل بالكامل (backend)",
+      "detail": "يسمح بتمرير null/undefined وأنواع ضمنية any، ما يخفي أخطاء وقت التشغيل.",
+      "file": "abyan-backend/tsconfig.json",
+      "fix": "فعّل strict: true و strictNullChecks وأصلح الأخطاء تدريجياً."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/about/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/about/about.controller.ts",
+      "line": 11,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Post /api/analytics/track",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/analytics/analytics.controller.ts",
+      "line": 12,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/app",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/app.controller.ts",
+      "line": 8,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Post /api/auth/login",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/auth/auth.controller.ts",
+      "line": 17,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Post /api/auth/forgot-password",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/auth/auth.controller.ts",
+      "line": 39,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Post /api/auth/reset-password",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/auth/auth.controller.ts",
+      "line": 44,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/culture/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/culture/culture.controller.ts",
+      "line": 27,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/districts/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/districts/districts.controller.ts",
+      "line": 26,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/districts/frontend/regions",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/districts/districts.controller.ts",
+      "line": 31,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/economy/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/economy/economy.controller.ts",
+      "line": 27,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/gallery/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/gallery/gallery.controller.ts",
+      "line": 26,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/highlights/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/highlights/highlights.controller.ts",
+      "line": 24,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/highlights/sections/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/highlights/highlights.controller.ts",
+      "line": 66,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/history/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/history/history.controller.ts",
+      "line": 24,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/landmarks/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/landmarks/landmarks.controller.ts",
+      "line": 27,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/pioneers/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/pioneers/pioneers.controller.ts",
+      "line": 27,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    }
+  ]
+}

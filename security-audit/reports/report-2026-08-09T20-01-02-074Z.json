@@ -1,0 +1,200 @@
+{
+  "scannedAt": "2026-08-09T20:01:02.072Z",
+  "checksRun": 11,
+  "total": 19,
+  "counts": {
+    "medium": 1,
+    "info": 18
+  },
+  "findings": [
+    {
+      "id": "LOG-CSV-INJECTION",
+      "severity": "medium",
+      "category": "logging",
+      "title": "حقن صيغ CSV (CSV Formula Injection)",
+      "detail": "يتم تهريب علامات الاقتباس والفواصل فقط. قيمة يتحكم بها المهاجم تبدأ بـ = أو + أو - أو @ ستُنفَّذ كصيغة عند فتح ملف السجل في Excel.",
+      "file": "abyan-backend/src/logs/logs.service.ts",
+      "fix": "أضف مسافة أو ' كبادئة لأي قيمة تبدأ بـ =+-@ قبل الكتابة، أو استخدم JSON Lines بدل CSV."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/about/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/about/about.controller.ts",
+      "line": 16,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Post /api/analytics/track",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/analytics/analytics.controller.ts",
+      "line": 13,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/app",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/app.controller.ts",
+      "line": 8,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Post /api/auth/login",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/auth/auth.controller.ts",
+      "line": 19,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Post /api/auth/forgot-password",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/auth/auth.controller.ts",
+      "line": 59,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Post /api/auth/reset-password",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/auth/auth.controller.ts",
+      "line": 65,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/culture/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/culture/culture.controller.ts",
+      "line": 29,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/districts/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/districts/districts.controller.ts",
+      "line": 28,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/districts/frontend/regions",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/districts/districts.controller.ts",
+      "line": 34,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/economy/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/economy/economy.controller.ts",
+      "line": 29,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/gallery/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/gallery/gallery.controller.ts",
+      "line": 28,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/gallery/categories",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/gallery/gallery.controller.ts",
+      "line": 69,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/health",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/health/health.controller.ts",
+      "line": 11,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/highlights/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/highlights/highlights.controller.ts",
+      "line": 26,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/highlights/sections/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/highlights/highlights.controller.ts",
+      "line": 69,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/history/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/history/history.controller.ts",
+      "line": 26,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/landmarks/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/landmarks/landmarks.controller.ts",
+      "line": 29,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    },
+    {
+      "id": "AC-PUBLIC-OK",
+      "severity": "info",
+      "category": "access-control",
+      "title": "مسار عام مقصود: Get /api/pioneers/frontend",
+      "detail": "مُدرج ضمن المسارات العامة المعتمدة — تأكد أن استجابته لا تحوي بيانات إدارية.",
+      "file": "abyan-backend/src/pioneers/pioneers.controller.ts",
+      "line": 29,
+      "fix": "راجعه دورياً وتأكد من تغطيته بتحديد معدّل مناسب."
+    }
+  ]
+}

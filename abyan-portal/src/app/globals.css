@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'ThmanyahSerifRegular';
+  src: url('/fonts/thmanyah-serif-display-regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ThmanyahSerifBlack';
+  src: url('/fonts/thmanyah-serif-display-black.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --spring-green: #10b981;
+  --spring-green-dark: #059669;
+  --sky-blue: #0ea5e9;
+  --sky-blue-dark: #0284c7;
+  --rocky-slate-dark: #0f172a;
+  --rocky-slate-text: #1e293b;
+  --rocky-slate-border: #e2e8f0;
+  --bg-light: #ffffff;
+  --bg-subtle: #f8fafc;
+  --font-cairo: 'Cairo', sans-serif;
+  --font-amiri: 'Amiri', serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-cairo);
+  background-color: var(--bg-light);
+  color: var(--rocky-slate-dark);
+  direction: rtl;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+/* قاعدة عالمية صارمة لتطبيق خط ثمانية ريجلار ولون الرمادي الصخري النقي (#1e293b) على جميع الفقرات وتاجات p في المنصة دون استثناء لضمان أقصى تباين وقرائية */
+p,
+p *,
+p.font-abyan-title,
+p.font-abyan-body {
+  font-family: 'ThmanyahSerifRegular', var(--font-abyan-body), serif !important;
+  color: #1e293b !important;
+  line-height: 1.6;
+  overflow: visible;
+  font-weight: 400;
+}
+
+.font-abyan-body {
+  font-family: 'ThmanyahSerifRegular', var(--font-abyan-body), serif !important;
+  line-height: 1.6;
+  overflow: visible;
+  font-weight: 400;
+}
+
+.font-abyan-title {
+  font-family: 'ThmanyahSerifBlack', var(--font-abyan-title), serif !important;
+  line-height: 1.4;
+  overflow: visible;
+}
+
+.font-amiri {
+  font-family: var(--font-amiri);
+}
+
+.font-cairo {
+  font-family: var(--font-cairo);
+}
+
+/* Light Glassmorphism Utilities */
+.glass-card-light {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.05);
+}
+
+.glass-nav-light {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+/* Custom Gradients */
+.gradient-abyan {
+  background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+}
+
+.text-gradient-abyan {
+  background: linear-gradient(135deg, #059669 0%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom Ultra-Thin Scrollbar (3.5px) */
+::-webkit-scrollbar {
+  width: 3.5px;
+  height: 3.5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0ea5e9;
+}
+
+.custom-thin-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.custom-thin-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+/* Hide scrollbar visually while keeping scroll active */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* 🌿 Abyan Spring Green & Sky Blue Smooth Shimmer Animation (Reversed Movement Direction) */
+@keyframes abyanShimmerLtr {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-abyan-shimmer-rtl {
+  background: linear-gradient(
+    90deg,
+    rgba(16, 185, 129, 0.08) 0%,
+    rgba(14, 165, 233, 0.22) 50%,
+    rgba(16, 185, 129, 0.08) 100%
+  );
+  background-size: 200% 100%;
+  animation: abyanShimmerLtr 2.2s infinite linear;
+}
+
+

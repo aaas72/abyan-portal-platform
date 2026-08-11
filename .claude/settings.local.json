@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm audit *)",
+      "Bash(node -e \"let s='';process.stdin.on\\('data',d=>s+=d\\).on\\('end',\\(\\)=>{try{const j=JSON.parse\\(s\\);console.log\\(JSON.stringify\\(j.metadata.vulnerabilities\\)\\);for\\(const k in j.vulnerabilities\\){const v=j.vulnerabilities[k];console.log\\(v.severity,'|',k,'|',\\(v.via||[]\\).map\\(x=>typeof x==='string'?x:x.title\\).join\\('; '\\)\\)}}catch\\(e\\){console.log\\('parse fail'\\)}}\\)\")",
+      "Bash(node security-audit/scan.mjs --skip-audit)",
+      "Bash(node -e ' *)"
+    ]
+  }
+}
