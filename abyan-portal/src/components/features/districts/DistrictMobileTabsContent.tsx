@@ -145,70 +145,199 @@ export default function DistrictMobileTabsContent({
         </div>
       )}
 
+      {/* TAB 4: SITES & LANDMARKS */}
       {activeSubTab === "sites" && (
-        <div className="space-y-3">
-          <TagList
-            title="أهم المعالم والحصون الأثرية:"
-            items={dist.landmarks}
-            variant="pure-text"
-            color="emerald"
-          />
-          {dist.historicalSites && dist.historicalSites.length > 0 && (
-            <div className="pt-2">
-              <TagList
-                title="الشواهد والقلاع التاريخية:"
-                items={dist.historicalSites}
-                variant="pure-text"
-                color="sky"
-              />
-            </div>
-          )}
+        <div className="space-y-4">
+          <h4 className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block border-none">
+            الشواهد والمعالم والحصون الأثرية بالمديرية:
+          </h4>
+          <div className="grid grid-cols-1 gap-4">
+            {dist.sitesCardList && dist.sitesCardList.length > 0
+              ? dist.sitesCardList.map((site) => (
+                  <UniversalCard
+                    key={site.id}
+                    variant="food"
+                    onClick={() =>
+                      setSelectedMediaItem({
+                        id: site.id,
+                        title: site.title,
+                        subtitle: site.subtitle,
+                        fullBiography: site.fullBiography || site.description,
+                        categoryLabel: `معلم أثري • مديرية ${dist.name}`,
+                        location: dist.name,
+                        bgGradient: site.bgGradient,
+                        images: site.images,
+                      })
+                    }
+                    data={{
+                      title: site.title,
+                      category: `معلم أثري • ${dist.name}`,
+                      description: site.subtitle || site.description,
+                      location: dist.name,
+                      bgGradient: site.bgGradient,
+                      images: site.images,
+                    }}
+                  />
+                ))
+              : dist.landmarks.map((landmark, idx) => (
+                  <UniversalCard
+                    key={idx}
+                    variant="food"
+                    onClick={() =>
+                      setSelectedMediaItem({
+                        id: `landmark-${idx}`,
+                        title: landmark,
+                        subtitle: `معلم بارز في مديرية ${dist.name}`,
+                        fullBiography: `${landmark} أحد المعالم والشواهد الجغرافية والتاريخية البارزة في مديرية ${dist.name}.`,
+                        categoryLabel: `معلم بارز • مديرية ${dist.name}`,
+                        location: dist.name,
+                        bgGradient: "from-emerald-950 via-sky-900 to-slate-900",
+                      })
+                    }
+                    data={{
+                      title: landmark,
+                      category: `معلم بارز • ${dist.name}`,
+                      description: `معلم بارز في مديرية ${dist.name}`,
+                      location: dist.name,
+                      bgGradient: "from-emerald-950 via-sky-900 to-slate-900",
+                    }}
+                  />
+                ))}
+          </div>
         </div>
       )}
 
+      {/* TAB 5: ECONOMY & CROPS */}
       {activeSubTab === "economy" && (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {dist.economyDetails && (
             <p className="text-sm sm:text-base text-slate-800 font-abyan-body font-normal leading-relaxed">
               {dist.economyDetails}
             </p>
           )}
-          <TagList
-            title="أبرز المحاصيل والمنتجات الزواعية:"
-            items={dist.crops}
-            variant="pure-text"
-            color="sky"
-          />
-          {dist.naturalResources && dist.naturalResources.length > 0 && (
-            <div className="pt-2">
-              <TagList
-                title="الثروات والموارد الطبيعية:"
-                items={dist.naturalResources}
-                variant="pure-text"
-                color="emerald"
-              />
-            </div>
-          )}
+          <h4 className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block border-none">
+            أبرز المحاصيل والمنتجات الزراعية والحيوانية:
+          </h4>
+          <div className="grid grid-cols-1 gap-4">
+            {dist.cropsCardList && dist.cropsCardList.length > 0
+              ? dist.cropsCardList.map((crop) => (
+                  <UniversalCard
+                    key={crop.id}
+                    variant="food"
+                    onClick={() =>
+                      setSelectedMediaItem({
+                        id: crop.id,
+                        title: crop.title,
+                        subtitle: crop.subtitle,
+                        fullBiography: crop.fullBiography || crop.description,
+                        categoryLabel: `خيرات الأرض • مديرية ${dist.name}`,
+                        location: dist.name,
+                        bgGradient: crop.bgGradient,
+                        images: crop.images,
+                      })
+                    }
+                    data={{
+                      title: crop.title,
+                      category: `خيرات الأرض • ${dist.name}`,
+                      description: crop.subtitle || crop.description,
+                      location: dist.name,
+                      bgGradient: crop.bgGradient,
+                      images: crop.images,
+                    }}
+                  />
+                ))
+              : dist.crops.map((crop, idx) => (
+                  <UniversalCard
+                    key={idx}
+                    variant="food"
+                    onClick={() =>
+                      setSelectedMediaItem({
+                        id: `crop-${idx}`,
+                        title: crop,
+                        subtitle: `محصول وثروة خصيبة في ${dist.name}`,
+                        fullBiography: `${crop} ركن أساسي من الثروات والمحاصيل التي تعتز بها مديرية ${dist.name}.`,
+                        categoryLabel: `خيرات الأرض • مديرية ${dist.name}`,
+                        location: dist.name,
+                        bgGradient: "from-emerald-950 via-slate-800 to-sky-900",
+                      })
+                    }
+                    data={{
+                      title: crop,
+                      category: `خيرات الأرض • ${dist.name}`,
+                      description: `محصول وثروة خصيبة في ${dist.name}`,
+                      location: dist.name,
+                      bgGradient: "from-emerald-950 via-slate-800 to-sky-900",
+                    }}
+                  />
+                ))}
+          </div>
         </div>
       )}
 
+      {/* TAB 6: CULTURE & TRADITIONS */}
       {activeSubTab === "culture" && (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {dist.traditionsAndCulture && (
             <p className="text-sm sm:text-base text-slate-800 font-abyan-body font-normal leading-relaxed">
               {dist.traditionsAndCulture}
             </p>
           )}
-          {dist.folkHeritage && dist.folkHeritage.length > 0 && (
-            <div className="pt-2">
-              <TagList
-                title="الفنون والموروث الشعبي بالمديرية:"
-                items={dist.folkHeritage}
-                variant="pure-text"
-                color="emerald"
-              />
-            </div>
-          )}
+          <h4 className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block border-none">
+            الفنون الشعبية وأصالة الموروث الأبيني:
+          </h4>
+          <div className="grid grid-cols-1 gap-4">
+            {dist.heritageCardList && dist.heritageCardList.length > 0
+              ? dist.heritageCardList.map((item) => (
+                  <UniversalCard
+                    key={item.id}
+                    variant="food"
+                    onClick={() =>
+                      setSelectedMediaItem({
+                        id: item.id,
+                        title: item.title,
+                        subtitle: item.subtitle,
+                        fullBiography: item.fullBiography || item.description,
+                        categoryLabel: `موروث وفلكلور • مديرية ${dist.name}`,
+                        location: dist.name,
+                        bgGradient: item.bgGradient,
+                        images: item.images,
+                      })
+                    }
+                    data={{
+                      title: item.title,
+                      category: `موروث وفلكلور • ${dist.name}`,
+                      description: item.subtitle || item.description,
+                      location: dist.name,
+                      bgGradient: item.bgGradient,
+                      images: item.images,
+                    }}
+                  />
+                ))
+              : dist.folkHeritage?.map((item, idx) => (
+                  <UniversalCard
+                    key={idx}
+                    variant="food"
+                    onClick={() =>
+                      setSelectedMediaItem({
+                        id: `heritage-${idx}`,
+                        title: item,
+                        subtitle: `موروث وفلكلور أصيل في ${dist.name}`,
+                        fullBiography: `${item} فن وموروث فلكلوري شفاهي يتوارثه أهالي مديرية ${dist.name}.`,
+                        categoryLabel: `موروث وفلكلور • مديرية ${dist.name}`,
+                        location: dist.name,
+                        bgGradient: "from-sky-950 via-emerald-950 to-slate-900",
+                      })
+                    }
+                    data={{
+                      title: item,
+                      category: `موروث وفلكلور • ${dist.name}`,
+                      description: `موروث وفلكلور أصيل في ${dist.name}`,
+                      location: dist.name,
+                      bgGradient: "from-sky-950 via-emerald-950 to-slate-900",
+                    }}
+                  />
+                ))}
+          </div>
         </div>
       )}
 
