@@ -40,6 +40,7 @@ export default function AdminEconomyPage() {
   const [currentPhotoCard, setCurrentPhotoCard] = useState<EconomyPhotoCardFormData | null>(null);
   
   const [isActiveStatus, setIsActiveStatus] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   const fetchPillars = async () => {
     try {
@@ -107,6 +108,8 @@ export default function AdminEconomyPage() {
   };
 
   const handleSavePillar = async (formData: EconomyPillarFormData) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       const dataToSave = { ...formData, isActive: isActiveStatus };
       if (currentEditingPillarId) {
@@ -120,6 +123,8 @@ export default function AdminEconomyPage() {
       fetchPillars();
     } catch (error) {
       toast.error("فشل في حفظ السجل");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -165,6 +170,8 @@ export default function AdminEconomyPage() {
   };
 
   const handleSavePhotoCard = async (formData: EconomyPhotoCardFormData) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       const dataToSave = { 
         ...formData, 
@@ -183,6 +190,8 @@ export default function AdminEconomyPage() {
       fetchPhotoCards();
     } catch (error) {
       toast.error("فشل في حفظ السجل");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -326,6 +335,7 @@ export default function AdminEconomyPage() {
         title={currentPillar ? "تعديل قطاع" : "إضافة قطاع جديد"}
         formId="economy-pillar-form"
         saveLabel="حفظ القطاع"
+        isSaving={isSaving}
         headerActions={
           <AdminToggle
             label="تفعيل القطاع"
@@ -349,6 +359,7 @@ export default function AdminEconomyPage() {
         title={currentPhotoCard ? "تعديل عنصر" : "إضافة عنصر جديد"}
         formId="economy-photocard-form"
         saveLabel="حفظ العنصر"
+        isSaving={isSaving}
         headerActions={
           <AdminToggle
             label="تفعيل العنصر"

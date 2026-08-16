@@ -105,7 +105,7 @@ export default function EconomyPillarForm({ id, initialData, isPublished, onPubl
         <label className="block text-sm font-abyan-title text-slate-700 font-bold mb-1">
           صور ومرفقات القطاع
           <span className="block text-xs font-abyan-body text-slate-500 font-normal mt-1">
-            (الحد الأقصى 5 صور)
+            (الحد الأقصى 10 صور)
           </span>
         </label>
         <div className="grid grid-cols-1 gap-4">
@@ -127,7 +127,7 @@ export default function EconomyPillarForm({ id, initialData, isPublished, onPubl
               }}
             />
           ))}
-          {(!formData.images || formData.images.length < 5) && (
+          {(!formData.images || formData.images.length < 10) && (
             <AdminMediaUpload 
               folderName="abyan-portal/economy"
               key={`new-img-${formData.images?.length || 0}`}

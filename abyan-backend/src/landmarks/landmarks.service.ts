@@ -111,7 +111,10 @@ export class LandmarksService {
   async createPhotoCard(
     createPhotoCardDto: CreateLandmarkPhotoCardDto,
   ): Promise<LandmarkPhotoCard> {
-    const newPhotoCard = new this.photoCardModel(createPhotoCardDto);
+    const newPhotoCard = new this.photoCardModel({
+      ...createPhotoCardDto,
+      authorName: createPhotoCardDto.authorName?.trim() || 'فريق توثيق بوابة أبين',
+    });
     const savedPhotoCard = await newPhotoCard.save();
 
     let mediaUpdated = false;
@@ -157,8 +160,13 @@ export class LandmarksService {
       );
     }
 
+    const dataToUpdate = {
+      ...updatePhotoCardDto,
+      authorName: updatePhotoCardDto.authorName?.trim() || existingCard.authorName || 'فريق توثيق بوابة أبين',
+    };
+
     const updated = await this.photoCardModel
-      .findByIdAndUpdate(id, updatePhotoCardDto, { new: true })
+      .findByIdAndUpdate(id, dataToUpdate, { new: true })
       .exec();
     return updated!;
   }

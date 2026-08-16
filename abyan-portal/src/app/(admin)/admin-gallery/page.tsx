@@ -59,6 +59,7 @@ export default function AdminGalleryPage() {
   const [currentEditingCategoryId, setCurrentEditingCategoryId] = useState<string | null>(null);
   const [currentCategory, setCurrentCategory] = useState<ArchiveCategoryFormData | null>(null);
   const [isCategoryPublished, setIsCategoryPublished] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   const fetchItems = async () => {
     try {
@@ -122,6 +123,8 @@ export default function AdminGalleryPage() {
   };
 
   const handleSaveItem = async (formData: ArchiveItemFormData) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       // Find the selected category to get its programmatic name
       const selectedCategory = categories.find(c => c.title === formData.categoryLabel);
@@ -145,10 +148,12 @@ export default function AdminGalleryPage() {
       }
       setIsDrawerOpen(false);
       fetchItems();
-      } catch (error: any) {
-        console.error("Failed to save archive item:", error?.response?.data || error);
-        toast.error(error?.response?.data?.message || "فشل في حفظ السجل");
-      }
+    } catch (error: any) {
+      console.error("Failed to save archive item:", error?.response?.data || error);
+      toast.error(error?.response?.data?.message || "فشل في حفظ السجل");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleDeleteCategory = async (cat: AdminArchiveCategory) => {
@@ -187,6 +192,8 @@ export default function AdminGalleryPage() {
   };
 
   const handleSaveCategory = async (formData: ArchiveCategoryFormData) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       if (currentEditingCategoryId) {
         await GalleryService.updateCategory(currentEditingCategoryId, formData);
@@ -199,6 +206,8 @@ export default function AdminGalleryPage() {
       fetchItems();
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "فشل في حفظ التصنيف");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -337,6 +346,7 @@ export default function AdminGalleryPage() {
         title={currentEditingId ? "تعديل الوثيقة" : "رفع وثيقة جديدة"}
         formId="archive-form"
         saveLabel="حفظ الوثيقة"
+        isSaving={isSaving}
       >
         <ArchiveItemForm
           id="archive-form"
@@ -356,6 +366,7 @@ export default function AdminGalleryPage() {
         title={currentEditingCategoryId ? "تعديل التصنيف" : "إضافة تصنيف جديد"}
         formId="archive-category-form"
         saveLabel="حفظ التصنيف"
+        isSaving={isSaving}
         headerActions={
           <AdminToggle
             label="تفعيل التصنيف"

@@ -40,6 +40,7 @@ export default function AdminAboutPage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Forms
   const pillarForm = useForm<AboutPillarFormData>({
@@ -92,6 +93,8 @@ export default function AdminAboutPage() {
   };
 
   const saveToBackend = async (newData: AboutContent) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       const response = await AboutService.updateAboutContent(newData);
       if (!response.success) throw new Error("Failed to save");
@@ -102,6 +105,8 @@ export default function AdminAboutPage() {
     } catch (error) {
       console.error("Save about error:", error);
       toast.error("حدث خطأ أثناء الحفظ");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -230,6 +235,7 @@ export default function AdminAboutPage() {
         title={editingItem ? "تعديل عنصر" : "إضافة عنصر جديد"}
         formId="drawer-form"
         saveLabel={editingItem ? "تحديث العنصر" : "حفظ العنصر"}
+        isSaving={isSaving}
       >
         <div className="p-6">
           {activeTab === "pillars" && (

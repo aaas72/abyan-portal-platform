@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
 
 interface AdminDrawerProps {
   isOpen: boolean;
@@ -10,9 +9,19 @@ interface AdminDrawerProps {
   formId?: string;
   saveLabel?: string;
   headerActions?: React.ReactNode;
+  isSaving?: boolean;
 }
 
-export default function AdminDrawer({ isOpen, onClose, title, children, formId, saveLabel, headerActions }: AdminDrawerProps) {
+export default function AdminDrawer({
+  isOpen,
+  onClose,
+  title,
+  children,
+  formId,
+  saveLabel,
+  headerActions,
+  isSaving = false,
+}: AdminDrawerProps) {
   // Lock body scroll when drawer is open
   useEffect(() => {
     if (isOpen) {
@@ -29,7 +38,6 @@ export default function AdminDrawer({ isOpen, onClose, title, children, formId, 
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
           {/* Backdrop (Static, no click to close) */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -62,9 +70,14 @@ export default function AdminDrawer({ isOpen, onClose, title, children, formId, 
                   <button
                     type="submit"
                     form={formId}
-                    className="font-abyan-title text-sm text-slate-500 hover:text-[#10b981] bg-transparent transition-colors border-none cursor-pointer"
+                    disabled={isSaving}
+                    className={`font-abyan-title text-sm transition-colors border-none ${
+                      isSaving
+                        ? "text-[#10b981] opacity-70 cursor-not-allowed"
+                        : "text-slate-500 hover:text-[#10b981] bg-transparent cursor-pointer"
+                    }`}
                   >
-                    {saveLabel}
+                    {isSaving ? "جاري الحفظ..." : saveLabel}
                   </button>
                 )}
 
@@ -75,7 +88,12 @@ export default function AdminDrawer({ isOpen, onClose, title, children, formId, 
                 <button
                   type="button"
                   onClick={onClose}
-                  className="font-abyan-title text-sm text-slate-500 hover:text-red-500 bg-transparent transition-colors border-none cursor-pointer"
+                  disabled={isSaving}
+                  className={`font-abyan-title text-sm bg-transparent transition-colors border-none ${
+                    isSaving
+                      ? "text-slate-300 cursor-not-allowed"
+                      : "text-slate-500 hover:text-red-500 cursor-pointer"
+                  }`}
                 >
                   إغلاق
                 </button>

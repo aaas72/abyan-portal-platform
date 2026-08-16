@@ -60,9 +60,11 @@ export default function UniversalCard({
         <span className="block font-abyan-title text-2xl md:text-3xl lg:text-4xl text-slate-900 font-normal leading-none group-hover:text-sky-600 transition-colors">
           {data.title}
         </span>
-        <p className="text-sm text-slate-600 font-abyan-body font-normal">
-          {data.description}
-        </p>
+        {data.subtitle && (
+          <span className="text-sm text-slate-600 font-abyan-body font-normal block">
+            {data.subtitle}
+          </span>
+        )}
       </motion.div>
     );
   }
@@ -93,7 +95,7 @@ export default function UniversalCard({
           ) : null}
         </div>
 
-        {/* Title & Short Description Below Photo Box */}
+        {/* Title & Details Below Photo Box */}
         <div className="space-y-1.5 overflow-hidden">
           {categoryText && (
             <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
@@ -108,9 +110,13 @@ export default function UniversalCard({
               {data.location}
             </span>
           )}
-          <p className="text-base sm:text-lg text-slate-700 font-abyan-body font-normal line-clamp-2 leading-relaxed overflow-hidden">
-            {data.description}
-          </p>
+        </div>
+
+        {/* Footer Prompt */}
+        <div className="pt-1 text-left text-sm text-sky-600 font-abyan-title border-none">
+          <span className="group-hover:translate-x-[-3px] transition-transform font-normal inline-block">
+            معاينة ←
+          </span>
         </div>
       </motion.div>
     );
@@ -196,12 +202,6 @@ export default function UniversalCard({
         <h3 className="font-abyan-title text-lg md:text-xl text-slate-900 font-normal group-hover:text-sky-600 transition-colors leading-snug">
           {data.title}
         </h3>
-      </div>
-
-      <div className="space-y-2 overflow-hidden w-full">
-        <p className="text-base sm:text-lg leading-relaxed text-slate-700 font-abyan-body font-normal line-clamp-3 overflow-hidden break-words">
-          {data.description}
-        </p>
       </div>
 
       {data.linkText && (

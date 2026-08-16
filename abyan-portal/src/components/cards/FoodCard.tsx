@@ -52,7 +52,7 @@ export default function FoodCard({ foodCard, onClick }: FoodCardProps) {
         ) : null}
       </div>
 
-      {/* Title & Short Description */}
+      {/* Title & Details */}
       <div className="space-y-1 overflow-hidden">
         {tagText && (
           <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
@@ -67,9 +67,6 @@ export default function FoodCard({ foodCard, onClick }: FoodCardProps) {
             {foodCard.location}
           </span>
         )}
-        <p className="text-base sm:text-lg text-slate-700 font-abyan-body font-normal line-clamp-2 leading-relaxed overflow-hidden">
-          {foodCard.description}
-        </p>
       </div>
 
       {/* Prompt Link */}

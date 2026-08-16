@@ -35,6 +35,7 @@ export default function AdminLandmarksPage() {
   // Drawer states
   const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false);
   const [isPhotoCardDrawerOpen, setIsPhotoCardDrawerOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   
   const [currentEditingCategoryId, setCurrentEditingCategoryId] = useState<string | null>(null);
   const [currentCategory, setCurrentCategory] = useState<LandmarkCategoryFormData | null>(null);
@@ -118,6 +119,8 @@ export default function AdminLandmarksPage() {
   };
 
   const handleSaveCategory = async (formData: LandmarkCategoryFormData) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       const dataToSave = { ...formData, isActive: isActiveStatus };
       if (currentEditingCategoryId) {
@@ -131,6 +134,8 @@ export default function AdminLandmarksPage() {
       fetchCategories();
     } catch (error) {
       toast.error("فشل في حفظ السجل");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -178,6 +183,8 @@ export default function AdminLandmarksPage() {
   };
 
   const handleSavePhotoCard = async (formData: LandmarkPhotoCardFormData) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       const dataToSave = { ...formData, isActive: isActiveStatus };
       if (currentEditingPhotoCardId) {
@@ -191,6 +198,8 @@ export default function AdminLandmarksPage() {
       fetchPhotoCards();
     } catch (error) {
       toast.error("فشل في حفظ السجل");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -338,6 +347,7 @@ export default function AdminLandmarksPage() {
         title={currentCategory ? "تعديل فئة المعالم" : "إضافة فئة معالم جديدة"}
         formId="landmark-category-form"
         saveLabel="حفظ الفئة"
+        isSaving={isSaving}
         headerActions={
           <AdminToggle
             label="تنشيط الفئة"
@@ -362,6 +372,7 @@ export default function AdminLandmarksPage() {
         title={currentPhotoCard ? "تعديل معلم" : "إضافة معلم جديد"}
         formId="landmark-photocard-form"
         saveLabel="حفظ المعلم"
+        isSaving={isSaving}
         headerActions={
           <AdminToggle
             label="نشر المعلم"

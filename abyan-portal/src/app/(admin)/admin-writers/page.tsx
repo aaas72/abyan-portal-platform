@@ -17,35 +17,32 @@ export default function AdminWritersPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isActiveStatus, setIsActiveStatus] = useState(true);
+  const [isActiveStatus, setIsActiveStatus] = useState<boolean>(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'writer' | 'admin'>('writer');
 
   const toast = useToast();
   const { confirm } = useConfirm();
 
-  useEffect(() => {
-    loadUsers();
-  }, []);
-
-  const loadUsers = async () => {
-    setIsLoading(true);
+  const fetchUsers = async () => {
     try {
+      setIsLoading(true);
       const res = await usersService.getUsers();
       if (res.success && res.data) {
         setUsers(res.data);
-      } else {
-        throw new Error("فشل في استرجاع الكُتاب");
       }
     } catch (err: any) {
       toast.error(
-        err.response?.data?.message ||
-          err.message ||
-          "حدث خطأ أثناء جلب البيانات",
+        err.response?.data?.message || err.message || "فشل في جلب الكُتّاب",
       );
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   const handleAddNew = () => {
     setSelectedUser(null);
@@ -55,28 +52,24 @@ export default function AdminWritersPage() {
 
   const handleEdit = (user: User) => {
     setSelectedUser(user);
-    setIsActiveStatus(user.isActive);
+    setIsActiveStatus(user.isActive ?? true);
     setDrawerOpen(true);
   };
 
   const handleDelete = async (user: User) => {
     const isConfirmed = await confirm({
       title: "تأكيد الحذف",
-      description: `هل أنت متأكد من رغبتك في حذف الحساب "${user.name}"؟ لا يمكن التراجع عن هذا الإجراء وسيتم حرمان المستخدم من الوصول للمنصة.`,
-      confirmText: "حذف الحساب",
+      description: `هل أنت متأكد من حذف الكاتب "${user.name}"؟`,
+      confirmText: "حذف الكاتب",
       cancelText: "إلغاء",
       variant: "danger",
     });
 
     if (isConfirmed) {
       try {
-        const res = await usersService.deleteUser(user._id);
-        if (res.success) {
-          toast.success("تم حذف الكاتب بنجاح");
-          setUsers((prev) => prev.filter((u) => u._id !== user._id));
-        } else {
-          throw new Error("فشل في حذف الكاتب");
-        }
+        await usersService.deleteUser(user._id);
+        toast.success("تم حذف الكاتب بنجاح");
+        setUsers((prev) => prev.filter((u) => u._id !== user._id));
       } catch (err: any) {
         toast.error(
           err.response?.data?.message || err.message || "حدث خطأ أثناء الحذف",
@@ -86,6 +79,8 @@ export default function AdminWritersPage() {
   };
 
   const handleSave = async (data: UserFormData) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       if (selectedUser) {
         const res = await usersService.updateUser(selectedUser._id, data);
@@ -112,6 +107,8 @@ export default function AdminWritersPage() {
       toast.error(
         err.response?.data?.message || err.message || "حدث خطأ أثناء الحفظ",
       );
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -211,6 +208,7 @@ export default function AdminWritersPage() {
         title={selectedUser ? "تعديل بيانات الكاتب" : "إضافة كاتب جديد"}
         formId="writer-form"
         saveLabel="حفظ الكاتب"
+        isSaving={isSaving}
         headerActions={
           <AdminToggle
             label="حالة الحساب"

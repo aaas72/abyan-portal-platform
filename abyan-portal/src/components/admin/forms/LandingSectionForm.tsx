@@ -122,9 +122,9 @@ export default function LandingSectionForm({
       {/* UPLOAD SECTION - Unified format (Always on the Left) */}
       <div className="order-first md:order-last md:col-start-2 md:row-start-1 md:row-span-8 p-4 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col gap-4 h-fit">
         <label className="block text-sm font-abyan-title text-slate-700 font-bold mb-1">
-          صور الخلفية للهيرو (اختياري)
+          صور ومرفقات القسم
           <span className="block text-xs font-abyan-body text-slate-500 font-normal mt-1">
-            (الحد الأقصى 5 صور)
+            (الحد الأقصى 10 صور)
           </span>
         </label>
         <div className="grid grid-cols-1 gap-4">
@@ -132,9 +132,9 @@ export default function LandingSectionForm({
             <AdminMediaUpload 
               folderName="abyan-portal/landing"
               key={`img-${index}`}
-              label={index === 0 ? "صورة الهيرو الأساسية" : `صورة إضافية ${index + 1}`}
+              label={index === 0 ? "الوسائط الرئيسية (الغلاف)" : `صورة إضافية ${index}`}
               value={imgUrl}
-              accept="image/*"
+              accept="image/*,video/*,audio/*"
               onChange={(_, previewUrl) => {
                 const newImages = [...(formData.images || [])];
                 if (!previewUrl) {
@@ -146,13 +146,13 @@ export default function LandingSectionForm({
               }}
             />
           ))}
-          {(!formData.images || formData.images.length < 5) && (
+          {(!formData.images || formData.images.length < 10) && (
             <AdminMediaUpload 
               folderName="abyan-portal/landing"
               key={`new-img-${formData.images?.length || 0}`}
               label={`إضافة صورة ${(formData.images?.length || 0) + 1}`}
               value=""
-              accept="image/*"
+              accept="image/*,video/*,audio/*"
               onChange={(_, previewUrl) => {
                 if (previewUrl) {
                   handleFieldChange('images', [...(formData.images || []), previewUrl]);

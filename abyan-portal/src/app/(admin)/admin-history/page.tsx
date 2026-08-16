@@ -26,7 +26,7 @@ export default function AdminHistoryPage() {
   const [currentEra, setCurrentEra] = useState<HistoryEraFormData | null>(null);
   const [currentEraId, setCurrentEraId] = useState<string | null>(null);
   const [isPublished, setIsPublished] = useState(true);
-
+  const [isSaving, setIsSaving] = useState(false);
   const toast = useToast();
   const { confirm } = useConfirm();
 
@@ -65,21 +65,23 @@ export default function AdminHistoryPage() {
       sources: row.sources && row.sources.length > 0 ? row.sources : (row.sourceName ? [{ name: row.sourceName, url: row.sourceUrl }] : []),
       shortSummary: row.shortSummary,
       fullDescription: row.fullDescription,
+      images: row.images || [],
       keyEvents: row.keyEvents || [],
       notableLandmarks: row.notableLandmarks || [],
       isActive: row.isActive,
     });
     setCurrentEraId(row._id);
-    setIsPublished(row.isActive ?? true);
+    setIsPublished(row.isActive);
     setIsDrawerOpen(true);
   };
 
   const handleDelete = async (row: AdminHistoryEra) => {
     const isConfirmed = await confirm({
       title: "تأكيد الحذف",
-      description: `هل أنت متأكد من حذف الحقبة "${row.eraTitle}"؟ لا يمكن التراجع عن هذا الإجراء.`,
+      description: `هل أنت متأكد من حذف حقبة "${row.eraTitle}"؟ لا يمكن التراجع عن هذا الإجراء.`,
       confirmText: "حذف الحقبة",
       cancelText: "إلغاء",
+      variant: "danger",
     });
 
     if (isConfirmed) {
@@ -94,6 +96,8 @@ export default function AdminHistoryPage() {
   };
 
   const handleSave = async (formData: HistoryEraFormData) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       if (currentEraId) {
         await HistoryService.updateEra(currentEraId, formData);
@@ -106,6 +110,8 @@ export default function AdminHistoryPage() {
       fetchEras();
     } catch (error) {
       toast.error("حدث خطأ أثناء الحفظ");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -200,6 +206,7 @@ export default function AdminHistoryPage() {
         title={currentEraId ? "تعديل الحقبة" : "إضافة حقبة جديدة"}
         formId="history-era-form"
         saveLabel={currentEraId ? "حفظ التعديلات" : "حفظ الحقبة"}
+        isSaving={isSaving}
         headerActions={
           <AdminToggle
             checked={isPublished}

@@ -53,6 +53,7 @@ export default function AdminCulturePage() {
     useState<CultureItemFormData | null>(null);
 
   const [isActiveStatus, setIsActiveStatus] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   const fetchCategories = async () => {
     try {
@@ -119,6 +120,8 @@ export default function AdminCulturePage() {
   };
 
   const handleSaveCategory = async (formData: CultureCategoryFormData) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       const dataToSave = { ...formData, isActive: isActiveStatus };
       if (currentEditingCategoryId) {
@@ -133,12 +136,14 @@ export default function AdminCulturePage() {
       }
       setIsCategoryDrawerOpen(false);
       fetchCategories();
-    } catch (error) {
+    } catch (error: any) {
       console.error(
         "Save culture category error:",
         error?.response?.data || error,
       );
       toast.error("فشل في حفظ السجل");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -187,6 +192,8 @@ export default function AdminCulturePage() {
   };
 
   const handleSaveItem = async (formData: CultureItemFormData) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       const dataToSave = {
         ...formData,
@@ -208,6 +215,8 @@ export default function AdminCulturePage() {
       fetchItems();
     } catch (error) {
       toast.error("فشل في حفظ السجل");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -358,6 +367,7 @@ export default function AdminCulturePage() {
         title={currentCategory ? "تعديل فئة" : "إضافة فئة جديدة"}
         formId="culture-category-form"
         saveLabel="حفظ الفئة"
+        isSaving={isSaving}
         headerActions={
           <AdminToggle
             label="تفعيل الفئة"
@@ -381,6 +391,7 @@ export default function AdminCulturePage() {
         title={currentItem ? "تعديل عنصر" : "إضافة عنصر جديد"}
         formId="culture-item-form"
         saveLabel="حفظ العنصر"
+        isSaving={isSaving}
         headerActions={
           <AdminToggle
             label="تفعيل العنصر"

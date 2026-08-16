@@ -113,7 +113,11 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      onSave(formData);
+      const finalData: LandmarkPhotoCardFormData = {
+        ...formData,
+        authorName: formData.authorName?.trim() || 'فريق توثيق بوابة أبين'
+      };
+      onSave(finalData);
     }
   };
 
@@ -125,21 +129,108 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
 
   return (
     <form id={id} onSubmit={handleSubmit} className="space-y-6">
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         
-        {/* MEDIA UPLOAD SECTION - TAKES LEFT COLUMN ON DESKTOP */}
-        <div className="md:col-start-1 md:row-start-1 md:row-span-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col gap-4">
-          <label className="block text-sm font-abyan-title text-slate-700 font-bold mb-2">
-            صور المعلم وتوثيقاته
-            <span className="block text-xs font-abyan-body text-slate-500 font-normal mt-1">(يمكنك رفع صور للمعلم - الحد الأقصى 5)</span>
+        {/* RIGHT COLUMN: ALL INPUTS */}
+        <div className="space-y-4">
+          <AdminSelect
+            label="فئة المعلم"
+            required
+            options={categories}
+            placeholder="اختر فئة المعلم..."
+            allowCustom={false}
+            value={formData.category}
+            onChange={(val) => handleFieldChange('category', val)}
+            error={errors.category}
+          />
+
+          <AdminInput
+            label="اسم المعلم"
+            required
+            value={formData.title}
+            onChange={(e) => handleFieldChange('title', e.target.value)}
+            error={errors.title}
+            placeholder="مثال: حصن القعيطي"
+          />
+
+          <AdminInput
+            label="اسم الكاتب / الباحث التوثيقي"
+            value={formData.authorName || ''}
+            onChange={(e) => handleFieldChange('authorName', e.target.value)}
+            error={errors.authorName}
+            placeholder="اختياري - افتراضياً: فريق توثيق بوابة أبين"
+          />
+
+          <AdminInput
+            label="النوع (Tag)"
+            required
+            value={formData.tag}
+            onChange={(e) => handleFieldChange('tag', e.target.value)}
+            error={errors.tag}
+            placeholder="مثال: حصن تاريخي"
+          />
+
+          <AdminSelect
+            label="المديرية"
+            required
+            options={districtOptions}
+            value={selectedDistrictName}
+            onChange={(val) => setSelectedDistrictName(val)}
+            placeholder="اختر المديرية..."
+          />
+
+          <AdminSelect
+            label="القرية / المنطقة"
+            value={selectedVillageName}
+            options={villageOptions}
+            onChange={(val) => setSelectedVillageName(val)}
+            placeholder="اختر القرية أو المنطقة..."
+            disabled={!selectedDistrictName || villageOptions.length === 0}
+          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <AdminInput
+              label="سنة البداية"
+              type="text"
+              value={formData.startYear}
+              onChange={(e) => handleFieldChange('startYear', e.target.value)}
+              error={errors.startYear}
+              placeholder="مثال: 1990"
+            />
+
+            <AdminInput
+              label="سنة النهاية"
+              type="text"
+              value={formData.endYear}
+              onChange={(e) => handleFieldChange('endYear', e.target.value)}
+              error={errors.endYear}
+              placeholder="مثال: 2020"
+            />
+          </div>
+
+          <AdminTextarea
+            label="وصف المعلم"
+            required
+            value={formData.description}
+            onChange={(e) => handleFieldChange('description', e.target.value)}
+            error={errors.description}
+            placeholder="اكتب وصف المعلم هنا..."
+            rows={5}
+          />
+        </div>
+
+        {/* LEFT COLUMN: MEDIA UPLOADS ONLY */}
+        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col gap-4 sticky top-4">
+          <label className="block text-sm font-abyan-title text-slate-700 font-bold mb-1">
+            صور المعلم
+            <span className="block text-xs font-abyan-body text-slate-500 font-normal mt-1">(يمكنك رفع صور للمعلم - الحد الأقصى 10)</span>
           </label>
           <div className="grid grid-cols-1 gap-4">
             {(formData.images || []).map((imgUrl, index) => (
               <AdminMediaUpload 
                 folderName="abyan-portal/landmarks"
                 key={`img-${index}`}
-                label={index === 0 ? "الوسائط الرئيسية (الغلاف)" : `صورة إضافية ${index}`}
+                label={index === 0 ? "الصورة الرئيسية للمعلم (الغلاف)" : `صورة إضافية ${index}`}
                 value={imgUrl}
                 accept="image/*,video/*,audio/*"
                 onChange={(_, previewUrl) => {
@@ -153,7 +244,7 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
                 }}
               />
             ))}
-            {(!formData.images || formData.images.length < 5) && (
+            {(!formData.images || formData.images.length < 10) && (
               <AdminMediaUpload 
                 folderName="abyan-portal/landmarks"
                 key={`new-img-${formData.images?.length || 0}`}
@@ -170,96 +261,14 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
           </div>
         </div>
 
-        {/* DETAILS SECTION - TAKES RIGHT COLUMN */}
-        <AdminSelect
-          label="فئة المعلم"
-          required
-          options={categories}
-          placeholder="اختر فئة المعلم..."
-          allowCustom={false}
-          value={formData.category}
-          onChange={(val) => handleFieldChange('category', val)}
-          error={errors.category}
-        />
-
-        <AdminInput
-          label="اسم المعلم"
-          required
-          value={formData.title}
-          onChange={(e) => handleFieldChange('title', e.target.value)}
-          error={errors.title}
-          placeholder="مثال: حصن القعيطي"
-        />
-
-        <AdminInput
-          label="اسم الكاتب / الباحث التوثيقي"
-          value={formData.authorName || ''}
-          onChange={(e) => handleFieldChange('authorName', e.target.value)}
-          error={errors.authorName}
-          placeholder="اختياري - افتراضياً: فريق توثيق بوابة أبين"
-        />
-
-        <AdminInput
-          label="النوع (Tag)"
-          required
-          value={formData.tag}
-          onChange={(e) => handleFieldChange('tag', e.target.value)}
-          error={errors.tag}
-          placeholder="مثال: حصن تاريخي"
-        />
-
-        <AdminSelect
-          label="المديرية"
-          required
-          options={districtOptions}
-          value={selectedDistrictName}
-          onChange={(val) => setSelectedDistrictName(val)}
-          placeholder="اختر المديرية..."
-        />
-
-        <AdminSelect
-          label="القرية / المنطقة"
-          value={selectedVillageName}
-          options={villageOptions}
-          onChange={(val) => setSelectedVillageName(val)}
-          placeholder="اختر القرية أو المنطقة..."
-          disabled={!selectedDistrictName || villageOptions.length === 0}
-        />
-
-        <AdminInput
-          label="سنة البداية"
-          type="text"
-          value={formData.startYear}
-          onChange={(e) => handleFieldChange('startYear', e.target.value)}
-          error={errors.startYear}
-          placeholder="مثال: 1990"
-        />
-
-        <AdminInput
-          label="سنة النهاية"
-          type="text"
-          value={formData.endYear}
-          onChange={(e) => handleFieldChange('endYear', e.target.value)}
-          error={errors.endYear}
-          placeholder="مثال: 2020"
-        />
-
-        <AdminTextarea
-          label="وصف المعلم"
-          required
-          value={formData.description}
-          onChange={(e) => handleFieldChange('description', e.target.value)}
-          error={errors.description}
-          placeholder="اكتب وصف المعلم هنا..."
-          containerClassName="md:col-span-2"
-          rows={5}
-        />
-
-        <AdminSourcesInput
-          sources={formData.sources || []}
-          onChange={(sources) => handleFieldChange('sources', sources)}
-          containerClassName="md:col-span-2 mt-2"
-        />
+        {/* FULL WIDTH SOURCES & REFERENCES */}
+        <div className="col-span-1 md:col-span-2">
+          <AdminSourcesInput
+            sources={formData.sources || []}
+            onChange={(sources) => handleFieldChange('sources', sources)}
+            containerClassName="mt-2"
+          />
+        </div>
       </div>
     </form>
   );

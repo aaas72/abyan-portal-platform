@@ -77,7 +77,7 @@ export default function ImageShowcaseCard({
         ) : null}
       </div>
 
-      {/* Title & Short Description Below Photo Box */}
+      {/* Title & Details Below Photo Box */}
       <div className="space-y-1 overflow-hidden">
         {tagText && (
           <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
@@ -97,9 +97,6 @@ export default function ImageShowcaseCard({
              {item.startYear || item.endYear ? (item.startYear || "") + " - " + (item.endYear || "") : item.year}
           </span>
         )}
-        <p className="text-base sm:text-lg text-slate-700 font-abyan-body font-normal line-clamp-2 leading-relaxed overflow-hidden">
-          {item.description}
-        </p>
       </div>
 
       {/* Prompt Link */}

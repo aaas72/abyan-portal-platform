@@ -107,6 +107,7 @@ export interface AdminHistoryEra {
   sources?: ContentSource[];
   shortSummary: string;
   fullDescription: string;
+  images?: string[];
   keyEvents: string[];
   notableLandmarks: string[];
   isActive: boolean;

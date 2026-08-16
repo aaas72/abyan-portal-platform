@@ -105,7 +105,10 @@ export default function HistoryEraForm({
     }
     
     setErrors({});
-    onSave(result.data);
+    onSave({
+      ...result.data,
+      authorName: result.data.authorName?.trim() || 'فريق توثيق بوابة أبين'
+    });
   };
 
   return (
@@ -157,45 +160,45 @@ export default function HistoryEraForm({
         placeholder="اختياري - افتراضياً: فريق توثيق بوابة أبين"
       />
 
-      <div className="col-span-1 space-y-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-        <label className="block text-sm font-abyan-title text-slate-700 font-normal">
-          الوسائط المتعددة (صور، فيديو، صوت - الحد الأقصى 5)
-        </label>
-        <div className="grid grid-cols-1 gap-4">
-          {(formData.images || []).map((imgUrl, index) => (
-            <AdminMediaUpload 
-              folderName="abyan-portal/history"
-              key={`img-${index}`}
-              label={index === 0 ? "الوسائط الرئيسية (الغلاف)" : `صورة إضافية ${index}`}
-              value={imgUrl}
-              accept="image/*,video/*,audio/*"
-              onChange={(_, previewUrl) => {
-                const newImages = [...(formData.images || [])];
-                if (!previewUrl) {
-                  newImages.splice(index, 1);
-                } else {
-                  newImages[index] = previewUrl;
-                }
-                handleFieldChange('images', newImages);
-              }}
-            />
-          ))}
-          {(!formData.images || formData.images.length < 5) && (
-            <AdminMediaUpload 
-              folderName="abyan-portal/history"
-              key={`new-img-${formData.images?.length || 0}`}
-              label={`إضافة صورة ${(formData.images?.length || 0) + 1}`}
-              value=""
-              accept="image/*,video/*,audio/*"
-              onChange={(_, previewUrl) => {
-                if (previewUrl) {
-                  handleFieldChange('images', [...(formData.images || []), previewUrl]);
-                }
-              }}
-            />
-          )}
+        <div className="md:col-span-2 p-4 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col gap-4">
+          <label className="block text-sm font-abyan-title text-slate-700 font-bold mb-1">
+            الوسائط المتعددة (صور، فيديو، صوت - الحد الأقصى 10)
+          </label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {(formData.images || []).map((imgUrl, index) => (
+              <AdminMediaUpload 
+                folderName="abyan-portal/history"
+                key={`img-${index}`}
+                label={index === 0 ? "الوسائط الرئيسية (الغلاف)" : `ملف إضافي ${index}`}
+                value={imgUrl}
+                accept="image/*,video/*,audio/*"
+                onChange={(_, previewUrl) => {
+                  const newImages = [...(formData.images || [])];
+                  if (!previewUrl) {
+                    newImages.splice(index, 1);
+                  } else {
+                    newImages[index] = previewUrl;
+                  }
+                  handleFieldChange('images', newImages);
+                }}
+              />
+            ))}
+            {(!formData.images || formData.images.length < 10) && (
+              <AdminMediaUpload 
+                folderName="abyan-portal/history"
+                key={`new-img-${formData.images?.length || 0}`}
+                label={`إضافة وسائط ${(formData.images?.length || 0) + 1}`}
+                value=""
+                accept="image/*,video/*,audio/*"
+                onChange={(_, previewUrl) => {
+                  if (previewUrl) {
+                    handleFieldChange('images', [...(formData.images || []), previewUrl]);
+                  }
+                }}
+              />
+            )}
+          </div>
         </div>
-      </div>
 
       <div className="col-span-1 border-t border-slate-100 pt-5 mt-2">
         <AdminTagsInput

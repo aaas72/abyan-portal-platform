@@ -100,7 +100,10 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
       return;
     }
     setErrors({});
-    onSave(result.data);
+    onSave({
+      ...result.data,
+      authorName: result.data.authorName?.trim() || 'فريق توثيق بوابة أبين'
+    });
   };
 
   return (
@@ -136,46 +139,46 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
 
       {/* MEDIA UPLOAD SECTION - Left side column */}
       <div className="order-first md:order-last md:col-start-2 md:row-start-1 md:row-span-8 p-4 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col gap-4 h-fit">
-        <label className="block text-sm font-abyan-title text-slate-700 font-bold mb-1">
-          صور ومعالم المديرية
-          <span className="block text-xs font-abyan-body text-slate-500 font-normal mt-1">
-            (الحد الأقصى 5 صور)
-          </span>
-        </label>
-        <div className="grid grid-cols-1 gap-4">
-          {(formData.images || []).map((imgUrl, index) => (
-            <AdminMediaUpload 
-              folderName="abyan-portal/districts"
-              key={`img-${index}`}
-              label={index === 0 ? "الوسائط الرئيسية (الغلاف)" : `صورة إضافية ${index}`}
-              value={imgUrl}
-              accept="image/*,video/*,audio/*"
-              onChange={(_, previewUrl) => {
-                const newImages = [...(formData.images || [])];
-                if (!previewUrl) {
-                  newImages.splice(index, 1);
-                } else {
-                  newImages[index] = previewUrl;
-                }
-                handleFieldChange('images', newImages);
-              }}
-            />
-          ))}
-          {(!formData.images || formData.images.length < 5) && (
-            <AdminMediaUpload 
-              folderName="abyan-portal/districts"
-              key={`new-img-${formData.images?.length || 0}`}
-              label={`إضافة صورة ${(formData.images?.length || 0) + 1}`}
-              value=""
-              accept="image/*,video/*,audio/*"
-              onChange={(_, previewUrl) => {
-                if (previewUrl) {
-                  handleFieldChange('images', [...(formData.images || []), previewUrl]);
-                }
-              }}
-            />
-          )}
-        </div>
+          <label className="block text-sm font-abyan-title text-slate-700 font-bold mb-1">
+            صور ومرفقات المديرية
+            <span className="block text-xs font-abyan-body text-slate-500 font-normal mt-1">
+              (الحد الأقصى 10 صور)
+            </span>
+          </label>
+          <div className="grid grid-cols-1 gap-4">
+            {(formData.images || []).map((imgUrl, index) => (
+              <AdminMediaUpload 
+                folderName="abyan-portal/districts"
+                key={`img-${index}`}
+                label={index === 0 ? "الوسائط الرئيسية (الغلاف)" : `صورة إضافية ${index}`}
+                value={imgUrl}
+                accept="image/*,video/*,audio/*"
+                onChange={(_, previewUrl) => {
+                  const newImages = [...(formData.images || [])];
+                  if (!previewUrl) {
+                    newImages.splice(index, 1);
+                  } else {
+                    newImages[index] = previewUrl;
+                  }
+                  handleFieldChange('images', newImages);
+                }}
+              />
+            ))}
+            {(!formData.images || formData.images.length < 10) && (
+              <AdminMediaUpload 
+                folderName="abyan-portal/districts"
+                key={`new-img-${formData.images?.length || 0}`}
+                label={`إضافة صورة ${(formData.images?.length || 0) + 1}`}
+                value=""
+                accept="image/*,video/*,audio/*"
+                onChange={(_, previewUrl) => {
+                  if (previewUrl) {
+                    handleFieldChange('images', [...(formData.images || []), previewUrl]);
+                  }
+                }}
+              />
+            )}
+          </div>
       </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -41,6 +41,7 @@ export default function AdminLandingPage() {
   const [currentHighlight, setCurrentHighlight] = useState<HighlightItemFormData | null>(null);
 
   const [isActiveStatus, setIsActiveStatus] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   const fetchHighlights = async () => {
     try {
@@ -92,6 +93,8 @@ export default function AdminLandingPage() {
   };
 
   const handleSaveSection = async (formData: LandingSectionFormData) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       if (currentSectionId && !currentSectionId.startsWith("temp")) {
         await HighlightsService.updateLandingSection(currentSectionId, {
@@ -132,6 +135,8 @@ export default function AdminLandingPage() {
       setIsSectionDrawerOpen(false);
     } catch (error) {
       toast.error("حدث خطأ أثناء حفظ القسم");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -156,6 +161,8 @@ export default function AdminLandingPage() {
   };
 
   const handleSaveHighlight = async (formData: HighlightItemFormData) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       if (currentHighlightId && !currentHighlightId.startsWith("h")) {
         await HighlightsService.updateHighlight(currentHighlightId, {
@@ -196,6 +203,8 @@ export default function AdminLandingPage() {
       setIsHighlightDrawerOpen(false);
     } catch (error) {
       toast.error("حدث خطأ أثناء حفظ البطاقة المبرزة");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -313,6 +322,7 @@ export default function AdminLandingPage() {
         title={currentSection ? "تعديل قسم الرئيسية" : "إضافة قسم جديد"}
         formId="landing-section-form"
         saveLabel="حفظ القسم"
+        isSaving={isSaving}
         headerActions={
           <AdminToggle
             label="تفعيل القسم"
@@ -337,6 +347,7 @@ export default function AdminLandingPage() {
         title={currentHighlight ? "تعديل بطاقة مبرزة" : "إضافة بطاقة مبرزة جديدة"}
         formId="landing-highlight-form"
         saveLabel="حفظ البطاقة"
+        isSaving={isSaving}
         headerActions={
           <AdminToggle
             label="تفعيل البطاقة"

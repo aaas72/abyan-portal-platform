@@ -31,6 +31,7 @@ export default function AdminCopyrightPage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Form
   const sectionForm = useForm<CopyrightSectionFormData>({
@@ -71,6 +72,8 @@ export default function AdminCopyrightPage() {
   };
 
   const saveToBackend = async (newData: CopyrightContent) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       const response = await CopyrightService.updateCopyrightContent(newData);
       if (!response.success) throw new Error("Failed to save");
@@ -81,6 +84,8 @@ export default function AdminCopyrightPage() {
     } catch (error) {
       console.error("Save copyright error:", error);
       toast.error("حدث خطأ أثناء الحفظ");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -188,6 +193,7 @@ export default function AdminCopyrightPage() {
         title={editingItem ? "تعديل بند" : "إضافة بند جديد"}
         formId="drawer-form"
         saveLabel={editingItem ? "تحديث البند" : "حفظ البند"}
+        isSaving={isSaving}
       >
         <div className="p-6">
           <form

@@ -72,20 +72,6 @@ export default function PioneerCard({ figure, onClick }: PioneerCardProps) {
         </div>
       </div>
 
-      {/* Short Bio */}
-      <div className="space-y-2 overflow-hidden w-full">
-        <p className="text-base sm:text-lg text-slate-700 font-abyan-body font-normal line-clamp-3 leading-relaxed overflow-hidden break-words">
-          {figure.biography}
-        </p>
-      </div>
-
-      {/* Quote Excerpt if available */}
-      {figure.quote && (
-        <p className="text-base sm:text-lg text-sky-600 font-abyan-body font-normal leading-relaxed pt-1 line-clamp-2 overflow-hidden break-words w-full">
-          « {figure.quote} »
-        </p>
-      )}
-
       {/* Footer Prompt */}
       <div className="pt-2 flex justify-end items-center text-sm text-sky-600 font-abyan-title overflow-hidden border-none">
         <span className="group-hover:translate-x-[-3px] transition-transform font-normal">

@@ -121,7 +121,10 @@ export default function ArchiveItemForm({ id, initialData, categories = [], dist
       return;
     }
     setErrors({});
-    onSave(result.data);
+    onSave({
+      ...result.data,
+      authorName: result.data.authorName?.trim() || 'فريق توثيق بوابة أبين'
+    });
   };
 
   const districtOptions = districts.map(d => ({ value: d.name, label: d.name }));
@@ -129,127 +132,135 @@ export default function ArchiveItemForm({ id, initialData, categories = [], dist
   const villageOptions = selectedDistrict?.villages ? selectedDistrict.villages.map(v => ({ value: v, label: v })) : [];
 
   return (
-    <form id={id} onSubmit={handleSubmit} noValidate className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
-      <AdminInput
-        label="عنوان الوثيقة أو الصورة الأرشيفية"
-        type="text"
-        required
-        value={formData.title}
-        onChange={(e) => handleFieldChange('title', e.target.value)}
-        error={errors.title}
-        placeholder="مثال: وثيقة إنشاء سد باتيس التاريخية..."
-      />
+    <form id={id} onSubmit={handleSubmit} noValidate className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+        {/* RIGHT COLUMN: ALL INPUTS */}
+        <div className="space-y-4">
+          <AdminInput
+            label="عنوان الوثيقة أو الصورة الأرشيفية"
+            type="text"
+            required
+            value={formData.title}
+            onChange={(e) => handleFieldChange('title', e.target.value)}
+            error={errors.title}
+            placeholder="مثال: وثيقة إنشاء سد باتيس التاريخية..."
+          />
 
-      <AdminInput
-        label="اسم الكاتب / الباحث التوثيقي"
-        type="text"
-        value={formData.authorName || ''}
-        onChange={(e) => handleFieldChange('authorName', e.target.value)}
-        error={errors.authorName}
-        placeholder="اختياري - افتراضياً: فريق توثيق بوابة أبين"
-      />
+          <AdminInput
+            label="اسم الكاتب / الباحث التوثيقي"
+            type="text"
+            value={formData.authorName || ''}
+            onChange={(e) => handleFieldChange('authorName', e.target.value)}
+            error={errors.authorName}
+            placeholder="اختياري - افتراضياً: فريق توثيق بوابة أبين"
+          />
 
-      <AdminSelect
-        label="التصنيف الأرشيفي"
-        required
-        value={formData.categoryLabel}
-        onChange={(categoryLabel) => handleFieldChange('categoryLabel', categoryLabel)}
-        error={errors.categoryLabel}
-        options={categories}
-        placeholder="اختر أو اكتب التكتل الأرشيفي..."
-      />
+          <AdminSelect
+            label="التصنيف الأرشيفي"
+            required
+            value={formData.categoryLabel}
+            onChange={(categoryLabel) => handleFieldChange('categoryLabel', categoryLabel)}
+            error={errors.categoryLabel}
+            options={categories}
+            placeholder="اختر أو اكتب التكتل الأرشيفي..."
+          />
 
-      {/* MEDIA UPLOAD SECTION - Left side column */}
-      <div className="order-first md:order-last md:col-start-2 md:row-start-1 md:row-span-8 p-4 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col gap-4 h-fit">
-        <label className="block text-sm font-abyan-title text-slate-700 font-bold mb-1">
-          مرفقات ووثائق الأرشيف
-          <span className="block text-xs font-abyan-body text-slate-500 font-normal mt-1">
-            (الحد الأقصى 5 ملفات)
-          </span>
-        </label>
-        <div className="grid grid-cols-1 gap-4">
-          {(formData.images || []).map((imgUrl, index) => (
-            <AdminMediaUpload 
-              folderName="abyan-portal/archive"
-              key={`img-${index}`}
-              label={index === 0 ? "الوسائط الرئيسية (الغلاف)" : `صورة إضافية ${index}`}
-              value={imgUrl}
-              accept="image/*,video/*,audio/*"
-              onChange={(_, previewUrl) => {
-                const newImages = [...(formData.images || [])];
-                if (!previewUrl) {
-                  newImages.splice(index, 1);
-                } else {
-                  newImages[index] = previewUrl;
-                }
-                handleFieldChange('images', newImages);
-              }}
-            />
-          ))}
-          {(!formData.images || formData.images.length < 5) && (
-            <AdminMediaUpload 
-              folderName="abyan-portal/archive"
-              key={`new-img-${formData.images?.length || 0}`}
-              label={`إضافة صورة ${(formData.images?.length || 0) + 1}`}
-              value=""
-              accept="image/*,video/*,audio/*"
-              onChange={(_, previewUrl) => {
-                if (previewUrl) {
-                  handleFieldChange('images', [...(formData.images || []), previewUrl]);
-                }
-              }}
-            />
-          )}
+          <AdminInput
+            label="سنة التوثيق"
+            type="text"
+            required
+            value={formData.year}
+            onChange={(e) => handleFieldChange('year', e.target.value)}
+            error={errors.year}
+            placeholder="مثال: 1954م، أو القرن الثامن عشر..."
+          />
+
+          <AdminSelect
+            label="المديرية"
+            required
+            value={selectedDistrictName}
+            onChange={(val) => {
+              setSelectedDistrictName(val);
+              setSelectedVillageName('');
+            }}
+            error={errors.location}
+            options={districtOptions}
+            placeholder="اختر المديرية..."
+          />
+
+          <AdminSelect
+            label="القرية / المنطقة"
+            value={selectedVillageName}
+            onChange={setSelectedVillageName}
+            options={villageOptions}
+            placeholder="اختر القرية أو المنطقة..."
+            disabled={!selectedDistrictName || villageOptions.length === 0}
+          />
+        </div>
+
+        {/* LEFT COLUMN: MEDIA UPLOADS ONLY */}
+        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col gap-4 sticky top-4">
+          <label className="block text-sm font-abyan-title text-slate-700 font-bold mb-1">
+            مرفقات ووثائق الأرشيف
+            <span className="block text-xs font-abyan-body text-slate-500 font-normal mt-1">
+              (الحد الأقصى 100 وثيقة/صورة)
+            </span>
+          </label>
+          <div className="grid grid-cols-1 gap-4 max-h-[70vh] overflow-y-auto pr-1">
+            {(formData.images || []).map((imgUrl, index) => (
+              <AdminMediaUpload 
+                folderName="abyan-portal/archive"
+                key={`img-${index}`}
+                label={index === 0 ? "الوسائط الرئيسية (الغلاف)" : `وثيقة / صورة إضافية ${index}`}
+                value={imgUrl}
+                accept="image/*,video/*,audio/*"
+                onChange={(_, previewUrl) => {
+                  const newImages = [...(formData.images || [])];
+                  if (!previewUrl) {
+                    newImages.splice(index, 1);
+                  } else {
+                    newImages[index] = previewUrl;
+                  }
+                  handleFieldChange('images', newImages);
+                }}
+              />
+            ))}
+            {(!formData.images || formData.images.length < 100) && (
+              <AdminMediaUpload 
+                folderName="abyan-portal/archive"
+                key={`new-img-${formData.images?.length || 0}`}
+                label={`إضافة وثيقة / صورة ${(formData.images?.length || 0) + 1}`}
+                value=""
+                accept="image/*,video/*,audio/*"
+                onChange={(_, previewUrl) => {
+                  if (previewUrl) {
+                    handleFieldChange('images', [...(formData.images || []), previewUrl]);
+                  }
+                }}
+              />
+            )}
+          </div>
+        </div>
+
+        {/* FULL WIDTH: DESCRIPTION & SOURCES */}
+        <div className="col-span-1 md:col-span-2 space-y-4">
+          <AdminParagraphsInput
+            label="الشرح والقيد التوثيقي للأرشيف (فقرات)"
+            required
+            value={formData.description}
+            onChange={(description) => handleFieldChange('description', description)}
+            error={errors.description}
+            placeholder="اكتب تفاصيل القيد، مصدر الوثيقة، والأهمية الوطنية..."
+            containerClassName="mt-2"
+          />
+
+          <AdminSourcesInput
+            sources={formData.sources || []}
+            onChange={(sources) => handleFieldChange('sources', sources)}
+            containerClassName="mt-2"
+          />
         </div>
       </div>
-
-      <AdminInput
-        label="سنة التوثيق"
-        type="text"
-        required
-        value={formData.year}
-        onChange={(e) => handleFieldChange('year', e.target.value)}
-        error={errors.year}
-        placeholder="مثال: 1954م، أو القرن الثامن عشر..."
-      />
-
-      <AdminSelect
-        label="المديرية"
-        required
-        value={selectedDistrictName}
-        onChange={(val) => {
-          setSelectedDistrictName(val);
-          setSelectedVillageName('');
-        }}
-        error={errors.location}
-        options={districtOptions}
-        placeholder="اختر المديرية..."
-      />
-
-      <AdminSelect
-        label="القرية / المنطقة"
-        value={selectedVillageName}
-        onChange={setSelectedVillageName}
-        options={villageOptions}
-        placeholder="اختر القرية أو المنطقة..."
-        disabled={!selectedDistrictName || villageOptions.length === 0}
-      />
-
-      <AdminParagraphsInput
-        label="الشرح والقيد التوثيقي للأرشيف (فقرات)"
-        required
-        value={formData.description}
-        onChange={(description) => handleFieldChange('description', description)}
-        error={errors.description}
-        placeholder="اكتب تفاصيل القيد، مصدر الوثيقة، والأهمية الوطنية..."
-        containerClassName="md:col-span-2 mt-2"
-      />
-
-      <AdminSourcesInput
-        sources={formData.sources || []}
-        onChange={(sources) => handleFieldChange('sources', sources)}
-        containerClassName="md:col-span-2 mt-2"
-      />
     </form>
   );
 }

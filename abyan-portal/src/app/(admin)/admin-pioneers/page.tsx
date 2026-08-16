@@ -59,6 +59,7 @@ export default function AdminPioneersPage() {
     null,
   );
   const [isCategoryPublished, setIsCategoryPublished] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   const toast = useToast();
   const { confirm } = useConfirm();
@@ -172,6 +173,8 @@ export default function AdminPioneersPage() {
   };
 
   const handleSave = async (formData: PioneerFormData) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       const dataToSave = { ...formData, isPublished };
       if (currentPioneerId) {
@@ -183,7 +186,7 @@ export default function AdminPioneersPage() {
       }
       setIsDrawerOpen(false);
       fetchPioneers(1);
-    } catch (error) {
+    } catch (error: any) {
       let errorMsg = "حدث خطأ أثناء حفظ البيانات";
       if (error?.response?.data?.errors) {
         errorMsg = error.response.data.errors.join("، ");
@@ -191,6 +194,8 @@ export default function AdminPioneersPage() {
         errorMsg = error.response.data.message;
       }
       toast.error(errorMsg);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -224,13 +229,15 @@ export default function AdminPioneersPage() {
         await PioneersService.deleteCategory(item._id);
         toast.success("تم حذف الفئة بنجاح");
         fetchCategories();
-      } catch (error) {
+      } catch (error: any) {
         toast.error(error?.response?.data?.message || "فشل في حذف الفئة");
       }
     }
   };
 
   const handleSaveCategory = async (formData: PioneerCategoryFormData) => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       const dataToSave = { ...formData, isActive: isCategoryPublished };
       if (currentCategoryId) {
@@ -242,11 +249,7 @@ export default function AdminPioneersPage() {
       }
       setIsCategoryDrawerOpen(false);
       fetchCategories();
-     } catch (error) {
-      console.error(
-        "Save pioneer category error:",
-        error?.response?.data || error,
-      );
+    } catch (error: any) {
       let errorMsg = "حدث خطأ أثناء حفظ الفئة";
       if (error?.response?.data?.errors) {
         errorMsg = error.response.data.errors.join("، ");
@@ -254,6 +257,8 @@ export default function AdminPioneersPage() {
         errorMsg = error.response.data.message;
       }
       toast.error(errorMsg);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -412,6 +417,7 @@ export default function AdminPioneersPage() {
         title={currentPioneer ? "تعديل شخصية" : "إضافة شخصية جديدة"}
         formId="pioneer-form"
         saveLabel="حفظ الشخصية"
+        isSaving={isSaving}
         headerActions={
           <AdminToggle
             label="نشر السجل"
@@ -438,6 +444,7 @@ export default function AdminPioneersPage() {
         title={currentCategory ? "تعديل فئة" : "إضافة فئة جديدة"}
         formId="pioneer-category-form"
         saveLabel="حفظ الفئة"
+        isSaving={isSaving}
         headerActions={
           <AdminToggle
             label="نشر الفئة"

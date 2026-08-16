@@ -119,6 +119,8 @@ export default function AdminDistrictsPage() {
   };
 
   const handleSaveDistrict = async (formData: DistrictFormData) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       const { isPublished, ...restFormData } = formData;
       const dataToSave = { ...restFormData, isActive: isDistrictPublished };
@@ -132,7 +134,7 @@ export default function AdminDistrictsPage() {
       }
       setIsDistrictDrawerOpen(false);
       fetchDistricts();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to save district:", error, error?.response?.data);
       let errorMessage = error?.response?.data?.message || "فشل في حفظ السجل";
       const detailedErrors = error?.response?.data?.errors;
@@ -140,6 +142,8 @@ export default function AdminDistrictsPage() {
         errorMessage = `${errorMessage}: ${detailedErrors[0]}`;
       }
       toast.error(typeof errorMessage === 'string' ? errorMessage : "فشل في حفظ السجل");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -177,6 +181,7 @@ export default function AdminDistrictsPage() {
   };
 
   const handleSaveRegion = async (formData: DistrictRegionFormData) => {
+    if (isSubmitting) return;
     setIsSubmitting(true);
     try {
       const dataToSave = { ...formData, isActive: isRegionPublished };
@@ -184,7 +189,7 @@ export default function AdminDistrictsPage() {
         await DistrictsService.updateRegion(currentEditingRegionId, dataToSave);
         toast.success("تم تحديث التقسيم بنجاح");
       } else {
-        await DistrictsService.createRegion(formData);
+        await DistrictsService.createRegion(dataToSave);
         toast.success("تم إضافة التقسيم بنجاح");
       }
       setIsRegionDrawerOpen(false);
@@ -342,6 +347,7 @@ export default function AdminDistrictsPage() {
         title={currentDistrict ? "تعديل مديرية" : "إضافة مديرية جديدة"}
         formId="district-form"
         saveLabel="حفظ المديرية"
+        isSaving={isSubmitting}
         headerActions={
           <AdminToggle
             label="نشر السجل"
@@ -367,6 +373,7 @@ export default function AdminDistrictsPage() {
         title={currentRegion ? "تعديل التقسيم العُرفي" : "إضافة تقسيم عُرفي جديد"}
         formId="region-form"
         saveLabel="حفظ التقسيم العُرفي"
+        isSaving={isSubmitting}
         headerActions={
           <AdminToggle
             label="نشر السجل"
