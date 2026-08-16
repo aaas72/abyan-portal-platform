@@ -4,6 +4,7 @@ import AdminSelect from '../form-fields/AdminSelect';
 import AdminTagsInput from '../form-fields/AdminTagsInput';
 import AdminParagraphsInput from '../form-fields/AdminParagraphsInput';
 import AdminMediaUpload from '../form-fields/AdminMediaUpload';
+import AdminSourcesInput from '../form-fields/AdminSourcesInput';
 import { DistrictFormDataSchema, DistrictFormData } from '@/types/schemas';
 
 export type { DistrictFormData };
@@ -127,11 +128,10 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
       <AdminInput
         label="اسم الكاتب / الباحث التوثيقي"
         type="text"
-        required
         value={formData.authorName || ''}
         onChange={(e) => handleFieldChange('authorName', e.target.value)}
         error={errors.authorName}
-        placeholder="مثال: الباحث جمال حسين"
+        placeholder="اختياري - افتراضياً: فريق توثيق بوابة أبين"
       />
 
       {/* MEDIA UPLOAD SECTION - Left side column */}
@@ -278,6 +278,12 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
         onChange={(description) => handleFieldChange('description', description)}
         error={errors.description}
         placeholder="اكتب التوثيق التاريخي، الدور الوطني والمكون الاجتماعي للمديرية..."
+        containerClassName="md:col-span-2 mt-2"
+      />
+
+      <AdminSourcesInput
+        sources={formData.sources || []}
+        onChange={(sources) => handleFieldChange('sources', sources)}
         containerClassName="md:col-span-2 mt-2"
       />
     </form>

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { SmartContainer } from "@/components/layout";
 import { SubpageHero, CategoryTabSelector, UnifiedMediaViewer, MediaItem, EmptyState } from "@/components/ui";
@@ -11,12 +12,15 @@ import {
   curtainOverlayTransition,
   itemFadeInRight,
 } from "@/lib/animations";
+import { updateUrlParams } from "@/lib/url-sync";
 
 interface EconomyClientProps {
   initialPillars: EconomyPillar[];
 }
 
 export default function EconomyClient({ initialPillars }: EconomyClientProps) {
+  const searchParams = useSearchParams();
+
   const [activeEconomyTab, setActiveEconomyTab] = useState<string>(() => {
     const valid = initialPillars.find((p) => (p.photoCards && p.photoCards.length > 0) || (p.keyProducts && p.keyProducts.length > 0) || (p.details && p.details.length > 0));
     return valid ? valid.id : "cotton";
@@ -36,6 +40,64 @@ export default function EconomyClient({ initialPillars }: EconomyClientProps) {
     const validData = initialPillars.filter((p) => (p.photoCards && p.photoCards.length > 0) || (p.keyProducts && p.keyProducts.length > 0) || (p.details && p.details.length > 0));
     return validData.find((p) => p.id === activeEconomyTab) || validData[0];
   }, [initialPillars, activeEconomyTab]);
+
+  const mapPhotoCardToModal = (photoCard: any, pillarName: string): MediaItem => ({
+    id: photoCard.id,
+    title: photoCard.title,
+    subtitle: photoCard.tag,
+    authorName: photoCard.authorName,
+    sourceName: photoCard.sourceName,
+    sourceUrl: photoCard.sourceUrl,
+    sources: photoCard.sources,
+    fullBiography: photoCard.description,
+    location: photoCard.location,
+    categoryLabel: pillarName,
+    description: photoCard.description,
+    bgGradient: photoCard.bgGradient,
+    images: photoCard.images,
+  });
+
+  // Sync state from URL query parameters on load
+  useEffect(() => {
+    const tabParam = searchParams.get("tab") || searchParams.get("pillar") || searchParams.get("category");
+    if (tabParam) {
+      const matchedPillar = initialPillars.find(
+        (p) => p.id === tabParam || p.pillarName === tabParam || p.title === tabParam
+      );
+      if (matchedPillar) {
+        setActiveEconomyTab(matchedPillar.id);
+      }
+    }
+
+    const itemParam = searchParams.get("item") || searchParams.get("id");
+    if (itemParam) {
+      for (const pillar of initialPillars) {
+        const foundCard = pillar.photoCards?.find(
+          (c) => c.id === itemParam || c.title === itemParam
+        );
+        if (foundCard) {
+          setActiveEconomyTab(pillar.id);
+          setSelectedEconomyModal(mapPhotoCardToModal(foundCard, pillar.pillarName));
+          break;
+        }
+      }
+    }
+  }, [searchParams, initialPillars]);
+
+  const handleSelectTab = (tabId: string) => {
+    setActiveEconomyTab(tabId);
+    updateUrlParams({ tab: tabId, item: null });
+  };
+
+  const handleOpenPhotoModal = (photoCard: any) => {
+    setSelectedEconomyModal(mapPhotoCardToModal(photoCard, currentPillar.pillarName));
+    updateUrlParams({ item: photoCard.id });
+  };
+
+  const handleCloseModal = () => {
+    setSelectedEconomyModal(null);
+    updateUrlParams({ item: null });
+  };
 
   if (!initialPillars || initialPillars.length === 0 || !currentPillar) {
     return (
@@ -60,7 +122,7 @@ export default function EconomyClient({ initialPillars }: EconomyClientProps) {
       <CategoryTabSelector
         tabs={pillarTabs}
         activeTab={activeEconomyTab}
-        onSelectTab={setActiveEconomyTab}
+        onSelectTab={handleSelectTab}
       />
 
       {/* MAIN ECONOMY PROFILE SHOWCASE */}
@@ -111,20 +173,7 @@ export default function EconomyClient({ initialPillars }: EconomyClientProps) {
                     <FoodCard
                       key={photoCard.id}
                       foodCard={photoCard}
-                      onClick={() =>
-                        setSelectedEconomyModal({
-                          id: photoCard.id,
-                          title: photoCard.title,
-                          subtitle: photoCard.tag,
-                          authorName: photoCard.authorName,
-                          fullBiography: photoCard.description,
-                          location: photoCard.location,
-                          categoryLabel: currentPillar.pillarName,
-                          description: photoCard.description,
-                          bgGradient: photoCard.bgGradient,
-                          images: photoCard.images,
-                        })
-                      }
+                      onClick={() => handleOpenPhotoModal(photoCard)}
                     />
                   ))}
                 </div>
@@ -171,7 +220,7 @@ export default function EconomyClient({ initialPillars }: EconomyClientProps) {
       {/* UNIFIED MEDIA VIEWER MODAL FOR ECONOMY FULL DETAILS */}
       <UnifiedMediaViewer
         item={selectedEconomyModal}
-        onClose={() => setSelectedEconomyModal(null)}
+        onClose={handleCloseModal}
       />
     </>
   );

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { SmartContainer } from "@/components/layout";
 import { SubpageHero, CategoryTabSelector, FolkAudioPlayer, UnifiedMediaViewer, MediaItem, EmptyState } from "@/components/ui";
@@ -12,6 +13,7 @@ import {
   curtainOverlayTransition,
   itemFadeInRight,
 } from "@/lib/animations";
+import { updateUrlParams } from "@/lib/url-sync";
 
 interface CultureClientProps {
   initialCategories: CultureCategory[];
@@ -23,6 +25,8 @@ const hasContent = (c: CultureCategory) => {
 };
 
 export default function CultureClient({ initialCategories, folkAudioTracks }: CultureClientProps) {
+  const searchParams = useSearchParams();
+
   const [activeCategoryTab, setActiveCategoryTab] = useState<string>(() => {
     const valid = initialCategories.find(hasContent);
     return valid ? valid.id : "dan";
@@ -42,6 +46,76 @@ export default function CultureClient({ initialCategories, folkAudioTracks }: Cu
     const validData = initialCategories.filter(hasContent);
     return validData.find((c) => c.id === activeCategoryTab) || validData[0];
   }, [initialCategories, activeCategoryTab]);
+
+  // Sync state from URL query parameters on load
+  useEffect(() => {
+    const tabParam = searchParams.get("tab") || searchParams.get("category");
+    if (tabParam) {
+      const matchedCat = initialCategories.find(
+        (c) => c.id === tabParam || c.categoryName === tabParam || c.title === tabParam
+      );
+      if (matchedCat) {
+        setActiveCategoryTab(matchedCat.id);
+      }
+    }
+
+    const itemParam = searchParams.get("item") || searchParams.get("id");
+    if (itemParam) {
+      for (const cat of initialCategories) {
+        const foundItem = cat.items?.find(
+          (i) => i.id === itemParam || i.title === itemParam
+        );
+        if (foundItem) {
+          setActiveCategoryTab(cat.id);
+          setSelectedCultureModal({
+            id: foundItem.id,
+            title: foundItem.title,
+            subtitle: foundItem.tag,
+            authorName: foundItem.authorName,
+            sourceName: foundItem.sourceName,
+            sourceUrl: foundItem.sourceUrl,
+            sources: foundItem.sources,
+            fullBiography: foundItem.description,
+            location: foundItem.location,
+            categoryLabel: cat.title,
+            description: foundItem.description,
+            bgGradient: foundItem.bgGradient,
+            images: foundItem.images,
+          });
+          break;
+        }
+      }
+    }
+  }, [searchParams, initialCategories]);
+
+  const handleSelectTab = (tabId: string) => {
+    setActiveCategoryTab(tabId);
+    updateUrlParams({ tab: tabId, item: null });
+  };
+
+  const handleOpenItemModal = (item: any) => {
+    setSelectedCultureModal({
+      id: item.id,
+      title: item.title,
+      subtitle: item.tag,
+      authorName: item.authorName,
+      sourceName: item.sourceName,
+      sourceUrl: item.sourceUrl,
+      sources: item.sources,
+      fullBiography: item.description,
+      location: item.location,
+      categoryLabel: currentCategory.title,
+      description: item.description,
+      bgGradient: item.bgGradient,
+      images: item.images,
+    });
+    updateUrlParams({ item: item.id });
+  };
+
+  const handleCloseModal = () => {
+    setSelectedCultureModal(null);
+    updateUrlParams({ item: null });
+  };
 
   if (!initialCategories || initialCategories.length === 0 || !currentCategory) {
     return (
@@ -66,7 +140,7 @@ export default function CultureClient({ initialCategories, folkAudioTracks }: Cu
       <CategoryTabSelector
         tabs={categoryTabs}
         activeTab={activeCategoryTab}
-        onSelectTab={setActiveCategoryTab}
+        onSelectTab={handleSelectTab}
       />
 
       {/* CULTURE SHOWCASE PANEL */}
@@ -127,20 +201,7 @@ export default function CultureClient({ initialCategories, folkAudioTracks }: Cu
                     <FoodCard
                       key={item.id}
                       foodCard={item}
-                      onClick={() =>
-                        setSelectedCultureModal({
-                          id: item.id,
-                          title: item.title,
-                          subtitle: item.tag,
-                          authorName: item.authorName,
-                          fullBiography: item.description,
-                          location: item.location,
-                          categoryLabel: currentCategory.title,
-                          description: item.description,
-                          bgGradient: item.bgGradient,
-                          images: item.images,
-                        })
-                      }
+                      onClick={() => handleOpenItemModal(item)}
                     />
                   ))}
                 </div>
@@ -162,12 +223,11 @@ export default function CultureClient({ initialCategories, folkAudioTracks }: Cu
                     bgGradient: currentCategory.visualShowcase.bgGradient,
                   }}
                   onClick={() =>
-                    setSelectedCultureModal({
+                    handleOpenItemModal({
                       id: "visual-storytelling",
                       title: currentCategory.visualShowcase?.title || "مجالس الحكايات والأمثال الشفاهية في أبين",
-                      subtitle: currentCategory.visualShowcase?.tag || "معرض المشاهد والحكايات الشعبية",
-                      fullBiography: currentCategory.visualShowcase?.description || "توثيق بصرِي لمجالس كبار السن وحكايات البحارة والمزارعين في شقرة وجعار ولودر",
-                      categoryLabel: "التراث السردي الشفاهي",
+                      tag: currentCategory.visualShowcase?.tag || "معرض المشاهد والحكايات الشعبية",
+                      description: currentCategory.visualShowcase?.description || "توثيق بصرِي لمجالس كبار السن وحكايات البحارة والمزارعين في شقرة وجعار ولودر",
                       bgGradient: currentCategory.visualShowcase?.bgGradient,
                       images: currentCategory.visualShowcase?.images,
                     })
@@ -217,7 +277,7 @@ export default function CultureClient({ initialCategories, folkAudioTracks }: Cu
       {/* UNIFIED MEDIA VIEWER MODAL FOR CULTURE DETAILS */}
       <UnifiedMediaViewer
         item={selectedCultureModal}
-        onClose={() => setSelectedCultureModal(null)}
+        onClose={handleCloseModal}
       />
     </>
   );

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { SmartContainer } from "@/components/layout";
 import { SubpageHero, EmptyState } from "@/components/ui";
@@ -10,15 +11,42 @@ import {
   curtainOverlayTransition,
   itemFadeInRight,
 } from "@/lib/animations";
+import { updateUrlParams } from "@/lib/url-sync";
 
 interface HistoryClientProps {
   historyEras: HistoryEra[];
 }
 
 export default function HistoryClient({ historyEras }: HistoryClientProps) {
-  const [selectedEraId, setSelectedEraId] = useState<string>(
-    historyEras[0]?.id || "ancient"
-  );
+  const searchParams = useSearchParams();
+
+  const [selectedEraId, setSelectedEraId] = useState<string>(() => {
+    const eraParam = searchParams.get("era") || searchParams.get("id");
+    if (eraParam) {
+      const match = historyEras.find(
+        (e) => e.id === eraParam || e.eraTitle === eraParam
+      );
+      if (match) return match.id;
+    }
+    return historyEras[0]?.id || "ancient";
+  });
+
+  useEffect(() => {
+    const eraParam = searchParams.get("era") || searchParams.get("id");
+    if (eraParam) {
+      const match = historyEras.find(
+        (e) => e.id === eraParam || e.eraTitle === eraParam
+      );
+      if (match) {
+        setSelectedEraId(match.id);
+      }
+    }
+  }, [searchParams, historyEras]);
+
+  const handleSelectEra = (eraId: string) => {
+    setSelectedEraId(eraId);
+    updateUrlParams({ era: eraId });
+  };
 
   const activeEra =
     historyEras.find((e) => e.id === selectedEraId) || historyEras[0];
@@ -62,7 +90,7 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
                 >
                   {/* Era Card Header */}
                   <div
-                    onClick={() => setSelectedEraId(isSelected ? "" : era.id)}
+                    onClick={() => handleSelectEra(isSelected ? "" : era.id)}
                     className="cursor-pointer py-2.5 flex items-center justify-between"
                   >
                     <div className="space-y-1 text-right flex-1 pl-3">
@@ -164,7 +192,7 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
                 return (
                   <div
                     key={era.id}
-                    onClick={() => setSelectedEraId(era.id)}
+                    onClick={() => handleSelectEra(era.id)}
                     className="py-3.5 px-1 text-right cursor-pointer bg-transparent border-b border-slate-100 last:border-none shadow-none transition-colors duration-300 min-w-0 w-full overflow-hidden"
                   >
                     <div className="flex flex-col text-right space-y-0.5 min-w-0 w-full">

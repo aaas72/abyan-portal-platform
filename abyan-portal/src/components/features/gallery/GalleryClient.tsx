@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { SmartContainer } from "@/components/layout";
 import { SubpageHero, CategoryTabSelector, UnifiedMediaViewer, MediaItem, EmptyState } from "@/components/ui";
@@ -11,6 +12,7 @@ import {
   curtainOverlayTransition,
   itemFadeInRight,
 } from "@/lib/animations";
+import { updateUrlParams } from "@/lib/url-sync";
 
 interface GalleryClientProps {
   initialCategories: { id: string; label: string }[];
@@ -18,6 +20,8 @@ interface GalleryClientProps {
 }
 
 export default function GalleryClient({ initialCategories, galleryItems }: GalleryClientProps) {
+  const searchParams = useSearchParams();
+
   const [activeCategoryTab, setActiveCategoryTab] = useState<string>("all");
   const [selectedGalleryModal, setSelectedGalleryModal] = useState<MediaItem | null>(null);
 
@@ -31,6 +35,64 @@ export default function GalleryClient({ initialCategories, galleryItems }: Galle
     if (activeCategoryTab === "all") return galleryItems;
     return galleryItems.filter((item) => item.category === activeCategoryTab);
   }, [galleryItems, activeCategoryTab]);
+
+  const mapItemToModal = (item: ArchiveItem): MediaItem => ({
+    id: item.id,
+    title: item.title,
+    subtitle: `${item.year} • ${item.location}`,
+    authorName: item.authorName,
+    sourceName: item.sourceName,
+    sourceUrl: item.sourceUrl,
+    sources: item.sources,
+    fullBiography: item.description,
+    location: item.location,
+    year: item.year,
+    categoryLabel: "الأرشيف الرقمي لبوابة أبين",
+    description: item.description,
+    bgGradient: item.bgGradient,
+    images: item.images,
+  });
+
+  // Sync state from URL query parameters on load
+  useEffect(() => {
+    const tabParam = searchParams.get("tab") || searchParams.get("category");
+    if (tabParam) {
+      const matchedTab = validTabs.find(
+        (c) => c.id === tabParam || c.label === tabParam
+      );
+      if (matchedTab) {
+        setActiveCategoryTab(matchedTab.id);
+      }
+    }
+
+    const itemParam = searchParams.get("item") || searchParams.get("id");
+    if (itemParam) {
+      const foundItem = galleryItems.find(
+        (i) => i.id === itemParam || i.title === itemParam
+      );
+      if (foundItem) {
+        if (foundItem.category) {
+          setActiveCategoryTab(foundItem.category);
+        }
+        setSelectedGalleryModal(mapItemToModal(foundItem));
+      }
+    }
+  }, [searchParams, validTabs, galleryItems]);
+
+  const handleSelectTab = (tabId: string) => {
+    setActiveCategoryTab(tabId);
+    updateUrlParams({ tab: tabId === "all" ? null : tabId, item: null });
+  };
+
+  const handleOpenItemModal = (item: ArchiveItem) => {
+    setSelectedGalleryModal(mapItemToModal(item));
+    updateUrlParams({ item: item.id });
+  };
+
+  const handleCloseModal = () => {
+    setSelectedGalleryModal(null);
+    updateUrlParams({ item: null });
+  };
 
   if (!galleryItems || galleryItems.length === 0) {
     return (
@@ -55,7 +117,7 @@ export default function GalleryClient({ initialCategories, galleryItems }: Galle
       <CategoryTabSelector
         tabs={validTabs}
         activeTab={activeCategoryTab}
-        onSelectTab={setActiveCategoryTab}
+        onSelectTab={handleSelectTab}
       />
 
       {/* GALLERY SHOWCASE GRID */}
@@ -94,21 +156,7 @@ export default function GalleryClient({ initialCategories, galleryItems }: Galle
                     bgGradient: item.bgGradient,
                     images: item.images, // Pass all images
                   }}
-                  onClick={() =>
-                    setSelectedGalleryModal({
-                      id: item.id,
-                      title: item.title,
-                      subtitle: `${item.year} • ${item.location}`,
-                      authorName: item.authorName,
-                      fullBiography: item.description,
-                      location: item.location,
-                      year: item.year,
-                      categoryLabel: "الأرشيف الرقمي لبوابة أبين",
-                      description: item.description,
-                      bgGradient: item.bgGradient,
-                      images: item.images, // Pass the whole array
-                    })
-                  }
+                  onClick={() => handleOpenItemModal(item)}
                 />
               ))}
             </motion.div>
@@ -119,8 +167,9 @@ export default function GalleryClient({ initialCategories, galleryItems }: Galle
       {/* UNIFIED MEDIA VIEWER MODAL FOR GALLERY PHOTO FULL VIEW */}
       <UnifiedMediaViewer
         item={selectedGalleryModal}
-        onClose={() => setSelectedGalleryModal(null)}
+        onClose={handleCloseModal}
       />
     </>
   );
 }
+

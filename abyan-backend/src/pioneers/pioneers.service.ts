@@ -24,7 +24,7 @@ export class PioneersService {
     @InjectModel(PioneerFigure.name)
     private figureModel: Model<PioneerFigureDocument>,
     private uploadService: UploadService,
-  ) {}
+  ) { }
 
   // --- Frontend Aggregation (Public) ---
 
@@ -51,9 +51,16 @@ export class PioneersService {
           role: f.title, // map db 'title' back to 'role' for UI visual components
           startYear: f.startYear || (f as any).era?.split('-')[0]?.trim() || '',
           endYear: f.endYear || (f as any).era?.split('-')[1]?.trim() || '',
-          location: f.origin, // map db 'origin' back to 'location'
+          location: f.origin || '', // map db 'origin' back to 'location'
           biography: f.biography,
           quote: f.quote,
+          birthDate: f.birthDate || '',
+          deathDate: f.deathDate || '',
+          achievements: f.achievements || [],
+          authorName: f.authorName || 'فريق توثيق بوابة أبين',
+          sourceName: f.sourceName || '',
+          sourceUrl: f.sourceUrl || '',
+          sources: f.sources || (f.sourceName ? [{ name: f.sourceName, url: f.sourceUrl }] : []),
           images: MediaMapper.extractImages(f),
           bgGradient: 'from-emerald-500 to-emerald-700', // inject default for UI components
         })),
@@ -99,7 +106,10 @@ export class PioneersService {
   async createFigure(
     createFigureDto: CreatePioneerFigureDto,
   ): Promise<PioneerFigure> {
-    const newFigure = new this.figureModel(createFigureDto);
+    const newFigure = new this.figureModel({
+      ...createFigureDto,
+      authorName: createFigureDto.authorName?.trim() || 'فريق توثيق بوابة أبين',
+    });
     const savedFigure = await newFigure.save();
 
     let mediaUpdated = false;
@@ -166,7 +176,7 @@ export class PioneersService {
         'image',
       );
     }
-    
+
     if (updateFigureDto.videos && updateFigureDto.videos.length > 0) {
       updateFigureDto.videos = await this.uploadService.renameMediaUrls(
         id,
@@ -204,7 +214,7 @@ export class PioneersService {
 
   async findAllFigures(): Promise<PioneerFigure[]> {
     const figures = await this.figureModel.find().limit(100).lean().exec();
-    
+
     return figures.map((figure: any) => ({
       ...figure,
       images: MediaMapper.extractImages(figure),

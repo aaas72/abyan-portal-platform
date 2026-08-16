@@ -41,6 +41,10 @@ export class GalleryService {
       aspectRatio: archive.aspectRatio,
       bgGradient: archive.bgGradient,
       description: archive.description,
+      authorName: archive.authorName || 'فريق توثيق بوابة أبين',
+      sourceName: (archive as any).sourceName || '',
+      sourceUrl: (archive as any).sourceUrl || '',
+      sources: (archive as any).sources || ((archive as any).sourceName ? [{ name: (archive as any).sourceName, url: (archive as any).sourceUrl }] : []),
       images: MediaMapper.extractImages(archive),
     }));
 
@@ -52,7 +56,10 @@ export class GalleryService {
   async createArchiveItem(
     createArchiveItemDto: CreateArchiveItemDto,
   ): Promise<ArchiveItem> {
-    const newItem = new this.archiveModel(createArchiveItemDto);
+    const newItem = new this.archiveModel({
+      ...createArchiveItemDto,
+      authorName: createArchiveItemDto.authorName?.trim() || 'فريق توثيق بوابة أبين',
+    });
     const savedItem = await newItem.save();
 
     let mediaUpdated = false;

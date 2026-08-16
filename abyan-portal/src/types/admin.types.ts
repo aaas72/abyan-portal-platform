@@ -1,3 +1,5 @@
+import { ContentSource } from "./schemas";
+
 export interface AdminAboutPillar {
   _id: string;
   title: string;
@@ -41,6 +43,9 @@ export interface AdminDistrict {
   areaKm2: string;
   areaPercentage: string;
   authorName?: string;
+  sourceName?: string;
+  sourceUrl?: string;
+  sources?: ContentSource[];
   crops: string[];
   landmarks: string[];
   villages: string[];
@@ -66,11 +71,15 @@ export interface AdminPioneer {
   endYear: string;
   origin?: string;
   authorName?: string;
+  sourceName?: string;
+  sourceUrl?: string;
+  sources?: ContentSource[];
   isActive: boolean;
   category?: string;
   biography?: string;
   quote?: string;
   birthDate?: string;
+  deathDate?: string;
   achievements?: string[];
   images?: string[];
 }
@@ -93,6 +102,9 @@ export interface AdminHistoryEra {
   eraTitle: string;
   historicalCapital: string;
   authorName?: string;
+  sourceName?: string;
+  sourceUrl?: string;
+  sources?: ContentSource[];
   shortSummary: string;
   fullDescription: string;
   keyEvents: string[];
@@ -118,6 +130,9 @@ export interface AdminLandmarkPhotoCard {
   tag: string;
   location: string;
   authorName?: string;
+  sourceName?: string;
+  sourceUrl?: string;
+  sources?: ContentSource[];
   description: string;
   bgGradient?: string;
   images?: string[];
@@ -157,6 +172,9 @@ export interface AdminCultureItem {
   tag: string;
   location: string;
   authorName?: string;
+  sourceName?: string;
+  sourceUrl?: string;
+  sources?: ContentSource[];
   description: string;
   bgGradient: string;
   images?: string[];
@@ -182,6 +200,9 @@ export interface AdminEconomyPhotoCard {
   tag: string;
   location: string;
   authorName?: string;
+  sourceName?: string;
+  sourceUrl?: string;
+  sources?: ContentSource[];
   description: string;
   bgGradient: string;
   images?: string[];
@@ -197,6 +218,9 @@ export interface AdminGalleryImage {
   year?: string;
   location?: string;
   authorName?: string;
+  sourceName?: string;
+  sourceUrl?: string;
+  sources?: ContentSource[];
   description?: string;
   images?: string[];
   isActive: boolean;

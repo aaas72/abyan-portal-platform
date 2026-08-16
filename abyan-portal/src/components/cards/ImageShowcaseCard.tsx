@@ -4,6 +4,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
+import { ContentSource } from "@/types/schemas";
+
 export interface ImageShowcaseData {
   id: string;
   title: string;
@@ -14,6 +16,9 @@ export interface ImageShowcaseData {
   endYear?: string;
   description: string;
   authorName?: string;
+  sourceName?: string;
+  sourceUrl?: string;
+  sources?: ContentSource[];
   bgGradient?: string;
   images?: string[];
   aspectRatio?: string;

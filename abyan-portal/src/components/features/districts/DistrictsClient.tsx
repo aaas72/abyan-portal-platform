@@ -19,6 +19,7 @@ import {
   curtainOverlayTransition,
   itemFadeInRight,
 } from "@/lib/animations";
+import { updateUrlParams } from "@/lib/url-sync";
 
 type DistrictSubTab =
   | "history"
@@ -34,40 +35,106 @@ interface DistrictsClientProps {
   regions: { id: string; label: string; description?: string }[];
 }
 
-
-
 export default function DistrictsClient({
   allDistricts,
   regions,
 }: DistrictsClientProps) {
   const searchParams = useSearchParams();
-  const queryDistrictId = searchParams.get("id");
 
-  const [selectedDistrictId, setSelectedDistrictId] = useState<string>(
-    queryDistrictId || "zinjibar",
-  );
+  const [selectedDistrictId, setSelectedDistrictId] = useState<string>(() => {
+    const queryDist = searchParams.get("district") || searchParams.get("id");
+    if (queryDist) {
+      const match = allDistricts.find(
+        (d) => d.id === queryDist || d.name === queryDist || d.title === queryDist
+      );
+      if (match) return match.id;
+    }
+    return "zinjibar";
+  });
+
   const [selectedRegionFilter, setSelectedRegionFilter] =
     useState<string>("all");
-  const [activeSubTab, setActiveSubTab] = useState<DistrictSubTab>("history");
+  const [activeSubTab, setActiveSubTab] = useState<DistrictSubTab>(() => {
+    const queryTab = searchParams.get("tab");
+    const validTabs: DistrictSubTab[] = [
+      "history",
+      "nature",
+      "pioneers",
+      "sites",
+      "economy",
+      "culture",
+      "villages",
+    ];
+    if (queryTab && validTabs.includes(queryTab as DistrictSubTab)) {
+      return queryTab as DistrictSubTab;
+    }
+    return "history";
+  });
   const [selectedMediaItem, setSelectedMediaItem] = useState<MediaItem | null>(
     null,
   );
 
+  // Sync from URL on mount
   useEffect(() => {
-    if (queryDistrictId) {
-      const requestedDistrict = allDistricts.find(d => d.id === queryDistrictId);
-      if (requestedDistrict) {
-        setSelectedDistrictId(queryDistrictId);
-        setSelectedRegionFilter(requestedDistrict.region);
-      } else {
-        setSelectedDistrictId(queryDistrictId);
+    const distParam = searchParams.get("district") || searchParams.get("id");
+    if (distParam) {
+      const matched = allDistricts.find(
+        (d) => d.id === distParam || d.name === distParam || d.title === distParam
+      );
+      if (matched) {
+        setSelectedDistrictId(matched.id);
+        setSelectedRegionFilter(matched.region || "all");
       }
     }
-  }, [queryDistrictId, allDistricts]);
 
-  useEffect(() => {
+    const regionParam = searchParams.get("region");
+    if (regionParam) {
+      const matchedReg = regions.find((r) => r.id === regionParam || r.label === regionParam);
+      if (matchedReg) {
+        setSelectedRegionFilter(matchedReg.id);
+      }
+    }
+
+    const tabParam = searchParams.get("tab");
+    const validTabs: DistrictSubTab[] = [
+      "history",
+      "nature",
+      "pioneers",
+      "sites",
+      "economy",
+      "culture",
+      "villages",
+    ];
+    if (tabParam && validTabs.includes(tabParam as DistrictSubTab)) {
+      setActiveSubTab(tabParam as DistrictSubTab);
+    }
+  }, [searchParams, allDistricts, regions]);
+
+  const handleSelectDistrict = (districtId: string) => {
+    setSelectedDistrictId(districtId);
     setActiveSubTab("history");
-  }, [selectedDistrictId]);
+    updateUrlParams({ district: districtId, tab: "history", item: null });
+  };
+
+  const handleSelectRegion = (regionId: string) => {
+    setSelectedRegionFilter(regionId);
+    updateUrlParams({ region: regionId === "all" ? null : regionId });
+  };
+
+  const handleSelectSubTab = (tabId: string) => {
+    setActiveSubTab(tabId as DistrictSubTab);
+    updateUrlParams({ tab: tabId, item: null });
+  };
+
+  const handleOpenMediaItem = (item: MediaItem) => {
+    setSelectedMediaItem(item);
+    updateUrlParams({ item: item.id });
+  };
+
+  const handleCloseModal = () => {
+    setSelectedMediaItem(null);
+    updateUrlParams({ item: null });
+  };
 
   const filteredDistricts = React.useMemo(() => {
     return selectedRegionFilter === "all"
@@ -120,7 +187,7 @@ export default function DistrictsClient({
       <CategoryTabSelector
         tabs={regions}
         activeTab={selectedRegionFilter}
-        onSelectTab={setSelectedRegionFilter}
+        onSelectTab={handleSelectRegion}
       />
 
       {/* REGION DESCRIPTION */}
@@ -167,7 +234,7 @@ export default function DistrictsClient({
                   {/* District Card Header */}
                   <div
                     onClick={() =>
-                      setSelectedDistrictId(isSelected ? "" : dist.id)
+                      handleSelectDistrict(isSelected ? "" : dist.id)
                     }
                     className="cursor-pointer py-2.5 flex items-center justify-between"
                   >
@@ -205,15 +272,17 @@ export default function DistrictsClient({
                           <CategoryTabSelector
                             tabs={subTabs}
                             activeTab={activeSubTab}
-                            onSelectTab={(tabId) =>
-                              setActiveSubTab(tabId as DistrictSubTab)
-                            }
+                            onSelectTab={handleSelectSubTab}
                             size="sm"
                             noContainer
                           />
                         </div>
 
-                        <DistrictMobileTabsContent activeSubTab={activeSubTab} dist={dist} setSelectedMediaItem={setSelectedMediaItem} />
+                        <DistrictMobileTabsContent 
+                          activeSubTab={activeSubTab} 
+                          dist={dist} 
+                          setSelectedMediaItem={handleOpenMediaItem} 
+                        />
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -228,7 +297,7 @@ export default function DistrictsClient({
           <DistrictDesktopSidebar 
             filteredDistricts={filteredDistricts} 
             selectedDistrictId={selectedDistrictId} 
-            setSelectedDistrictId={setSelectedDistrictId} 
+            setSelectedDistrictId={handleSelectDistrict} 
           />
 
           {/* Left Column: Active District Detailed Profile */}
@@ -255,9 +324,7 @@ export default function DistrictsClient({
                   <CategoryTabSelector
                     tabs={subTabs}
                     activeTab={activeSubTab}
-                    onSelectTab={(tabId) =>
-                      setActiveSubTab(tabId as DistrictSubTab)
-                    }
+                    onSelectTab={handleSelectSubTab}
                     size="sm"
                     noContainer
                   />
@@ -268,7 +335,7 @@ export default function DistrictsClient({
                   <DistrictDesktopTabsContent
                     activeSubTab={activeSubTab}
                     activeDistrict={activeDistrict}
-                    setSelectedMediaItem={setSelectedMediaItem}
+                    setSelectedMediaItem={handleOpenMediaItem}
                   />
                 </AnimatePresence>
               </motion.div>
@@ -280,7 +347,7 @@ export default function DistrictsClient({
       {/* Unified Media Viewer Modal Preview */}
       <UnifiedMediaViewer
         item={selectedMediaItem}
-        onClose={() => setSelectedMediaItem(null)}
+        onClose={handleCloseModal}
       />
     </>
   );

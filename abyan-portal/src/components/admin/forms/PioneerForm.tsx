@@ -4,6 +4,7 @@ import AdminSelect from '../form-fields/AdminSelect';
 import AdminMediaUpload from '../form-fields/AdminMediaUpload';
 import AdminTagsInput from '../form-fields/AdminTagsInput';
 import AdminParagraphsInput from '../form-fields/AdminParagraphsInput';
+import AdminSourcesInput from '../form-fields/AdminSourcesInput';
 import { PioneerFormDataSchema, PioneerFormData } from '@/types/schemas';
 import { AdminDistrict } from '@/types/admin.types';
 
@@ -26,14 +27,17 @@ export default function PioneerForm({ id, initialData, categories, districts = [
     category: '',
     origin: '',
     authorName: '',
+    sourceName: '',
+    sourceUrl: '',
+    sources: [],
     startYear: '',
     endYear: '',
     biography: '',
     quote: '',
     birthDate: '',
     isPublished: isPublished ?? true,
+    achievements: [],
     images: [],
-    achievements: []
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -69,6 +73,7 @@ export default function PioneerForm({ id, initialData, categories, districts = [
         biography: '',
         quote: '',
         birthDate: '',
+        deathDate: '',
         isPublished: isPublished ?? true,
         images: [],
         achievements: []
@@ -156,12 +161,11 @@ export default function PioneerForm({ id, initialData, categories, districts = [
 
         <AdminInput
           label="اسم الكاتب / الباحث التوثيقي"
-          required
           type="text"
           value={formData.authorName || ''}
           onChange={(e) => handleFieldChange('authorName', e.target.value)}
           error={errors.authorName}
-          placeholder="مثال: أ. منصور بلعيدي"
+          placeholder="اختياري - افتراضياً: فريق توثيق بوابة أبين"
         />
 
         {/* MEDIA UPLOAD SECTION - Left side column */}
@@ -264,6 +268,14 @@ export default function PioneerForm({ id, initialData, categories, districts = [
           error={errors.birthDate}
         />
 
+        <AdminInput
+          label="تاريخ الوفاة (اختياري)"
+          type="date"
+          value={formData.deathDate || ''}
+          onChange={(e) => handleFieldChange('deathDate', e.target.value)}
+          error={errors.deathDate}
+        />
+
         <AdminTagsInput 
           label="أهم الإنجازات"
           required
@@ -289,6 +301,12 @@ export default function PioneerForm({ id, initialData, categories, districts = [
           onChange={(val) => handleFieldChange('biography', val)}
           error={errors.biography}
           placeholder="اكتب تفاصيل السيرة هنا..."
+          containerClassName="md:col-span-2 mt-2"
+        />
+
+        <AdminSourcesInput
+          sources={formData.sources || []}
+          onChange={(sources) => handleFieldChange('sources', sources)}
           containerClassName="md:col-span-2 mt-2"
         />
       </div>

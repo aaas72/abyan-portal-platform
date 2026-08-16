@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
+import AdminSearchFilterBar from "@/components/admin/AdminSearchFilterBar";
 import AdminDataTable, { Column } from "@/components/admin/AdminDataTable";
 import AdminDrawer from "@/components/admin/AdminDrawer";
 import AdminTabs from "@/components/admin/AdminTabs";
@@ -16,6 +17,9 @@ import { HistoryEraFormData } from "@/types/schemas";
 export default function AdminHistoryPage() {
   const [data, setData] = useState<AdminHistoryEra[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Search State
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Drawer State
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -56,6 +60,9 @@ export default function AdminHistoryPage() {
       eraTitle: row.eraTitle,
       historicalCapital: row.historicalCapital,
       authorName: row.authorName || "",
+      sourceName: row.sourceName || "",
+      sourceUrl: row.sourceUrl || "",
+      sources: row.sources && row.sources.length > 0 ? row.sources : (row.sourceName ? [{ name: row.sourceName, url: row.sourceUrl }] : []),
       shortSummary: row.shortSummary,
       fullDescription: row.fullDescription,
       keyEvents: row.keyEvents || [],
@@ -135,16 +142,40 @@ export default function AdminHistoryPage() {
     },
   ];
 
+  // Filtered Eras
+  const filteredEras = useMemo(() => {
+    return data.filter((item) => {
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch = !q ||
+        item.eraTitle.toLowerCase().includes(q) ||
+        (item.historicalCapital && item.historicalCapital.toLowerCase().includes(q)) ||
+        (item.startYear && item.startYear.toLowerCase().includes(q)) ||
+        (item.endYear && item.endYear.toLowerCase().includes(q)) ||
+        (item.authorName && item.authorName.toLowerCase().includes(q)) ||
+        (item.shortSummary && item.shortSummary.toLowerCase().includes(q)) ||
+        (item.fullDescription && item.fullDescription.toLowerCase().includes(q));
+      return matchesSearch;
+    });
+  }, [data, searchQuery]);
+
   return (
     <div className="flex flex-col h-full">
       <AdminPageHeader
         title="التاريخ والحقب"
         description="إدارة الخط الزمني لتاريخ أبين والحقب الزمنية"
-      />
+      >
+        <AdminSearchFilterBar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          searchPlaceholder="بحث في الحقب، العواصم، التواريخ..."
+          totalCount={data.length}
+          filteredCount={filteredEras.length}
+        />
+      </AdminPageHeader>
 
       <AdminTabs
         tabs={[
-          { id: 'eras', label: 'الحقب الزمنية' },
+          { id: 'eras', label: 'الحقب الزمنية', count: filteredEras.length },
         ]}
         activeTab="eras"
         onTabChange={() => {}}
@@ -155,11 +186,11 @@ export default function AdminHistoryPage() {
       <div className="flex-1 p-6">
         <AdminDataTable
           columns={columns}
-          data={data}
+          data={filteredEras}
           isLoading={isLoading}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          emptyMessage="لا توجد حقب زمنية مضافة بعد."
+          emptyMessage={searchQuery ? "لا توجد نتائج مطابقة لبحثك." : "لا توجد حقب زمنية مضافة بعد."}
         />
       </div>
 

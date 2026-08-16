@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { SmartContainer } from "@/components/layout";
 import { SubpageHero, CategoryTabSelector, UnifiedMediaViewer, MediaItem, EmptyState } from "@/components/ui";
@@ -11,12 +12,15 @@ import {
   curtainOverlayTransition,
   itemFadeInRight,
 } from "@/lib/animations";
+import { updateUrlParams } from "@/lib/url-sync";
 
 interface LandmarksClientProps {
   initialData: LandmarkCategory[];
 }
 
 export default function LandmarksClient({ initialData }: LandmarksClientProps) {
+  const searchParams = useSearchParams();
+
   const [activeTabId, setActiveTabId] = useState<string>(() => {
     const valid = initialData.find((c) => (c.photoCards && c.photoCards.length > 0) || (c.keyLandmarks && c.keyLandmarks.length > 0));
     return valid ? valid.id : "delta";
@@ -37,21 +41,64 @@ export default function LandmarksClient({ initialData }: LandmarksClientProps) {
     return validData.find((cat) => cat.id === activeTabId) || validData[0];
   }, [initialData, activeTabId]);
 
+  const mapPhotoCardToModal = (photoCard: ImageShowcaseData, categoryName: string): MediaItem => ({
+    id: photoCard.id,
+    title: photoCard.title,
+    subtitle: photoCard.tag,
+    authorName: photoCard.authorName,
+    sourceName: photoCard.sourceName,
+    sourceUrl: photoCard.sourceUrl,
+    sources: photoCard.sources,
+    fullBiography: photoCard.description,
+    location: photoCard.location,
+    startYear: photoCard.startYear,
+    endYear: photoCard.endYear,
+    categoryLabel: categoryName,
+    description: photoCard.description,
+    bgGradient: photoCard.bgGradient,
+    images: photoCard.images,
+  });
+
+  // Sync state from URL query parameters on load
+  useEffect(() => {
+    const tabParam = searchParams.get("tab") || searchParams.get("category");
+    if (tabParam) {
+      const matchedCat = initialData.find(
+        (c) => c.id === tabParam || c.categoryName === tabParam || c.title === tabParam
+      );
+      if (matchedCat) {
+        setActiveTabId(matchedCat.id);
+      }
+    }
+
+    const itemParam = searchParams.get("item") || searchParams.get("id");
+    if (itemParam) {
+      for (const cat of initialData) {
+        const foundCard = cat.photoCards?.find(
+          (p) => p.id === itemParam || p.title === itemParam
+        );
+        if (foundCard) {
+          setActiveTabId(cat.id);
+          setSelectedMediaModal(mapPhotoCardToModal(foundCard, cat.categoryName));
+          break;
+        }
+      }
+    }
+  }, [searchParams, initialData]);
+
+  const handleSelectTab = (tabId: string) => {
+    setActiveTabId(tabId);
+    updateUrlParams({ tab: tabId, item: null });
+  };
+
   const handleOpenLandmarkModal = (photoCard: ImageShowcaseData) => {
-    setSelectedMediaModal({
-      id: photoCard.id,
-      title: photoCard.title,
-      subtitle: photoCard.tag,
-      authorName: photoCard.authorName,
-      fullBiography: photoCard.description,
-      location: photoCard.location,
-      startYear: photoCard.startYear,
-      endYear: photoCard.endYear,
-      categoryLabel: currentCategory.categoryName,
-      description: photoCard.description,
-      bgGradient: photoCard.bgGradient,
-      images: photoCard.images,
-    });
+    setSelectedMediaModal(mapPhotoCardToModal(photoCard, currentCategory.categoryName));
+    updateUrlParams({ item: photoCard.id });
+  };
+
+  const handleCloseModal = () => {
+    setSelectedMediaModal(null);
+    updateUrlParams({ item: null });
   };
 
   if (!initialData || initialData.length === 0 || !currentCategory) {
@@ -77,7 +124,7 @@ export default function LandmarksClient({ initialData }: LandmarksClientProps) {
       <CategoryTabSelector
         tabs={categoryTabs}
         activeTab={activeTabId}
-        onSelectTab={setActiveTabId}
+        onSelectTab={handleSelectTab}
       />
 
       {/* MAIN LANDMARK SHOWCASE PANEL */}
@@ -168,7 +215,7 @@ export default function LandmarksClient({ initialData }: LandmarksClientProps) {
       {/* UNIFIED MEDIA VIEWER MODAL FOR LANDMARK FULL PHOTO */}
       <UnifiedMediaViewer
         item={selectedMediaModal}
-        onClose={() => setSelectedMediaModal(null)}
+        onClose={handleCloseModal}
       />
     </>
   );

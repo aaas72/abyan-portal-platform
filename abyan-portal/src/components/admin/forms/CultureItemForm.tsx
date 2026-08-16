@@ -3,6 +3,7 @@ import AdminInput from "../form-fields/AdminInput";
 import AdminSelect from "../form-fields/AdminSelect";
 import AdminMediaUpload from "../form-fields/AdminMediaUpload";
 import AdminParagraphsInput from "../form-fields/AdminParagraphsInput";
+import AdminSourcesInput from "../form-fields/AdminSourcesInput";
 import {
   CultureItemFormDataSchema,
   CultureItemFormData,
@@ -175,12 +176,11 @@ export default function CultureItemForm({
 
         <AdminInput
           label="اسم الكاتب / الباحث التوثيقي"
-          required
           type="text"
           value={formData.authorName || ""}
           onChange={(e) => handleFieldChange("authorName", e.target.value)}
           error={errors.authorName}
-          placeholder="مثال: أ. صالح أحمد الحيدري"
+          placeholder="اختياري - افتراضياً: فريق توثيق بوابة أبين"
         />
 
         <AdminInput
@@ -211,6 +211,12 @@ export default function CultureItemForm({
             placeholder="اكتب تفاصيل هذا الموروث..."
           />
         </div>
+
+        <AdminSourcesInput
+          sources={formData.sources || []}
+          onChange={(sources) => handleFieldChange("sources", sources)}
+          containerClassName="md:col-span-2 mt-2"
+        />
       </div>
     </form>
   );

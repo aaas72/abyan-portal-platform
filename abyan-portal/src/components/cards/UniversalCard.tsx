@@ -5,6 +5,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
+import { ContentSource } from "@/types/schemas";
+
 export interface UniversalCardData {
   id?: string;
   category?: string;
@@ -16,11 +18,15 @@ export interface UniversalCardData {
   era?: string;
   startYear?: string;
   endYear?: string;
+  birthDate?: string;
   location?: string;
   quote?: string;
   bgGradient?: string;
   aspectRatio?: string;
   authorName?: string;
+  sourceName?: string;
+  sourceUrl?: string;
+  sources?: ContentSource[];
   images?: string[];
 }
 
@@ -38,8 +44,8 @@ export default function UniversalCard({
   const categoryText = data.category ? data.category.split("•")[0].trim() : undefined;
   const cardImage = data.images && data.images.length > 0 ? data.images[0] : null;
 
-  // VARIANT 1: STAT CARD (CENTERED TEXT WITH GRADIENT BACKGROUND)
-  if (variant === "stat") {
+  // VARIANT 1: HIGHLIGHT CARD (TEXT ONLY WITH GRADIENT ACCENTS)
+  if (variant === "highlight" || variant === "plain" || variant === "stat") {
     return (
       <motion.div
         onClick={onClick}
@@ -149,19 +155,14 @@ export default function UniversalCard({
                 {data.title}
               </h3>
               {data.subtitle && (
-                <span className="text-sm sm:text-base font-normal text-sky-700 font-abyan-title block break-words leading-snug">
+                <span className="text-sm sm:text-base font-normal text-slate-700 font-abyan-body block break-words leading-snug">
                   {data.subtitle}
                 </span>
               )}
-              {/* Info details moved from image */}
+              {/* Location strictly on its own vertical line */}
               {data.location && (
                 <span className="text-xs sm:text-sm font-normal text-sky-600 font-abyan-title block break-words leading-snug mt-1">
                   {data.location}
-                </span>
-              )}
-              {(data.startYear || data.endYear || data.era) && (
-                <span className="text-xs sm:text-sm font-normal text-slate-500 font-abyan-title block break-words leading-snug">
-                  {data.startYear || data.endYear ? <>{data.startYear || ""}&nbsp;&nbsp;-&nbsp;&nbsp;{data.endYear || ""}</> : data.era}
                 </span>
               )}
             </div>

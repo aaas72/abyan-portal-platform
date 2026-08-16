@@ -112,7 +112,15 @@ export default function DistrictDesktopTabsContent({
                           pioneer.fullBiography || pioneer.description,
                         categoryLabel: pioneer.category || "رمز وطني وتاريخي",
                         location: pioneer.location || activeDistrict.name,
+                        startYear: pioneer.startYear,
+                        endYear: pioneer.endYear,
+                        birthDate: pioneer.birthDate,
+                        deathDate: pioneer.deathDate,
+                        achievements: pioneer.achievements,
                         year: `${pioneer.startYear || ""}\u00A0\u00A0-\u00A0\u00A0${pioneer.endYear || ""}`,
+                        sources: pioneer.sources || activeDistrict.sources,
+                        sourceName: pioneer.sourceName || activeDistrict.sourceName,
+                        sourceUrl: pioneer.sourceUrl || activeDistrict.sourceUrl,
                         bgGradient: pioneer.bgGradient,
                         images: pioneer.images,
                       })
@@ -184,6 +192,10 @@ export default function DistrictDesktopTabsContent({
                           site.fullBiography || site.description,
                         categoryLabel: "معلم أثري",
                         location: activeDistrict.name,
+                        authorName: site.authorName || activeDistrict.authorName,
+                        sources: site.sources || activeDistrict.sources,
+                        sourceName: site.sourceName || activeDistrict.sourceName,
+                        sourceUrl: site.sourceUrl || activeDistrict.sourceUrl,
                         bgGradient: site.bgGradient,
                         images: site.images,
                       })
@@ -210,6 +222,10 @@ export default function DistrictDesktopTabsContent({
                         fullBiography: `${landmark} أحد المعالم والشواهد الجغرافية والتاريخية البارزة في مديرية ${activeDistrict.name}.`,
                         categoryLabel: "معلم بارز",
                         location: activeDistrict.name,
+                        authorName: activeDistrict.authorName,
+                        sources: activeDistrict.sources,
+                        sourceName: activeDistrict.sourceName,
+                        sourceUrl: activeDistrict.sourceUrl,
                         bgGradient:
                           "from-emerald-950 via-sky-900 to-slate-900",
                       })
@@ -255,6 +271,10 @@ export default function DistrictDesktopTabsContent({
                           crop.fullBiography || crop.description,
                         categoryLabel: "خيرات الأرض",
                         location: activeDistrict.name,
+                        authorName: crop.authorName || activeDistrict.authorName,
+                        sources: crop.sources || activeDistrict.sources,
+                        sourceName: crop.sourceName || activeDistrict.sourceName,
+                        sourceUrl: crop.sourceUrl || activeDistrict.sourceUrl,
                         bgGradient: crop.bgGradient,
                         images: crop.images,
                       })
@@ -281,6 +301,10 @@ export default function DistrictDesktopTabsContent({
                         fullBiography: `${crop} ركن أساسي من الثروات والمحاصيل التي تعتز بها مديرية ${activeDistrict.name}.`,
                         categoryLabel: "خيرات الأرض",
                         location: activeDistrict.name,
+                        authorName: activeDistrict.authorName,
+                        sources: activeDistrict.sources,
+                        sourceName: activeDistrict.sourceName,
+                        sourceUrl: activeDistrict.sourceUrl,
                         bgGradient:
                           "from-emerald-950 via-slate-800 to-sky-900",
                       })
@@ -327,6 +351,10 @@ export default function DistrictDesktopTabsContent({
                             item.fullBiography || item.description,
                           categoryLabel: "موروث وفلكلور",
                           location: activeDistrict.name,
+                          authorName: item.authorName || activeDistrict.authorName,
+                          sources: item.sources || activeDistrict.sources,
+                          sourceName: item.sourceName || activeDistrict.sourceName,
+                          sourceUrl: item.sourceUrl || activeDistrict.sourceUrl,
                           bgGradient: item.bgGradient,
                           images: item.images,
                         })
@@ -353,6 +381,10 @@ export default function DistrictDesktopTabsContent({
                           fullBiography: `${item} فن وموروث فلكلوري شفاهي يتوارثه أهالي مديرية ${activeDistrict.name}.`,
                           categoryLabel: "موروث وفلكلور",
                           location: activeDistrict.name,
+                          authorName: activeDistrict.authorName,
+                          sources: activeDistrict.sources,
+                          sourceName: activeDistrict.sourceName,
+                          sourceUrl: activeDistrict.sourceUrl,
                           bgGradient:
                             "from-sky-950 via-emerald-950 to-slate-900",
                         })

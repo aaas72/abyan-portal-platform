@@ -29,8 +29,22 @@ export class CreatePioneerFigureDto {
   biography: string;
 
   @IsString({ message: 'اسم الكاتب / الباحث التوثيقي يجب أن يكون نصاً' })
-  @IsNotEmpty({ message: 'اسم الكاتب / الباحث التوثيقي مطلوب' })
-  authorName: string;
+  @IsOptional()
+  authorName?: string;
+
+  @IsString()
+  @MaxLength(500)
+  @IsOptional()
+  sourceName?: string;
+
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  sourceUrl?: string;
+
+  @IsArray()
+  @IsOptional()
+  sources?: Array<{ name: string; url?: string }>;
 
   @IsString()
   @MaxLength(500)
@@ -45,6 +59,10 @@ export class CreatePioneerFigureDto {
   @IsString({ message: 'تاريخ الميلاد يجب أن يكون نصاً' })
   @IsNotEmpty({ message: 'تاريخ الميلاد مطلوب' })
   birthDate: string;
+
+  @IsString({ message: 'تاريخ الوفاة يجب أن يكون نصاً' })
+  @IsOptional()
+  deathDate?: string;
 
   @IsString()
   @MaxLength(500)

@@ -16,7 +16,7 @@ export class UploadService {
     if (!file) {
       throw new BadRequestException('No file provided');
     }
-    
+
     const folder = folderName ? `abyan-portal/${folderName}` : 'abyan-portal/general';
 
     return new Promise((resolve, reject) => {
@@ -85,7 +85,7 @@ export class UploadService {
 
       // The part after /upload/ usually contains the version (v1234) and then the public_id + extension
       let pathAfterUpload = urlParts[1];
-      
+
       // Remove version (e.g. v1700000000/) if exists
       if (pathAfterUpload.match(/^v\d+\//)) {
         pathAfterUpload = pathAfterUpload.replace(/^v\d+\//, '');
@@ -93,28 +93,32 @@ export class UploadService {
 
       // Remove extension (e.g. .jpg) to get the clean public_id
       const lastDotIndex = pathAfterUpload.lastIndexOf('.');
-      const oldPublicId = lastDotIndex !== -1 ? pathAfterUpload.substring(0, lastDotIndex) : pathAfterUpload;
+      const rawOldPublicId = lastDotIndex !== -1 ? pathAfterUpload.substring(0, lastDotIndex) : pathAfterUpload;
+      let decodedOldPublicId = rawOldPublicId;
+      try {
+        decodedOldPublicId = decodeURIComponent(rawOldPublicId);
+      } catch (e) { }
 
       // If it is already named correctly, skip renaming to save API calls
-      if (oldPublicId === newPublicId) {
+      if (rawOldPublicId === newPublicId || decodedOldPublicId === newPublicId) {
         newUrls.push(url);
         continue;
       }
 
       try {
         // Cloudinary rename API call
-        const result = await cloudinary.uploader.rename(oldPublicId, newPublicId, {
+        const result = await cloudinary.uploader.rename(decodedOldPublicId, newPublicId, {
           overwrite: true,
           invalidate: true,
         });
-        
+
         if (result && result.secure_url) {
           newUrls.push(result.secure_url);
         } else {
           newUrls.push(url); // fallback
         }
       } catch (error) {
-        console.error(`Failed to rename Cloudinary file from ${oldPublicId} to ${newPublicId}:`, error);
+        console.error(`Failed to rename Cloudinary file from ${decodedOldPublicId} to ${newPublicId}:`, error);
         newUrls.push(url); // fallback to old URL if rename fails
       }
     }

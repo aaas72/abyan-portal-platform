@@ -3,6 +3,7 @@ import AdminInput from '../form-fields/AdminInput';
 import AdminSelect from '../form-fields/AdminSelect';
 import AdminMediaUpload from '../form-fields/AdminMediaUpload';
 import AdminParagraphsInput from '../form-fields/AdminParagraphsInput';
+import AdminSourcesInput from '../form-fields/AdminSourcesInput';
 import { EconomyPhotoCardFormDataSchema, EconomyPhotoCardFormData } from '@/types/schemas';
 
 export type { EconomyPhotoCardFormData };
@@ -157,12 +158,11 @@ export default function EconomyPhotoCardForm({ id, initialData, pillars, isPubli
 
         <AdminInput
           label="اسم الكاتب / الباحث التوثيقي"
-          required
           type="text"
           value={formData.authorName || ''}
           onChange={(e) => handleFieldChange('authorName', e.target.value)}
           error={errors.authorName}
-          placeholder="مثال: م. فضل قاسم"
+          placeholder="اختياري - افتراضياً: فريق توثيق بوابة أبين"
         />
 
         <AdminInput
@@ -190,6 +190,12 @@ export default function EconomyPhotoCardForm({ id, initialData, pillars, isPubli
           onChange={(val) => handleFieldChange('description', val)}
           error={errors.description}
           placeholder="اكتب التوثيق الاقتصادي..."
+          containerClassName="md:col-span-2 mt-2"
+        />
+
+        <AdminSourcesInput
+          sources={formData.sources || []}
+          onChange={(sources) => handleFieldChange('sources', sources)}
           containerClassName="md:col-span-2 mt-2"
         />
       </div>

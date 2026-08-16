@@ -69,6 +69,10 @@ export class CultureService {
           tag: f.tag,
           location: f.location,
           description: f.description,
+          authorName: f.authorName || 'فريق توثيق بوابة أبين',
+          sourceName: (f as any).sourceName || '',
+          sourceUrl: (f as any).sourceUrl || '',
+          sources: (f as any).sources || ((f as any).sourceName ? [{ name: (f as any).sourceName, url: (f as any).sourceUrl }] : []),
           bgGradient: f.bgGradient,
           images: MediaMapper.extractImages(f),
         })),
@@ -122,7 +126,10 @@ export class CultureService {
   async createItem(
     createItemDto: CreateCultureItemDto,
   ): Promise<CultureItem> {
-    const newItem = new this.itemModel(createItemDto);
+    const newItem = new this.itemModel({
+      ...createItemDto,
+      authorName: createItemDto.authorName?.trim() || 'فريق توثيق بوابة أبين',
+    });
     const savedItem = await newItem.save();
 
     let mediaUpdated = false;

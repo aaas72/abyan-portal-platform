@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
+import AdminSearchFilterBar from "@/components/admin/AdminSearchFilterBar";
 import AdminDataTable, { Column } from "@/components/admin/AdminDataTable";
 import AdminDrawer from "@/components/admin/AdminDrawer";
 import AdminTabs from "@/components/admin/AdminTabs";
@@ -23,6 +24,10 @@ export default function AdminEconomyPage() {
   const [pillars, setPillars] = useState<AdminEconomyPillar[]>([]);
   const [photoCards, setPhotoCards] = useState<AdminEconomyPhotoCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Search & Filter State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedPillar, setSelectedPillar] = useState("");
 
   // Drawer states
   const [isPillarDrawerOpen, setIsPillarDrawerOpen] = useState(false);
@@ -127,6 +132,9 @@ export default function AdminEconomyPage() {
       tag: item.tag,
       location: item.location,
       authorName: item.authorName || "",
+      sourceName: item.sourceName || "",
+      sourceUrl: item.sourceUrl || "",
+      sources: item.sources && item.sources.length > 0 ? item.sources : (item.sourceName ? [{ name: item.sourceName, url: item.sourceUrl }] : []),
       description: item.description || "",
       bgGradient: item.bgGradient || "",
       images: item.images || [],
@@ -217,20 +225,66 @@ export default function AdminEconomyPage() {
     },
   ];
 
+  // Filtered PhotoCards
+  const filteredPhotoCards = useMemo(() => {
+    return photoCards.filter((item) => {
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch = !q ||
+        item.title.toLowerCase().includes(q) ||
+        (item.tag && item.tag.toLowerCase().includes(q)) ||
+        (item.location && item.location.toLowerCase().includes(q)) ||
+        (item.authorName && item.authorName.toLowerCase().includes(q)) ||
+        (item.description && item.description.toLowerCase().includes(q));
+
+      const matchesPillar = !selectedPillar || selectedPillar === "all" ||
+        item.pillar === selectedPillar;
+
+      return matchesSearch && matchesPillar;
+    });
+  }, [photoCards, searchQuery, selectedPillar]);
+
+  // Filtered Pillars
+  const filteredPillars = useMemo(() => {
+    return pillars.filter((item) => {
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch = !q ||
+        item.pillarName.toLowerCase().includes(q) ||
+        item.title.toLowerCase().includes(q) ||
+        (item.subtitle && item.subtitle.toLowerCase().includes(q)) ||
+        (item.description && item.description.toLowerCase().includes(q));
+      return matchesSearch;
+    });
+  }, [pillars, searchQuery]);
+
   return (
     <div>
       <AdminPageHeader
         title="إدارة الاقتصاد والتنمية"
         description="إضافة وتعديل وحذف القطاعات الاقتصادية والمحاصيل الزراعية والثروات الأبينية."
-      />
+      >
+        <AdminSearchFilterBar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          searchPlaceholder={activeTab === 'items' ? "بحث في المحاصيل، الثروات، الوصف..." : "بحث في القطاعات الاقتصادية..."}
+          categoryFilter={activeTab === 'items' ? selectedPillar : undefined}
+          onCategoryChange={activeTab === 'items' ? setSelectedPillar : undefined}
+          categoryOptions={activeTab === 'items' ? pillars.map((p) => ({ label: p.title || p.pillarName, value: p.pillarName })) : []}
+          categoryPlaceholder="كل القطاعات الاقتصادية"
+          totalCount={activeTab === 'items' ? photoCards.length : pillars.length}
+          filteredCount={activeTab === 'items' ? filteredPhotoCards.length : filteredPillars.length}
+        />
+      </AdminPageHeader>
 
       <AdminTabs 
         tabs={[
-          { id: 'items', label: 'العناصر والمحاصيل' },
-          { id: 'pillars', label: 'القطاعات الاقتصادية' }
+          { id: 'items', label: 'العناصر والمحاصيل', count: filteredPhotoCards.length },
+          { id: 'pillars', label: 'القطاعات الاقتصادية', count: filteredPillars.length }
         ]}
         activeTab={activeTab}
-        onTabChange={(id) => setActiveTab(id as 'pillars' | 'items')}
+        onTabChange={(id) => {
+          setActiveTab(id as 'pillars' | 'items');
+          setSelectedPillar("");
+        }}
         actionLabel={activeTab === 'pillars' ? "إضافة قطاع جديد" : "إضافة عنصر جديد"}
         onAction={() => {
           setIsActiveStatus(true);
@@ -249,18 +303,20 @@ export default function AdminEconomyPage() {
       {activeTab === 'pillars' ? (
         <AdminDataTable
           columns={pillarColumns}
-          data={pillars}
+          data={filteredPillars}
           isLoading={isLoading}
           onEdit={handleEditPillar}
           onDelete={handleDeletePillar}
+          emptyMessage={searchQuery ? "لا توجد نتائج مطابقة لبحثك." : "لا توجد قطاعات اقتصادية متاحة حالياً."}
         />
       ) : (
         <AdminDataTable
           columns={photoCardColumns}
-          data={photoCards}
+          data={filteredPhotoCards}
           isLoading={isLoading}
           onEdit={handleEditPhotoCard}
           onDelete={handleDeletePhotoCard}
+          emptyMessage={searchQuery || selectedPillar ? "لا توجد نتائج مطابقة لبحثك." : "لا توجد عناصر أو محاصيل متاحة حالياً."}
         />
       )}
 

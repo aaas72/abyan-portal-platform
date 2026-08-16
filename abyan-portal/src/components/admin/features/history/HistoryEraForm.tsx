@@ -3,6 +3,7 @@ import AdminInput from '../../form-fields/AdminInput';
 import AdminMediaUpload from '../../form-fields/AdminMediaUpload';
 import AdminParagraphsInput from '../../form-fields/AdminParagraphsInput';
 import AdminTagsInput from '../../form-fields/AdminTagsInput';
+import AdminSourcesInput from '../../form-fields/AdminSourcesInput';
 import { HistoryEraFormDataSchema, HistoryEraFormData } from '@/types/schemas';
 
 interface HistoryEraFormProps {
@@ -150,11 +151,10 @@ export default function HistoryEraForm({
 
       <AdminInput
         label="اسم الكاتب / الباحث التوثيقي"
-        value={formData.authorName}
+        value={formData.authorName || ''}
         onChange={(e) => handleFieldChange('authorName', e.target.value)}
         error={errors.authorName}
-        required
-        placeholder="أدخل اسم الكاتب أو الباحث الموثّق لهذه الحقبة"
+        placeholder="اختياري - افتراضياً: فريق توثيق بوابة أبين"
       />
 
       <div className="col-span-1 space-y-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
@@ -239,6 +239,12 @@ export default function HistoryEraForm({
           placeholder="أدخل السرد التاريخي المفصل للحقبة..."
         />
       </div>
+
+      <AdminSourcesInput
+        sources={formData.sources || []}
+        onChange={(sources) => handleFieldChange('sources', sources)}
+        containerClassName="md:col-span-2 mt-2"
+      />
     </form>
   );
 }

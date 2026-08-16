@@ -26,6 +26,10 @@ export class HistoryService {
       historicalCapital: era.historicalCapital,
       shortSummary: era.shortSummary,
       fullDescription: era.fullDescription,
+      authorName: era.authorName || 'فريق توثيق بوابة أبين',
+      sourceName: (era as any).sourceName || '',
+      sourceUrl: (era as any).sourceUrl || '',
+      sources: (era as any).sources || ((era as any).sourceName ? [{ name: (era as any).sourceName, url: (era as any).sourceUrl }] : []),
       keyEvents: era.keyEvents,
       notableLandmarks: era.notableLandmarks,
     }));
@@ -36,7 +40,10 @@ export class HistoryService {
   // --- HistoryEra Management (Protected) ---
 
   async createEra(createEraDto: CreateHistoryEraDto): Promise<HistoryEra> {
-    const newEra = new this.eraModel(createEraDto);
+    const newEra = new this.eraModel({
+      ...createEraDto,
+      authorName: createEraDto.authorName?.trim() || 'فريق توثيق بوابة أبين',
+    });
     return newEra.save();
   }
 

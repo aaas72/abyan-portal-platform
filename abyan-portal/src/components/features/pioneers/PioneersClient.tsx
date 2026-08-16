@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { SmartContainer } from "@/components/layout";
 import {
@@ -16,12 +17,15 @@ import {
   curtainOverlayVariants,
   curtainOverlayTransition,
 } from "@/lib/animations";
+import { updateUrlParams } from "@/lib/url-sync";
 
 interface PioneersClientProps {
   initialData: PioneerCategory[];
 }
 
 export default function PioneersClient({ initialData }: PioneersClientProps) {
+  const searchParams = useSearchParams();
+
   const [activeTabId, setActiveTabId] = useState<string>(() => {
     const valid = initialData.find((c) => c.figures && c.figures.length > 0);
     return valid ? valid.id : "poets";
@@ -43,20 +47,69 @@ export default function PioneersClient({ initialData }: PioneersClientProps) {
     return validData.find((p) => p.id === activeTabId) || validData[0];
   }, [initialData, activeTabId]);
 
+  const mapFigureToModal = (fig: PioneerFigure, categoryTitle: string): MediaItem => ({
+    id: fig.id,
+    title: fig.name,
+    subtitle: fig.role,
+    authorName: fig.authorName,
+    sourceName: fig.sourceName,
+    sourceUrl: fig.sourceUrl,
+    sources: fig.sources,
+    fullBiography: fig.biography,
+    quote: fig.quote,
+    startYear: fig.startYear,
+    endYear: fig.endYear,
+    birthDate: fig.birthDate,
+    deathDate: fig.deathDate,
+    achievements: fig.achievements,
+    year: `${fig.startYear || ""}\u00A0\u00A0-\u00A0\u00A0${fig.endYear || ""}`,
+    location: fig.location,
+    categoryLabel: categoryTitle,
+    description: fig.role,
+    bgGradient: fig.bgGradient,
+    images: fig.images,
+  });
+
+  // Sync state from URL query parameters on load
+  useEffect(() => {
+    const tabParam = searchParams.get("tab") || searchParams.get("category");
+    if (tabParam) {
+      const matchedCat = initialData.find(
+        (c) => c.id === tabParam || c.categoryName === tabParam || c.title === tabParam
+      );
+      if (matchedCat) {
+        setActiveTabId(matchedCat.id);
+      }
+    }
+
+    const itemParam = searchParams.get("item") || searchParams.get("id");
+    if (itemParam) {
+      for (const cat of initialData) {
+        const foundFig = cat.figures?.find(
+          (f) => f.id === itemParam || f.name === itemParam
+        );
+        if (foundFig) {
+          setActiveTabId(cat.id);
+          setSelectedPioneerModal(mapFigureToModal(foundFig, cat.title));
+          break;
+        }
+      }
+    }
+  }, [searchParams, initialData]);
+
+  const handleSelectTab = (tabId: string) => {
+    setActiveTabId(tabId);
+    updateUrlParams({ tab: tabId, item: null });
+  };
+
   const handleOpenPioneerModal = (fig: PioneerFigure) => {
-    setSelectedPioneerModal({
-      id: fig.id,
-      title: fig.name,
-      subtitle: fig.role,
-      authorName: fig.authorName,
-      fullBiography: `${fig.biography}${fig.quote ? `\n\nالمقولة والشاهد التراثي: « ${fig.quote} »` : ""}`,
-      year: `${fig.startYear || ""}\u00A0\u00A0-\u00A0\u00A0${fig.endYear || ""}`,
-      location: fig.location,
-      categoryLabel: currentCategory.title,
-      description: fig.role,
-      bgGradient: fig.bgGradient,
-      images: fig.images,
-    });
+    setSelectedPioneerModal(mapFigureToModal(fig, currentCategory.title));
+    updateUrlParams({ item: fig.id });
+  };
+
+  const handleCloseModal = () => {
+    setSelectedPioneerModal(null);
+    updateUrlParams({ item: null });
   };
 
   if (!initialData || initialData.length === 0 || !currentCategory) {
@@ -82,7 +135,7 @@ export default function PioneersClient({ initialData }: PioneersClientProps) {
       <CategoryTabSelector
         tabs={categoryTabs}
         activeTab={activeTabId}
-        onSelectTab={setActiveTabId}
+        onSelectTab={handleSelectTab}
       />
 
       {/* PIONEER PROFILE CARDS SHOWCASE GRID */}
@@ -122,6 +175,7 @@ export default function PioneersClient({ initialData }: PioneersClientProps) {
                     subtitle: fig.role,
                     startYear: fig.startYear,
                     endYear: fig.endYear,
+                    birthDate: fig.birthDate,
                     location: fig.location,
                     description: fig.biography,
                     quote: fig.quote,
@@ -140,7 +194,7 @@ export default function PioneersClient({ initialData }: PioneersClientProps) {
       {/* UNIFIED MEDIA VIEWER MODAL FOR PIONEER FULL PROFILE */}
       <UnifiedMediaViewer
         item={selectedPioneerModal}
-        onClose={() => setSelectedPioneerModal(null)}
+        onClose={handleCloseModal}
       />
     </>
   );

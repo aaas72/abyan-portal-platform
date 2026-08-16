@@ -53,6 +53,10 @@ export class DistrictsService {
       villages: district.villages,
       description: district.description,
       geography: district.geography,
+      authorName: district.authorName || 'فريق توثيق بوابة أبين',
+      sourceName: (district as any).sourceName || '',
+      sourceUrl: (district as any).sourceUrl || '',
+      sources: (district as any).sources || ((district as any).sourceName ? [{ name: (district as any).sourceName, url: (district as any).sourceUrl }] : []),
 
       // Optional fields
       oldName: district.oldName,
@@ -105,6 +109,17 @@ export class DistrictsService {
       subtitle: item.subtitle,
       description: item.description,
       fullBiography: item.fullBiography,
+      category: item.category,
+      location: item.location,
+      birthDate: item.birthDate || '',
+      deathDate: item.deathDate || '',
+      startYear: item.startYear,
+      endYear: item.endYear,
+      achievements: item.achievements || [],
+      authorName: item.authorName,
+      sources: item.sources || (item.sourceName ? [{ name: item.sourceName, url: item.sourceUrl }] : []),
+      sourceName: item.sourceName,
+      sourceUrl: item.sourceUrl,
       images: MediaMapper.extractImages(item),
       bgGradient: item.bgGradient,
     }));
@@ -142,7 +157,10 @@ export class DistrictsService {
   async createDistrict(
     createDistrictDto: CreateDistrictDto,
   ): Promise<District> {
-    const newDistrict = new this.districtModel(createDistrictDto);
+    const newDistrict = new this.districtModel({
+      ...createDistrictDto,
+      authorName: createDistrictDto.authorName?.trim() || 'فريق توثيق بوابة أبين',
+    });
     const savedDistrict = await newDistrict.save();
 
     if (savedDistrict.images && savedDistrict.images.length > 0) {

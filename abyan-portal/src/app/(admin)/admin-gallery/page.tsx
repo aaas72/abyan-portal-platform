@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
+import AdminSearchFilterBar from "@/components/admin/AdminSearchFilterBar";
 import AdminDataTable, { Column } from "@/components/admin/AdminDataTable";
 import AdminDrawer from "@/components/admin/AdminDrawer";
 import AdminTabs from "@/components/admin/AdminTabs";
@@ -42,6 +43,10 @@ export default function AdminGalleryPage() {
   const [districts, setDistricts] = useState<AdminDistrict[]>([]);
   
   const [isLoading, setIsLoading] = useState(true);
+
+  // Search & Filter State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   
   // Items Drawer
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -97,7 +102,7 @@ export default function AdminGalleryPage() {
     }
   };
 
-  const handleEditItem = (item: GalleryImage) => {
+  const handleEditItem = (item: any) => {
     setCurrentEditingId(item._id);
     setCurrentGalleryItem({
       title: item.title,
@@ -105,6 +110,9 @@ export default function AdminGalleryPage() {
       year: item.year || item.date || "",
       location: item.location || "",
       authorName: item.authorName || "",
+      sourceName: item.sourceName || "",
+      sourceUrl: item.sourceUrl || "",
+      sources: item.sources && item.sources.length > 0 ? item.sources : (item.sourceName ? [{ name: item.sourceName, url: item.sourceUrl }] : []),
       description: item.description || "",
       images: item.images || [],
       isPublished: item.isActive,
@@ -223,9 +231,39 @@ export default function AdminGalleryPage() {
     },
   ];
 
+  // Filtered Archive Items
+  const filteredData = useMemo(() => {
+    return data.filter((item) => {
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch = !q ||
+        item.title.toLowerCase().includes(q) ||
+        (item.year && item.year.toLowerCase().includes(q)) ||
+        (item.location && item.location.toLowerCase().includes(q)) ||
+        (item.authorName && item.authorName.toLowerCase().includes(q)) ||
+        (item.description && item.description.toLowerCase().includes(q));
+
+      const matchesCategory = !selectedCategory || selectedCategory === "all" ||
+        item.category === selectedCategory || item.categoryLabel === selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [data, searchQuery, selectedCategory]);
+
+  // Filtered Categories
+  const filteredCategories = useMemo(() => {
+    return categories.filter((item) => {
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch = !q ||
+        item.title.toLowerCase().includes(q) ||
+        item.categoryName.toLowerCase().includes(q) ||
+        (item.description && item.description.toLowerCase().includes(q));
+      return matchesSearch;
+    });
+  }, [categories, searchQuery]);
+
   const tabs = [
-    { id: 'items', label: 'محتوى الأرشيف' },
-    { id: 'categories', label: 'التصنيفات الأرشيفية' },
+    { id: 'items', label: 'محتوى الأرشيف', count: filteredData.length },
+    { id: 'categories', label: 'التصنيفات الأرشيفية', count: filteredCategories.length },
   ];
 
   return (
@@ -233,12 +271,27 @@ export default function AdminGalleryPage() {
       <AdminPageHeader
         title="معرض الصور والأرشيف"
         description="إدارة مكتبة الصور والوثائق والمخطوطات التراثية وتصنيفاتها."
-      />
+      >
+        <AdminSearchFilterBar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          searchPlaceholder={activeTab === 'items' ? "بحث في الوثائق، الصور، الموقع..." : "بحث في التصنيفات..."}
+          categoryFilter={activeTab === 'items' ? selectedCategory : undefined}
+          onCategoryChange={activeTab === 'items' ? setSelectedCategory : undefined}
+          categoryOptions={activeTab === 'items' ? categories.map((c) => ({ label: c.title, value: c.categoryName })) : []}
+          categoryPlaceholder="كل تصنيفات الأرشيف"
+          totalCount={activeTab === 'items' ? data.length : categories.length}
+          filteredCount={activeTab === 'items' ? filteredData.length : filteredCategories.length}
+        />
+      </AdminPageHeader>
 
       <AdminTabs 
         tabs={tabs} 
         activeTab={activeTab} 
-        onTabChange={(tab) => setActiveTab(tab as any)} 
+        onTabChange={(tab) => {
+          setActiveTab(tab as any);
+          setSelectedCategory("");
+        }} 
         actionLabel={activeTab === 'items' ? "رفع وثيقة جديدة" : "إضافة تصنيف جديد"}
         onAction={() => {
           if (activeTab === 'items') {
@@ -259,20 +312,20 @@ export default function AdminGalleryPage() {
         {activeTab === 'items' ? (
           <AdminDataTable
             columns={itemColumns}
-            data={data}
+            data={filteredData}
             isLoading={isLoading}
             onEdit={handleEditItem}
             onDelete={handleDeleteItem}
-            emptyMessage="لا توجد بيانات متاحة حالياً."
+            emptyMessage={searchQuery || selectedCategory ? "لا توجد نتائج مطابقة لبحثك." : "لا توجد وثائق متاحة حالياً."}
           />
         ) : (
           <AdminDataTable
             columns={categoryColumns}
-            data={categories}
+            data={filteredCategories}
             isLoading={isLoading}
             onEdit={handleEditCategory}
             onDelete={handleDeleteCategory}
-            emptyMessage="لا توجد تصنيفات متاحة حالياً."
+            emptyMessage={searchQuery ? "لا توجد نتائج مطابقة لبحثك." : "لا توجد تصنيفات متاحة حالياً."}
           />
         )}
       </div>

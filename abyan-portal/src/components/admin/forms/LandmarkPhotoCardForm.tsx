@@ -3,6 +3,7 @@ import AdminInput from '../form-fields/AdminInput';
 import AdminTextarea from '../form-fields/AdminTextarea';
 import AdminSelect from '../form-fields/AdminSelect';
 import AdminMediaUpload from '../form-fields/AdminMediaUpload';
+import AdminSourcesInput from '../form-fields/AdminSourcesInput';
 import { LandmarkPhotoCardFormDataSchema, LandmarkPhotoCardFormData } from '@/types/schemas';
 import { AdminDistrict } from '@/types/admin.types';
 
@@ -192,11 +193,10 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
 
         <AdminInput
           label="اسم الكاتب / الباحث التوثيقي"
-          required
           value={formData.authorName || ''}
           onChange={(e) => handleFieldChange('authorName', e.target.value)}
           error={errors.authorName}
-          placeholder="مثال: د. علوي عمر جابر"
+          placeholder="اختياري - افتراضياً: فريق توثيق بوابة أبين"
         />
 
         <AdminInput
@@ -253,6 +253,12 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
           placeholder="اكتب وصف المعلم هنا..."
           containerClassName="md:col-span-2"
           rows={5}
+        />
+
+        <AdminSourcesInput
+          sources={formData.sources || []}
+          onChange={(sources) => handleFieldChange('sources', sources)}
+          containerClassName="md:col-span-2 mt-2"
         />
       </div>
     </form>

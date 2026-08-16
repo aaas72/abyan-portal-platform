@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
+import AdminSearchFilterBar from "@/components/admin/AdminSearchFilterBar";
 import AdminDataTable, { Column } from "@/components/admin/AdminDataTable";
 import AdminDrawer from "@/components/admin/AdminDrawer";
 import AdminTabs from "@/components/admin/AdminTabs";
@@ -23,6 +24,10 @@ export default function AdminDistrictsPage() {
   const [districts, setDistricts] = useState<AdminDistrict[]>([]);
   const [regions, setRegions] = useState<AdminDistrictRegion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Search & Filter State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState("");
   
   // District Drawer State
   const [isDistrictDrawerOpen, setIsDistrictDrawerOpen] = useState(false);
@@ -98,6 +103,9 @@ export default function AdminDistrictsPage() {
       areaKm2: item.areaKm2 || "",
       areaPercentage: item.areaPercentage || "",
       authorName: item.authorName || "",
+      sourceName: item.sourceName || "",
+      sourceUrl: item.sourceUrl || "",
+      sources: item.sources && item.sources.length > 0 ? item.sources : (item.sourceName ? [{ name: item.sourceName, url: item.sourceUrl }] : []),
       crops: item.crops || [],
       landmarks: item.landmarks || [],
       villages: item.villages || [],
@@ -231,21 +239,66 @@ export default function AdminDistrictsPage() {
     },
   ];
 
+  // Filtered Districts
+  const filteredDistricts = useMemo(() => {
+    return districts.filter((item) => {
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch = !q ||
+        item.name.toLowerCase().includes(q) ||
+        (item.capital && item.capital.toLowerCase().includes(q)) ||
+        (item.authorName && item.authorName.toLowerCase().includes(q)) ||
+        (item.description && item.description.toLowerCase().includes(q)) ||
+        (item.geography && item.geography.toLowerCase().includes(q));
+
+      const matchesRegion = !selectedRegion || selectedRegion === "all" ||
+        item.region === selectedRegion;
+
+      return matchesSearch && matchesRegion;
+    });
+  }, [districts, searchQuery, selectedRegion]);
+
+  // Filtered Regions
+  const filteredRegions = useMemo(() => {
+    return regions.filter((item) => {
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch = !q ||
+        item.regionLabel.toLowerCase().includes(q) ||
+        item.regionKey.toLowerCase().includes(q) ||
+        (item.description && item.description.toLowerCase().includes(q));
+      return matchesSearch;
+    });
+  }, [regions, searchQuery]);
+
   return (
     <div>
       <AdminPageHeader
         title="إدارة المديريات والتقسيم العُرفي"
         description="إدارة جميع البيانات الخاصة بمديريات أبين وفئاتها الجغرافية (التقسيم العُرفي)."
-      />
+      >
+        <AdminSearchFilterBar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          searchPlaceholder={activeTab === 'districts' ? "بحث بالاسم، العاصمة، الوصف..." : "بحث في فئات التقسيم..."}
+          categoryFilter={activeTab === 'districts' ? selectedRegion : undefined}
+          onCategoryChange={activeTab === 'districts' ? setSelectedRegion : undefined}
+          categoryOptions={activeTab === 'districts' ? regions.map((r) => ({ label: r.regionLabel, value: r.regionKey })) : []}
+          categoryPlaceholder="كل فئات التقسيم العرفي"
+          totalCount={activeTab === 'districts' ? districts.length : regions.length}
+          filteredCount={activeTab === 'districts' ? filteredDistricts.length : filteredRegions.length}
+        />
+      </AdminPageHeader>
 
       {/* Tabs */}
       <AdminTabs
         tabs={[
-          { id: 'districts', label: 'المديريات' },
-          { id: 'regions', label: 'فئات التقسيم العُرفي' },
+          { id: 'districts', label: 'المديريات', count: filteredDistricts.length },
+          { id: 'regions', label: 'فئات التقسيم العُرفي', count: filteredRegions.length },
         ]}
         activeTab={activeTab}
-        onTabChange={(id) => setActiveTab(id as 'districts' | 'regions')}
+        onTabChange={(id) => {
+          setActiveTab(id as 'districts' | 'regions');
+          setSelectedRegion("");
+        }}
         actionLabel={activeTab === 'districts' ? "إضافة مديرية جديدة" : "إضافة تقسيم جديد"}
         onAction={() => {
           if (activeTab === 'districts') {
@@ -265,18 +318,20 @@ export default function AdminDistrictsPage() {
       {activeTab === 'districts' ? (
         <AdminDataTable
           columns={districtColumns}
-          data={districts}
+          data={filteredDistricts}
           isLoading={isLoading}
           onEdit={handleEditDistrict}
           onDelete={handleDeleteDistrict}
+          emptyMessage={searchQuery || selectedRegion ? "لا توجد نتائج مطابقة لبحثك." : "لا توجد مديريات متاحة حالياً."}
         />
       ) : (
         <AdminDataTable
           columns={regionColumns}
-          data={regions}
+          data={filteredRegions}
           isLoading={isLoading}
           onEdit={handleEditRegion}
           onDelete={handleDeleteRegion}
+          emptyMessage={searchQuery ? "لا توجد نتائج مطابقة لبحثك." : "لا توجد أقسام جغرافية متاحة حالياً."}
         />
       )}
 

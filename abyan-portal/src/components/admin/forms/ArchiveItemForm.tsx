@@ -3,6 +3,7 @@ import AdminInput from '../form-fields/AdminInput';
 import AdminSelect from '../form-fields/AdminSelect';
 import AdminParagraphsInput from '../form-fields/AdminParagraphsInput';
 import AdminMediaUpload from '../form-fields/AdminMediaUpload';
+import AdminSourcesInput from '../form-fields/AdminSourcesInput';
 import { ArchiveItemFormDataSchema, ArchiveItemFormData } from '@/types/schemas';
 import { AdminDistrict } from '@/types/admin.types';
 
@@ -142,11 +143,10 @@ export default function ArchiveItemForm({ id, initialData, categories = [], dist
       <AdminInput
         label="اسم الكاتب / الباحث التوثيقي"
         type="text"
-        required
         value={formData.authorName || ''}
         onChange={(e) => handleFieldChange('authorName', e.target.value)}
         error={errors.authorName}
-        placeholder="مثال: د. قاسم المحبشي"
+        placeholder="اختياري - افتراضياً: فريق توثيق بوابة أبين"
       />
 
       <AdminSelect
@@ -242,6 +242,12 @@ export default function ArchiveItemForm({ id, initialData, categories = [], dist
         onChange={(description) => handleFieldChange('description', description)}
         error={errors.description}
         placeholder="اكتب تفاصيل القيد، مصدر الوثيقة، والأهمية الوطنية..."
+        containerClassName="md:col-span-2 mt-2"
+      />
+
+      <AdminSourcesInput
+        sources={formData.sources || []}
+        onChange={(sources) => handleFieldChange('sources', sources)}
         containerClassName="md:col-span-2 mt-2"
       />
     </form>

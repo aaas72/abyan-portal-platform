@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
+import AdminSearchFilterBar from "@/components/admin/AdminSearchFilterBar";
 import AdminDataTable, { Column } from "@/components/admin/AdminDataTable";
 import AdminDrawer from "@/components/admin/AdminDrawer";
 import AdminTabs from "@/components/admin/AdminTabs";
@@ -30,6 +31,10 @@ export default function AdminCulturePage() {
   const [categories, setCategories] = useState<AdminCultureCategory[]>([]);
   const [items, setItems] = useState<AdminCultureItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Search & Filter State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   // Drawer states
   const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false);
@@ -149,6 +154,9 @@ export default function AdminCulturePage() {
       tag: item.tag,
       location: item.location,
       authorName: item.authorName || "",
+      sourceName: item.sourceName || "",
+      sourceUrl: item.sourceUrl || "",
+      sources: item.sources && item.sources.length > 0 ? item.sources : (item.sourceName ? [{ name: item.sourceName, url: item.sourceUrl }] : []),
       description: item.description || "",
       bgGradient: item.bgGradient || "",
       images: item.images || [],
@@ -245,20 +253,68 @@ export default function AdminCulturePage() {
     },
   ];
 
+  // Filtered Items
+  const filteredItems = useMemo(() => {
+    return items.filter((item) => {
+      const q = searchQuery.trim().toLowerCase();
+      const catObj = typeof item.category === "object" ? item.category : categories.find((c) => c._id === item.category);
+      const catId = (catObj as any)?._id || (catObj as any)?.id || item.category;
+
+      const matchesSearch = !q ||
+        item.title.toLowerCase().includes(q) ||
+        (item.tag && item.tag.toLowerCase().includes(q)) ||
+        (item.location && item.location.toLowerCase().includes(q)) ||
+        (item.authorName && item.authorName.toLowerCase().includes(q)) ||
+        (item.description && item.description.toLowerCase().includes(q));
+
+      const matchesCategory = !selectedCategory || selectedCategory === "all" ||
+        catId === selectedCategory || (catObj as any)?.title === selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [items, categories, searchQuery, selectedCategory]);
+
+  // Filtered Categories
+  const filteredCategories = useMemo(() => {
+    return categories.filter((item) => {
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch = !q ||
+        item.title.toLowerCase().includes(q) ||
+        (item.subtitle && item.subtitle.toLowerCase().includes(q)) ||
+        (item.description && item.description.toLowerCase().includes(q));
+      return matchesSearch;
+    });
+  }, [categories, searchQuery]);
+
   return (
     <div>
       <AdminPageHeader
         title="إدارة الثقافة والموروث"
         description="إضافة وتعديل وحذف العادات، التقاليد، الفنون، والأكلات الشعبية الأبينية."
-      />
+      >
+        <AdminSearchFilterBar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          searchPlaceholder={activeTab === 'items' ? "بحث في الموروث، الأكلات، الفنون..." : "بحث في فئات الثقافة..."}
+          categoryFilter={activeTab === 'items' ? selectedCategory : undefined}
+          onCategoryChange={activeTab === 'items' ? setSelectedCategory : undefined}
+          categoryOptions={activeTab === 'items' ? categories.map((c) => ({ label: c.title, value: c._id })) : []}
+          categoryPlaceholder="كل فئات الموروث"
+          totalCount={activeTab === 'items' ? items.length : categories.length}
+          filteredCount={activeTab === 'items' ? filteredItems.length : filteredCategories.length}
+        />
+      </AdminPageHeader>
 
       <AdminTabs
         tabs={[
-          { id: "items", label: "العناصر والتراث" },
-          { id: "categories", label: "فئات الثقافة" },
+          { id: "items", label: "العناصر والتراث", count: filteredItems.length },
+          { id: "categories", label: "فئات الثقافة", count: filteredCategories.length },
         ]}
         activeTab={activeTab}
-        onTabChange={(id) => setActiveTab(id as "categories" | "items")}
+        onTabChange={(id) => {
+          setActiveTab(id as "categories" | "items");
+          setSelectedCategory("");
+        }}
         actionLabel={
           activeTab === "categories" ? "إضافة فئة جديدة" : "إضافة عنصر جديد"
         }
@@ -279,18 +335,20 @@ export default function AdminCulturePage() {
       {activeTab === "categories" ? (
         <AdminDataTable
           columns={categoryColumns}
-          data={categories}
+          data={filteredCategories}
           isLoading={isLoading}
           onEdit={handleEditCategory}
           onDelete={handleDeleteCategory}
+          emptyMessage={searchQuery ? "لا توجد نتائج مطابقة لبحثك." : "لا توجد فئات ثقافة متاحة حالياً."}
         />
       ) : (
         <AdminDataTable
           columns={itemColumns}
-          data={items}
+          data={filteredItems}
           isLoading={isLoading}
           onEdit={handleEditItem}
           onDelete={handleDeleteItem}
+          emptyMessage={searchQuery || selectedCategory ? "لا توجد نتائج مطابقة لبحثك." : "لا توجد عناصر تراثية متاحة حالياً."}
         />
       )}
 

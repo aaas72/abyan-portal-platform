@@ -1,7 +1,9 @@
+
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
+import AdminSearchFilterBar from "@/components/admin/AdminSearchFilterBar";
 import AdminDataTable, { Column } from "@/components/admin/AdminDataTable";
 import AdminDrawer from "@/components/admin/AdminDrawer";
 import AdminTabs from "@/components/admin/AdminTabs";
@@ -30,6 +32,10 @@ export default function AdminPioneersPage() {
   const [data, setData] = useState<AdminPioneer[]>([]);
   const [categories, setCategories] = useState<AdminPioneerCategory[]>([]);
   const [districts, setDistricts] = useState<AdminDistrict[]>([]);
+
+  // Search & Filter State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -149,10 +155,14 @@ export default function AdminPioneersPage() {
       endYear: item.endYear || "",
       origin: item.origin || "",
       authorName: item.authorName || "",
+      sourceName: item.sourceName || "",
+      sourceUrl: item.sourceUrl || "",
+      sources: item.sources && item.sources.length > 0 ? item.sources : (item.sourceName ? [{ name: item.sourceName, url: item.sourceUrl }] : []),
       category: item.category || "",
       biography: item.biography || "",
       quote: item.quote || "",
       birthDate: item.birthDate || "",
+      deathDate: item.deathDate || "",
       isPublished: item.isActive,
       achievements: item.achievements || [],
       images: item.images || [],
@@ -295,20 +305,65 @@ export default function AdminPioneersPage() {
     },
   ];
 
+  // Filtered Figures
+  const filteredFigures = useMemo(() => {
+    return data.filter((item) => {
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch = !q ||
+        item.name.toLowerCase().includes(q) ||
+        (item.title && item.title.toLowerCase().includes(q)) ||
+        (item.origin && item.origin.toLowerCase().includes(q)) ||
+        (item.authorName && item.authorName.toLowerCase().includes(q)) ||
+        (item.biography && item.biography.toLowerCase().includes(q));
+
+      const matchesCategory = !selectedCategory || selectedCategory === "all" ||
+        item.category === selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [data, searchQuery, selectedCategory]);
+
+  // Filtered Categories
+  const filteredCategories = useMemo(() => {
+    return categories.filter((item) => {
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch = !q ||
+        item.title.toLowerCase().includes(q) ||
+        (item.subtitle && item.subtitle.toLowerCase().includes(q)) ||
+        (item.description && item.description.toLowerCase().includes(q));
+      return matchesSearch;
+    });
+  }, [categories, searchQuery]);
+
   return (
     <div>
       <AdminPageHeader
         title="إدارة رواد أبين"
         description="إضافة وتعديل وحذف الشخصيات التاريخية والأدبية والسياسية من أبين."
-      />
+      >
+        <AdminSearchFilterBar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          searchPlaceholder={activeTab === "figures" ? "بحث بالاسم، اللقب، المنشأ..." : "بحث في فئات الرواد..."}
+          categoryFilter={activeTab === "figures" ? selectedCategory : undefined}
+          onCategoryChange={activeTab === "figures" ? setSelectedCategory : undefined}
+          categoryOptions={activeTab === "figures" ? categories.map((c) => ({ label: c.title, value: c.title })) : []}
+          categoryPlaceholder="كل فئات الرواد"
+          totalCount={activeTab === "figures" ? data.length : categories.length}
+          filteredCount={activeTab === "figures" ? filteredFigures.length : filteredCategories.length}
+        />
+      </AdminPageHeader>
 
       <AdminTabs
         tabs={[
-          { id: "figures", label: "الشخصيات والرواد" },
-          { id: "categories", label: "فئات الشخصيات" },
+          { id: "figures", label: "الشخصيات والرواد", count: filteredFigures.length },
+          { id: "categories", label: "فئات الشخصيات", count: filteredCategories.length },
         ]}
         activeTab={activeTab}
-        onTabChange={(id) => setActiveTab(id as "figures" | "categories")}
+        onTabChange={(id) => {
+          setActiveTab(id as "figures" | "categories");
+          setSelectedCategory("");
+        }}
         actionLabel={
           activeTab === "figures" ? "إضافة شخصية جديدة" : "إضافة فئة جديدة"
         }
@@ -330,21 +385,23 @@ export default function AdminPioneersPage() {
       {activeTab === "figures" ? (
         <AdminDataTable
           columns={columns}
-          data={data}
+          data={filteredFigures}
           isLoading={isLoading}
           isLoadingMore={isLoadingMore}
-          hasMore={hasMore}
+          hasMore={hasMore && !searchQuery && !selectedCategory}
           onLoadMore={handleLoadMore}
           onEdit={handleEdit}
           onDelete={handleDelete}
+          emptyMessage={searchQuery || selectedCategory ? "لا توجد نتائج مطابقة لبحثك." : "لا توجد شخصيات متاحة حالياً."}
         />
       ) : (
         <AdminDataTable
           columns={categoryColumns}
-          data={categories}
+          data={filteredCategories}
           isLoading={isLoading}
           onEdit={handleEditCategory}
           onDelete={handleDeleteCategory}
+          emptyMessage={searchQuery ? "لا توجد نتائج مطابقة لبحثك." : "لا توجد فئات متاحة حالياً."}
         />
       )}
 

@@ -53,6 +53,10 @@ export class EconomyService {
           tag: p.tag,
           location: p.location,
           description: p.description,
+          authorName: p.authorName || 'فريق توثيق بوابة أبين',
+          sourceName: (p as any).sourceName || '',
+          sourceUrl: (p as any).sourceUrl || '',
+          sources: (p as any).sources || ((p as any).sourceName ? [{ name: (p as any).sourceName, url: (p as any).sourceUrl }] : []),
           bgGradient: p.bgGradient,
           images: MediaMapper.extractImages(p),
         })),
@@ -149,7 +153,10 @@ export class EconomyService {
   async createPhotoCard(
     createPhotoCardDto: CreateEconomyPhotoCardDto,
   ): Promise<EconomyPhotoCard> {
-    const newPhotoCard = new this.photoCardModel(createPhotoCardDto);
+    const newPhotoCard = new this.photoCardModel({
+      ...createPhotoCardDto,
+      authorName: createPhotoCardDto.authorName?.trim() || 'فريق توثيق بوابة أبين',
+    });
     const savedPhotoCard = await newPhotoCard.save();
 
     let mediaUpdated = false;

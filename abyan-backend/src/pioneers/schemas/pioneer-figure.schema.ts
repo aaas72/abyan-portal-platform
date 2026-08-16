@@ -24,6 +24,18 @@ export class PioneerFigure {
   authorName: string;
 
   @Prop()
+  sourceName?: string;
+
+  @Prop()
+  sourceUrl?: string;
+
+  @Prop({
+    type: [{ name: { type: String, required: true }, url: { type: String } }],
+    default: [],
+  })
+  sources?: Array<{ name: string; url?: string }>;
+
+  @Prop()
   startYear: string;
 
   @Prop()
@@ -40,6 +52,9 @@ export class PioneerFigure {
 
   @Prop({ required: true })
   birthDate: string;
+
+  @Prop()
+  deathDate?: string;
 
   @Prop({ type: [String], required: true })
   achievements: string[];

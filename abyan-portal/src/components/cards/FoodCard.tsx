@@ -4,12 +4,18 @@ import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
+import { ContentSource } from "@/types/schemas";
+
 export interface FoodCardData {
   id: string;
   title: string;
   tag: string;
   location: string;
   description: string;
+  authorName?: string;
+  sourceName?: string;
+  sourceUrl?: string;
+  sources?: ContentSource[];
   bgGradient?: string;
   images?: string[];
 }

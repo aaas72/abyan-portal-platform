@@ -9,6 +9,7 @@ import {
 } from "@/lib/animations";
 
 import { HistoryEra } from "@/types/schemas";
+import { formatFormalArabicPeriod } from "@/lib/utils";
 
 interface EraDetailOverlayProps {
   era: HistoryEra | null;
@@ -40,7 +41,7 @@ export default function EraDetailOverlay({
               {...itemFadeInRight(0.05)}
               className="text-xs sm:text-sm font-normal text-sky-600 font-abyan-title block"
             >
-              {era.startYear}&nbsp;&nbsp;-&nbsp;&nbsp;{era.endYear}
+              {formatFormalArabicPeriod(era.startYear, era.endYear)}
             </motion.span>
 
             {/* Era Capital Sub-heading */}
@@ -66,6 +67,39 @@ export default function EraDetailOverlay({
             >
               {era.shortSummary}
             </motion.p>
+
+            {/* Sources / References */}
+            {(() => {
+              const sourcesList = era.sources && era.sources.length > 0
+                ? era.sources
+                : (era.sourceName ? [{ name: era.sourceName, url: era.sourceUrl }] : []);
+              if (sourcesList.length === 0) return null;
+              return (
+                <motion.div
+                  {...itemFadeInRight(0.2)}
+                  className="pt-2 flex flex-wrap items-center gap-2 text-xs font-abyan-body text-slate-500"
+                >
+                  <span>المصادر:</span>
+                  {sourcesList.map((src, i) => (
+                    <span key={i} className="inline-flex items-center gap-1">
+                      {i > 0 && <span className="text-slate-300">•</span>}
+                      {src.url ? (
+                        <a
+                          href={src.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sky-600 hover:text-sky-700 underline font-abyan-title"
+                        >
+                          {src.name}
+                        </a>
+                      ) : (
+                        <span className="text-slate-700">{src.name}</span>
+                      )}
+                    </span>
+                  ))}
+                </motion.div>
+              );
+            })()}
           </div>
         </motion.div>
       )}

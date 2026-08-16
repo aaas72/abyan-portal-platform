@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
+import AdminSearchFilterBar from "@/components/admin/AdminSearchFilterBar";
 import AdminDataTable, { Column } from "@/components/admin/AdminDataTable";
 import AdminDrawer from "@/components/admin/AdminDrawer";
 import AdminTabs from "@/components/admin/AdminTabs";
@@ -26,6 +27,10 @@ export default function AdminLandmarksPage() {
   const [photoCards, setPhotoCards] = useState<AdminLandmarkPhotoCard[]>([]);
   const [districts, setDistricts] = useState<AdminDistrict[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Search & Filter State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   // Drawer states
   const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false);
@@ -138,6 +143,9 @@ export default function AdminLandmarksPage() {
       tag: item.tag,
       location: item.location,
       authorName: item.authorName || "",
+      sourceName: item.sourceName || "",
+      sourceUrl: item.sourceUrl || "",
+      sources: item.sources && item.sources.length > 0 ? item.sources : (item.sourceName ? [{ name: item.sourceName, url: item.sourceUrl }] : []),
       description: item.description || "",
       startYear: item.startYear || "",
       endYear: item.endYear || "",
@@ -226,21 +234,67 @@ export default function AdminLandmarksPage() {
     },
   ];
 
+  // Filtered PhotoCards
+  const filteredPhotoCards = useMemo(() => {
+    return photoCards.filter((item) => {
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch = !q ||
+        item.title.toLowerCase().includes(q) ||
+        (item.tag && item.tag.toLowerCase().includes(q)) ||
+        (item.location && item.location.toLowerCase().includes(q)) ||
+        (item.authorName && item.authorName.toLowerCase().includes(q)) ||
+        (item.description && item.description.toLowerCase().includes(q));
+
+      const matchesCategory = !selectedCategory || selectedCategory === "all" ||
+        item.category === selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [photoCards, searchQuery, selectedCategory]);
+
+  // Filtered Categories
+  const filteredCategories = useMemo(() => {
+    return categories.filter((item) => {
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch = !q ||
+        item.categoryName.toLowerCase().includes(q) ||
+        item.title.toLowerCase().includes(q) ||
+        (item.subtitle && item.subtitle.toLowerCase().includes(q)) ||
+        (item.description && item.description.toLowerCase().includes(q));
+      return matchesSearch;
+    });
+  }, [categories, searchQuery]);
+
   return (
     <div>
       <AdminPageHeader
         title="إدارة المعالم"
         description="إدارة فئات المعالم وإضافة المعالم المرتبطة بها في محافظة أبين."
-      />
+      >
+        <AdminSearchFilterBar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          searchPlaceholder={activeTab === 'photoCards' ? "بحث بالاسم، الموقع، الوصف..." : "بحث في فئات المعالم..."}
+          categoryFilter={activeTab === 'photoCards' ? selectedCategory : undefined}
+          onCategoryChange={activeTab === 'photoCards' ? setSelectedCategory : undefined}
+          categoryOptions={activeTab === 'photoCards' ? categories.map((c) => ({ label: c.title, value: c.categoryName })) : []}
+          categoryPlaceholder="كل فئات المعالم"
+          totalCount={activeTab === 'photoCards' ? photoCards.length : categories.length}
+          filteredCount={activeTab === 'photoCards' ? filteredPhotoCards.length : filteredCategories.length}
+        />
+      </AdminPageHeader>
 
       {/* Tabs */}
       <AdminTabs
         tabs={[
-          { id: 'photoCards', label: 'المعالم' },
-          { id: 'categories', label: 'فئات المعالم' },
+          { id: 'photoCards', label: 'المعالم', count: filteredPhotoCards.length },
+          { id: 'categories', label: 'فئات المعالم', count: filteredCategories.length },
         ]}
         activeTab={activeTab}
-        onTabChange={(id) => setActiveTab(id as 'categories' | 'photoCards')}
+        onTabChange={(id) => {
+          setActiveTab(id as 'categories' | 'photoCards');
+          setSelectedCategory("");
+        }}
         actionLabel={activeTab === 'categories' ? "إضافة فئة جديدة" : "إضافة معلم جديد"}
         onAction={() => {
           if (activeTab === 'categories') {
@@ -260,18 +314,20 @@ export default function AdminLandmarksPage() {
       {activeTab === 'categories' ? (
         <AdminDataTable
           columns={categoryColumns}
-          data={categories}
+          data={filteredCategories}
           isLoading={isLoading}
           onEdit={handleEditCategory}
           onDelete={handleDeleteCategory}
+          emptyMessage={searchQuery ? "لا توجد نتائج مطابقة لبحثك." : "لا توجد فئات معالم متاحة حالياً."}
         />
       ) : (
         <AdminDataTable
           columns={photoCardColumns}
-          data={photoCards}
+          data={filteredPhotoCards}
           isLoading={isLoading}
           onEdit={handleEditPhotoCard}
           onDelete={handleDeletePhotoCard}
+          emptyMessage={searchQuery || selectedCategory ? "لا توجد نتائج مطابقة لبحثك." : "لا توجد معالم متاحة حالياً."}
         />
       )}
 

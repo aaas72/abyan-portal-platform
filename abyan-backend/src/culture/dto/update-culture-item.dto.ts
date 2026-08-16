@@ -40,6 +40,20 @@ export class UpdateCultureItemDto {
   @IsString()
   @MaxLength(500)
   @IsOptional()
+  sourceName?: string;
+
+  @IsString()
+  @MaxLength(1000)
+  @IsOptional()
+  sourceUrl?: string;
+
+  @IsArray()
+  @IsOptional()
+  sources?: Array<{ name: string; url?: string }>;
+
+  @IsString()
+  @MaxLength(500)
+  @IsOptional()
   bgGradient?: string;
   @IsBoolean()
   @IsOptional()
