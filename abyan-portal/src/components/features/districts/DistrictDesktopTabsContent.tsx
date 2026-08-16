@@ -141,7 +141,7 @@ export default function DistrictDesktopTabsContent({
                         title: pioneer,
                         subtitle: `رمز وعلم من أعلام مديرية ${activeDistrict.name}`,
                         fullBiography: `${pioneer} هو أحد أعمدة وشخصيات مديرية ${activeDistrict.name} البارزة في التاريخ والتراث الأبيني.`,
-                        categoryLabel: `علم بالمديرية • ${activeDistrict.name}`,
+                        categoryLabel: "علم بالمديرية",
                         location: activeDistrict.name,
                         year: "رواد أبين",
                         bgGradient: "from-emerald-50 to-sky-50",
@@ -149,7 +149,7 @@ export default function DistrictDesktopTabsContent({
                     }
                     data={{
                       title: pioneer,
-                      category: `علم بالمديرية • ${activeDistrict.name}`,
+                      category: "علم بالمديرية",
                       subtitle: `رمز وعلم من أعلام مديرية ${activeDistrict.name}`,
                       description: `${pioneer} هو أحد أعمدة وشخصيات مديرية ${activeDistrict.name} البارزة في التاريخ والتراث الأبيني.`,
                       location: activeDistrict.name,
@@ -182,7 +182,7 @@ export default function DistrictDesktopTabsContent({
                         subtitle: site.subtitle,
                         fullBiography:
                           site.fullBiography || site.description,
-                        categoryLabel: `معلم أثري • مديرية ${activeDistrict.name}`,
+                        categoryLabel: "معلم أثري",
                         location: activeDistrict.name,
                         bgGradient: site.bgGradient,
                         images: site.images,
@@ -190,7 +190,7 @@ export default function DistrictDesktopTabsContent({
                     }
                     data={{
                       title: site.title,
-                      category: `معلم أثري • ${activeDistrict.name}`,
+                      category: "معلم أثري",
                       description: site.subtitle || site.description,
                       location: activeDistrict.name,
                       bgGradient: site.bgGradient,
@@ -208,7 +208,7 @@ export default function DistrictDesktopTabsContent({
                         title: landmark,
                         subtitle: `معلم بارز في مديرية ${activeDistrict.name}`,
                         fullBiography: `${landmark} أحد المعالم والشواهد الجغرافية والتاريخية البارزة في مديرية ${activeDistrict.name}.`,
-                        categoryLabel: `معلم بارز • مديرية ${activeDistrict.name}`,
+                        categoryLabel: "معلم بارز",
                         location: activeDistrict.name,
                         bgGradient:
                           "from-emerald-950 via-sky-900 to-slate-900",
@@ -216,7 +216,7 @@ export default function DistrictDesktopTabsContent({
                     }
                     data={{
                       title: landmark,
-                      category: `معلم بارز • ${activeDistrict.name}`,
+                      category: "معلم بارز",
                       description: `معلم بارز في مديرية ${activeDistrict.name}`,
                       location: activeDistrict.name,
                       bgGradient:
@@ -239,7 +239,7 @@ export default function DistrictDesktopTabsContent({
           <h4 className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block border-none">
             أبرز المحاصيل والمنتجات الزراعية والحيوانية:
           </h4>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {activeDistrict.cropsCardList &&
             activeDistrict.cropsCardList.length > 0
               ? activeDistrict.cropsCardList.map((crop) => (
@@ -253,7 +253,7 @@ export default function DistrictDesktopTabsContent({
                         subtitle: crop.subtitle,
                         fullBiography:
                           crop.fullBiography || crop.description,
-                        categoryLabel: `خيرات الأرض • مديرية ${activeDistrict.name}`,
+                        categoryLabel: "خيرات الأرض",
                         location: activeDistrict.name,
                         bgGradient: crop.bgGradient,
                         images: crop.images,
@@ -261,7 +261,7 @@ export default function DistrictDesktopTabsContent({
                     }
                     data={{
                       title: crop.title,
-                      category: `خيرات الأرض • ${activeDistrict.name}`,
+                      category: "خيرات الأرض",
                       description: crop.subtitle || crop.description,
                       location: activeDistrict.name,
                       bgGradient: crop.bgGradient,
@@ -279,7 +279,7 @@ export default function DistrictDesktopTabsContent({
                         title: crop,
                         subtitle: `محصول وثروة خصيبة في ${activeDistrict.name}`,
                         fullBiography: `${crop} ركن أساسي من الثروات والمحاصيل التي تعتز بها مديرية ${activeDistrict.name}.`,
-                        categoryLabel: `خيرات الأرض • مديرية ${activeDistrict.name}`,
+                        categoryLabel: "خيرات الأرض",
                         location: activeDistrict.name,
                         bgGradient:
                           "from-emerald-950 via-slate-800 to-sky-900",
@@ -287,7 +287,7 @@ export default function DistrictDesktopTabsContent({
                     }
                     data={{
                       title: crop,
-                      category: `خيرات الأرض • ${activeDistrict.name}`,
+                      category: "خيرات الأرض",
                       description: `محصول وثروة خصيبة في ${activeDistrict.name}`,
                       location: activeDistrict.name,
                       bgGradient:
@@ -325,7 +325,7 @@ export default function DistrictDesktopTabsContent({
                           subtitle: item.subtitle,
                           fullBiography:
                             item.fullBiography || item.description,
-                          categoryLabel: `موروث وفلكلور • مديرية ${activeDistrict.name}`,
+                          categoryLabel: "موروث وفلكلور",
                           location: activeDistrict.name,
                           bgGradient: item.bgGradient,
                           images: item.images,
@@ -333,7 +333,7 @@ export default function DistrictDesktopTabsContent({
                       }
                       data={{
                         title: item.title,
-                        category: `موروث وفلكلور • ${activeDistrict.name}`,
+                        category: "موروث وفلكلور",
                         description: item.subtitle || item.description,
                         location: activeDistrict.name,
                         bgGradient: item.bgGradient,
@@ -351,7 +351,7 @@ export default function DistrictDesktopTabsContent({
                           title: item,
                           subtitle: `موروث وفلكلور أصيل في ${activeDistrict.name}`,
                           fullBiography: `${item} فن وموروث فلكلوري شفاهي يتوارثه أهالي مديرية ${activeDistrict.name}.`,
-                          categoryLabel: `موروث وفلكلور • مديرية ${activeDistrict.name}`,
+                          categoryLabel: "موروث وفلكلور",
                           location: activeDistrict.name,
                           bgGradient:
                             "from-sky-950 via-emerald-950 to-slate-900",
@@ -359,7 +359,7 @@ export default function DistrictDesktopTabsContent({
                       }
                       data={{
                         title: item,
-                        category: `موروث وفلكلور • ${activeDistrict.name}`,
+                        category: "موروث وفلكلور",
                         description: `موروث وفلكلور أصيل في ${activeDistrict.name}`,
                         location: activeDistrict.name,
                         bgGradient:

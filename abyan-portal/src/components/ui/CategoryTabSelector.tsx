@@ -63,17 +63,42 @@ export default function CategoryTabSelector({
     };
   }, [tabs]);
 
-  // Auto-scroll active tab into center view
-  useEffect(() => {
-    if (activeTabRef.current && scrollRef.current) {
-      activeTabRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "center",
+  const scrollToActiveTab = (behavior: ScrollBehavior = "smooth") => {
+    if (!activeTabRef.current || !scrollRef.current) return;
+    const container = scrollRef.current;
+    const tabEl = activeTabRef.current;
+
+    const containerRect = container.getBoundingClientRect();
+    const tabRect = tabEl.getBoundingClientRect();
+
+    if (containerRect.width === 0 || tabRect.width === 0) return;
+
+    const containerCenter = containerRect.left + containerRect.width / 2;
+    const tabCenter = tabRect.left + tabRect.width / 2;
+    const diff = tabCenter - containerCenter;
+
+    if (Math.abs(diff) > 2) {
+      container.scrollBy({
+        left: diff,
+        behavior,
       });
-      setTimeout(checkScroll, 350);
     }
-  }, [activeTab]);
+  };
+
+  // Robust auto-scroll active tab into center view without scrolling to beginning
+  useEffect(() => {
+    scrollToActiveTab("auto");
+    const t1 = setTimeout(() => scrollToActiveTab("smooth"), 60);
+    const t2 = setTimeout(() => {
+      scrollToActiveTab("smooth");
+      checkScroll();
+    }, 220);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [activeTab, tabs]);
 
   const handleScroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;

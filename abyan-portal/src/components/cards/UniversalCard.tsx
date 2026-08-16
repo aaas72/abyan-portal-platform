@@ -35,6 +35,9 @@ export default function UniversalCard({
   onClick,
   variant = "highlight",
 }: UniversalCardProps) {
+  const categoryText = data.category ? data.category.split("•")[0].trim() : undefined;
+  const cardImage = data.images && data.images.length > 0 ? data.images[0] : null;
+
   // VARIANT 1: STAT CARD (CENTERED TEXT WITH GRADIENT BACKGROUND)
   if (variant === "stat") {
     return (
@@ -43,9 +46,9 @@ export default function UniversalCard({
         transition={{ duration: 0.3, ease: "easeOut" }}
         className="group cursor-pointer text-right bg-gradient-to-br from-emerald-100/70 via-white to-sky-100/70 hover:from-sky-100/90 hover:to-emerald-100/90 transition-all duration-500 ease-in-out rounded-2xl p-5 border-none space-y-2 shadow-none overflow-hidden w-full relative"
       >
-        {data.category && (
+        {categoryText && (
           <span className="text-sm font-normal text-[#10b981] font-abyan-title block">
-            {data.category}
+            {categoryText}
           </span>
         )}
         <span className="block font-abyan-title text-2xl md:text-3xl lg:text-4xl text-slate-900 font-normal leading-none group-hover:text-sky-600 transition-colors">
@@ -81,16 +84,14 @@ export default function UniversalCard({
               draggable={false}
               onContextMenu={(e) => e.preventDefault()}
             />
-          ) : (
-            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
-          )}
+          ) : null}
         </div>
 
         {/* Title & Short Description Below Photo Box */}
         <div className="space-y-1.5 overflow-hidden">
-          {data.category && (
+          {categoryText && (
             <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
-              {data.category}
+              {categoryText}
             </span>
           )}
           <h3 className="font-abyan-title text-lg md:text-xl font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
@@ -133,17 +134,15 @@ export default function UniversalCard({
                 draggable={false}
                 onContextMenu={(e) => e.preventDefault()}
               />
-            ) : (
-              <div className="absolute inset-0 opacity-25 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:12px_12px]" />
-            )}
+            ) : null}
           </div>
 
           {/* Title, Role & Button Side Container */}
           <div className="flex flex-col justify-between flex-1 py-1 overflow-hidden">
             <div className="space-y-1.5 overflow-hidden">
-              {data.category && (
+              {categoryText && (
                 <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
-                  {data.category}
+                  {categoryText}
                 </span>
               )}
               <h3 className="font-abyan-title text-lg md:text-xl font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
@@ -188,9 +187,9 @@ export default function UniversalCard({
       className="group cursor-pointer text-right bg-transparent border-none pb-6 mb-2 space-y-3 shadow-none transition-all duration-300 overflow-hidden w-full relative"
     >
       <div className="space-y-1 overflow-hidden">
-        {data.category && (
+        {categoryText && (
           <span className="text-sm md:text-base font-normal text-[#10b981] font-abyan-title block">
-            {data.category}
+            {categoryText}
           </span>
         )}
         <h3 className="font-abyan-title text-lg md:text-xl text-slate-900 font-normal group-hover:text-sky-600 transition-colors leading-snug">

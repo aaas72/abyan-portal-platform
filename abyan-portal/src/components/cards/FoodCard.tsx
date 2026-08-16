@@ -20,6 +20,8 @@ interface FoodCardProps {
 }
 
 export default function FoodCard({ foodCard, onClick }: FoodCardProps) {
+  const tagText = foodCard.tag ? foodCard.tag.split("•")[0].trim() : undefined;
+
   return (
     <motion.div
       onClick={onClick}
@@ -46,9 +48,9 @@ export default function FoodCard({ foodCard, onClick }: FoodCardProps) {
 
       {/* Title & Short Description */}
       <div className="space-y-1 overflow-hidden">
-        {foodCard.tag && (
+        {tagText && (
           <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
-            {foodCard.tag}
+            {tagText}
           </span>
         )}
         <h3 className="font-abyan-title text-base sm:text-lg font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">

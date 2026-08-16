@@ -24,6 +24,8 @@ interface PioneerCardProps {
 }
 
 export default function PioneerCard({ figure, onClick }: PioneerCardProps) {
+  const roleText = figure.role ? figure.role.split("•")[0].trim() : figure.role;
+
   return (
     <motion.div
       onClick={onClick}
@@ -53,7 +55,7 @@ export default function PioneerCard({ figure, onClick }: PioneerCardProps) {
         {/* Title & Role Info Side Container */}
         <div className="space-y-1 overflow-hidden flex-1">
           <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
-            {figure.role}
+            {roleText}
           </span>
           <h3 className="font-abyan-title text-lg sm:text-xl font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
             {figure.name}

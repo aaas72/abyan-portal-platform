@@ -90,7 +90,7 @@ export default async function DistrictsDataWrapper() {
           fullBiography: match.biography,
           bgGradient: match.bgGradient,
           images: match.images,
-          category: match.categoryTitle || `علم بمديرية ${district.name}`,
+          category: match.categoryTitle || "علم بالمديرية",
           startYear: match.startYear,
           endYear: match.endYear,
           location: match.location || district.name,
@@ -102,7 +102,7 @@ export default async function DistrictsDataWrapper() {
           subtitle: `رمز وعلم من أعلام مديرية ${district.name}`,
           description: `${pName} هو أحد أعمدة وشخصيات مديرية ${district.name} البارزة في التاريخ والتراث الأبيني.`,
           fullBiography: `${pName} هو أحد أعمدة وشخصيات مديرية ${district.name} البارزة في التاريخ والتراث الأبيني.`,
-          category: `علم بالمديرية • ${district.name}`,
+          category: "علم بالمديرية",
           location: district.name,
           bgGradient: "from-emerald-50 to-sky-50",
         });
@@ -121,7 +121,7 @@ export default async function DistrictsDataWrapper() {
           fullBiography: l.description,
           bgGradient: l.bgGradient,
           images: l.images,
-          category: l.categoryTitle || `معلم أثري • ${district.name}`,
+          category: l.categoryTitle || "معلم أثري",
           location: l.location || district.name,
         });
       }
@@ -140,7 +140,7 @@ export default async function DistrictsDataWrapper() {
           fullBiography: match.description,
           bgGradient: match.bgGradient,
           images: match.images,
-          category: match.categoryTitle || `معلم أثري • ${district.name}`,
+          category: match.categoryTitle || "معلم أثري",
           location: match.location || district.name,
         });
       } else if (!match && !siteItemsMap.has(`site-${idx}`)) {
@@ -150,7 +150,7 @@ export default async function DistrictsDataWrapper() {
           subtitle: `معلم بارز في مديرية ${district.name}`,
           description: `${sName} أحد المعالم والشواهد الجغرافية والتاريخية البارزة في مديرية ${district.name}.`,
           fullBiography: `${sName} أحد المعالم والشواهد الجغرافية والتاريخية البارزة في مديرية ${district.name}.`,
-          category: `معلم بارز • ${district.name}`,
+          category: "معلم بارز",
           location: district.name,
           bgGradient: "from-emerald-950 via-sky-900 to-slate-900",
         });
@@ -169,7 +169,7 @@ export default async function DistrictsDataWrapper() {
           fullBiography: e.description,
           bgGradient: e.bgGradient,
           images: e.images,
-          category: e.categoryTitle || `خيرات الأرض • ${district.name}`,
+          category: e.categoryTitle || "خيرات الأرض",
           location: e.location || district.name,
         });
       }
@@ -189,7 +189,7 @@ export default async function DistrictsDataWrapper() {
           fullBiography: match.description,
           bgGradient: match.bgGradient,
           images: match.images,
-          category: match.categoryTitle || `خيرات الأرض • ${district.name}`,
+          category: match.categoryTitle || "خيرات الأرض",
           location: match.location || district.name,
         });
       } else if (!match && !cropItemsMap.has(`crop-${idx}`)) {
@@ -199,7 +199,7 @@ export default async function DistrictsDataWrapper() {
           subtitle: `محصول وثروة خصيبة في ${district.name}`,
           description: `${cName} ركن أساسي من الثروات والمحاصيل التي تعتز بها مديرية ${district.name}.`,
           fullBiography: `${cName} ركن أساسي من الثروات والمحاصيل التي تعتز بها مديرية ${district.name}.`,
-          category: `خيرات الأرض • ${district.name}`,
+          category: "خيرات الأرض",
           location: district.name,
           bgGradient: "from-emerald-950 via-slate-800 to-sky-900",
         });
@@ -218,7 +218,7 @@ export default async function DistrictsDataWrapper() {
           fullBiography: c.description,
           bgGradient: c.bgGradient,
           images: c.images,
-          category: c.categoryTitle || `موروث وفلكلور • ${district.name}`,
+          category: c.categoryTitle || "موروث وفلكلور",
           location: c.location || district.name,
         });
       }
@@ -238,7 +238,7 @@ export default async function DistrictsDataWrapper() {
           fullBiography: match.description,
           bgGradient: match.bgGradient,
           images: match.images,
-          category: match.categoryTitle || `موروث وفلكلور • ${district.name}`,
+          category: match.categoryTitle || "موروث وفلكلور",
           location: match.location || district.name,
         });
       } else if (!match && !heritageItemsMap.has(`heritage-${idx}`)) {
@@ -248,7 +248,7 @@ export default async function DistrictsDataWrapper() {
           subtitle: `موروث وفلكلور أصيل في ${district.name}`,
           description: `${hName} فن وموروث فلكلوري شفاهي يتوارثه أهالي مديرية ${district.name}.`,
           fullBiography: `${hName} فن وموروث فلكلوري شفاهي يتوارثه أهالي مديرية ${district.name}.`,
-          category: `موروث وفلكلور • ${district.name}`,
+          category: "موروث وفلكلور",
           location: district.name,
           bgGradient: "from-sky-950 via-emerald-950 to-slate-900",
         });

@@ -124,7 +124,7 @@ export default function DistrictMobileTabsContent({
                         title: pioneer,
                         subtitle: `رمز وعلم من أعلام مديرية ${dist.name}`,
                         fullBiography: `${pioneer} هو أحد أعمدة وشخصيات مديرية ${dist.name} البارزة في التاريخ والتراث الأبيني.`,
-                        categoryLabel: `علم بالمديرية • ${dist.name}`,
+                        categoryLabel: "علم بالمديرية",
                         location: dist.name,
                         year: "رواد أبين",
                         bgGradient: "from-emerald-50 to-sky-50",
@@ -132,7 +132,7 @@ export default function DistrictMobileTabsContent({
                     }
                     data={{
                       title: pioneer,
-                      category: `علم بالمديرية • ${dist.name}`,
+                      category: "علم بالمديرية",
                       subtitle: `رمز وعلم من أعلام مديرية ${dist.name}`,
                       description: `${pioneer} هو أحد أعمدة وشخصيات مديرية ${dist.name} البارزة في التاريخ والتراث الأبيني.`,
                       location: dist.name,
@@ -163,7 +163,7 @@ export default function DistrictMobileTabsContent({
                         title: site.title,
                         subtitle: site.subtitle,
                         fullBiography: site.fullBiography || site.description,
-                        categoryLabel: `معلم أثري • مديرية ${dist.name}`,
+                        categoryLabel: "معلم أثري",
                         location: dist.name,
                         bgGradient: site.bgGradient,
                         images: site.images,
@@ -171,7 +171,7 @@ export default function DistrictMobileTabsContent({
                     }
                     data={{
                       title: site.title,
-                      category: `معلم أثري • ${dist.name}`,
+                      category: "معلم أثري",
                       description: site.subtitle || site.description,
                       location: dist.name,
                       bgGradient: site.bgGradient,
@@ -189,14 +189,14 @@ export default function DistrictMobileTabsContent({
                         title: landmark,
                         subtitle: `معلم بارز في مديرية ${dist.name}`,
                         fullBiography: `${landmark} أحد المعالم والشواهد الجغرافية والتاريخية البارزة في مديرية ${dist.name}.`,
-                        categoryLabel: `معلم بارز • مديرية ${dist.name}`,
+                        categoryLabel: "معلم بارز",
                         location: dist.name,
                         bgGradient: "from-emerald-950 via-sky-900 to-slate-900",
                       })
                     }
                     data={{
                       title: landmark,
-                      category: `معلم بارز • ${dist.name}`,
+                      category: "معلم بارز",
                       description: `معلم بارز في مديرية ${dist.name}`,
                       location: dist.name,
                       bgGradient: "from-emerald-950 via-sky-900 to-slate-900",
@@ -230,7 +230,7 @@ export default function DistrictMobileTabsContent({
                         title: crop.title,
                         subtitle: crop.subtitle,
                         fullBiography: crop.fullBiography || crop.description,
-                        categoryLabel: `خيرات الأرض • مديرية ${dist.name}`,
+                        categoryLabel: "خيرات الأرض",
                         location: dist.name,
                         bgGradient: crop.bgGradient,
                         images: crop.images,
@@ -238,7 +238,7 @@ export default function DistrictMobileTabsContent({
                     }
                     data={{
                       title: crop.title,
-                      category: `خيرات الأرض • ${dist.name}`,
+                      category: "خيرات الأرض",
                       description: crop.subtitle || crop.description,
                       location: dist.name,
                       bgGradient: crop.bgGradient,
@@ -256,14 +256,14 @@ export default function DistrictMobileTabsContent({
                         title: crop,
                         subtitle: `محصول وثروة خصيبة في ${dist.name}`,
                         fullBiography: `${crop} ركن أساسي من الثروات والمحاصيل التي تعتز بها مديرية ${dist.name}.`,
-                        categoryLabel: `خيرات الأرض • مديرية ${dist.name}`,
+                        categoryLabel: "خيرات الأرض",
                         location: dist.name,
                         bgGradient: "from-emerald-950 via-slate-800 to-sky-900",
                       })
                     }
                     data={{
                       title: crop,
-                      category: `خيرات الأرض • ${dist.name}`,
+                      category: "خيرات الأرض",
                       description: `محصول وثروة خصيبة في ${dist.name}`,
                       location: dist.name,
                       bgGradient: "from-emerald-950 via-slate-800 to-sky-900",
@@ -297,7 +297,7 @@ export default function DistrictMobileTabsContent({
                         title: item.title,
                         subtitle: item.subtitle,
                         fullBiography: item.fullBiography || item.description,
-                        categoryLabel: `موروث وفلكلور • مديرية ${dist.name}`,
+                        categoryLabel: "موروث وفلكلور",
                         location: dist.name,
                         bgGradient: item.bgGradient,
                         images: item.images,
@@ -305,7 +305,7 @@ export default function DistrictMobileTabsContent({
                     }
                     data={{
                       title: item.title,
-                      category: `موروث وفلكلور • ${dist.name}`,
+                      category: "موروث وفلكلور",
                       description: item.subtitle || item.description,
                       location: dist.name,
                       bgGradient: item.bgGradient,
@@ -323,14 +323,14 @@ export default function DistrictMobileTabsContent({
                         title: item,
                         subtitle: `موروث وفلكلور أصيل في ${dist.name}`,
                         fullBiography: `${item} فن وموروث فلكلوري شفاهي يتوارثه أهالي مديرية ${dist.name}.`,
-                        categoryLabel: `موروث وفلكلور • مديرية ${dist.name}`,
+                        categoryLabel: "موروث وفلكلور",
                         location: dist.name,
                         bgGradient: "from-sky-950 via-emerald-950 to-slate-900",
                       })
                     }
                     data={{
                       title: item,
-                      category: `موروث وفلكلور • ${dist.name}`,
+                      category: "موروث وفلكلور",
                       description: `موروث وفلكلور أصيل في ${dist.name}`,
                       location: dist.name,
                       bgGradient: "from-sky-950 via-emerald-950 to-slate-900",

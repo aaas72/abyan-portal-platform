@@ -74,7 +74,7 @@ export default function AdminDataTable<T extends { _id?: string }>({
   return (
     <div className="w-full overflow-x-auto pb-4">
       <table className="w-full text-right border-collapse min-w-full sm:min-w-max">
-        <thead className="bg-white border-b border-slate-200 sm:sticky sm:top-32 z-30">
+        <thead className="bg-white border-b border-slate-200">
           <tr>
             <th className="hidden sm:table-cell pt-3 pb-3 px-4 text-right align-middle w-12">
               <span className="font-abyan-title text-slate-900 font-normal text-sm">

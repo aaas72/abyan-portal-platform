@@ -38,12 +38,9 @@ export default function DistrictHero({ district }: DistrictHeroProps) {
         )}
       </div>
 
-      {/* التدرج اللوني والنقاط كخلفية في حال عدم وجود صورة أو حول الحواف */}
+      {/* التدرج اللوني كخلفية في حال عدم وجود صورة أو حول الحواف */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
         <div className="absolute inset-0 bg-gradient-to-l from-emerald-950/95 via-slate-900/70 to-sky-950/30" />
-        {(!district.images || district.images.length === 0) && (
-          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
-        )}
       </div>
 
       <div className="relative z-10 p-6 sm:p-8 w-full flex flex-col gap-4 text-right">

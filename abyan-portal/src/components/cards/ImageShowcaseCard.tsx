@@ -44,6 +44,8 @@ export default function ImageShowcaseCard({
   item,
   onClick,
 }: ImageShowcaseCardProps) {
+  const tagText = item.tag ? item.tag.split("•")[0].trim() : undefined;
+
   return (
     <motion.div
       onClick={onClick}
@@ -67,16 +69,14 @@ export default function ImageShowcaseCard({
             draggable={false}
             onContextMenu={(e) => e.preventDefault()}
           />
-        ) : (
-          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
-        )}
+        ) : null}
       </div>
 
       {/* Title & Short Description Below Photo Box */}
       <div className="space-y-1 overflow-hidden">
-        {item.tag && (
+        {tagText && (
           <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
-            {item.tag}
+            {tagText}
           </span>
         )}
         <h3 className="font-abyan-title text-base sm:text-lg font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
