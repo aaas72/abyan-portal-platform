@@ -55,14 +55,13 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
         <SmartContainer className="flex items-start justify-between overflow-visible pointer-events-auto w-full">
           {/* Right Side: Brand Title "بوابة أبين" */}
           <Link href="/" className="no-underline">
-            <motion.h1
-              {...subtleMicroHover}
-              className={`font-abyan-title text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-none py-0 overflow-visible drop-shadow-md cursor-pointer ${
+            <h1
+              className={`font-abyan-title text-2xl sm:text-3xl md:text-3xl lg:text-4xl leading-none py-0 overflow-visible drop-shadow-md cursor-pointer select-none ${
                 isHomePage ? "text-white" : "text-slate-900"
               }`}
             >
               بوابة أبين
-            </motion.h1>
+            </h1>
           </Link>
 
           {/* Left Side (Desktop & Tablet): Horizontal Navigation Links */}
