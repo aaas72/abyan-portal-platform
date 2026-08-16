@@ -82,10 +82,10 @@ export default function CultureClient({ initialCategories, folkAudioTracks }: Cu
           >
             {/* Category Subtitle & Header */}
             <motion.div {...itemFadeInRight(0.05)} className="space-y-1">
-              <span className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block">
+              <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block">
                 قسم {currentCategory.categoryName}
               </span>
-              <span className="text-xs text-slate-500 font-abyan-title block">
+              <span className="text-sm sm:text-base text-slate-500 font-abyan-title block">
                 {currentCategory.subtitle}
               </span>
             </motion.div>
@@ -101,7 +101,7 @@ export default function CultureClient({ initialCategories, folkAudioTracks }: Cu
             {/* Description Paragraph */}
             <motion.p
               {...itemFadeInRight(0.16)}
-              className="text-xs sm:text-sm text-[#1e293b] font-abyan-body font-normal leading-relaxed pt-1"
+              className="text-sm sm:text-base lg:text-lg text-[#1e293b] font-abyan-body font-normal leading-relaxed pt-1"
             >
               {currentCategory.description}
             </motion.p>
@@ -109,7 +109,7 @@ export default function CultureClient({ initialCategories, folkAudioTracks }: Cu
             {/* AUDIO PLAYER (FOR DAN & FOLK TRACKS) */}
             {currentCategory.audioTrack && (
               <motion.div {...itemFadeInRight(0.2)} className="pt-2">
-                <span className="text-xs font-normal text-[#10b981] font-abyan-title block mb-2">
+                <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block mb-2">
                   استماع للتسجيل الشفاهي الموثق:
                 </span>
                 <FolkAudioPlayer activeTrack={currentCategory.audioTrack} tracks={folkAudioTracks} />
@@ -119,7 +119,7 @@ export default function CultureClient({ initialCategories, folkAudioTracks }: Cu
             {/* ITEMS PHOTO CARDS SHOWCASE (FOR ALL CULTURE CATEGORIES) */}
             {currentCategory.items && currentCategory.items.length > 0 && (
               <motion.div {...itemFadeInRight(0.24)} className="pt-3 space-y-4">
-                <span className="text-xs font-normal text-[#10b981] font-abyan-title block">
+                <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block">
                   معرض عناصر ومأثورات الفئة:
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -132,6 +132,7 @@ export default function CultureClient({ initialCategories, folkAudioTracks }: Cu
                           id: item.id,
                           title: item.title,
                           subtitle: item.tag,
+                          authorName: item.authorName,
                           fullBiography: item.description,
                           location: item.location,
                           categoryLabel: currentCategory.title,
@@ -149,7 +150,7 @@ export default function CultureClient({ initialCategories, folkAudioTracks }: Cu
             {/* VISUAL SHOWCASE CARD (FOR STORYTELLING) */}
             {currentCategory.visualShowcase && (
               <motion.div {...itemFadeInRight(0.24)} className="pt-3 space-y-3">
-                <span className="text-xs font-normal text-[#10b981] font-abyan-title block">
+                <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block">
                   مشهد ومأثورات الحكايات الشعبية:
                 </span>
                 <ImageShowcaseCard
@@ -194,14 +195,14 @@ export default function CultureClient({ initialCategories, folkAudioTracks }: Cu
             {/* DETAILS */}
             {currentCategory.details && currentCategory.details.length > 0 && (
               <motion.div {...itemFadeInRight(0.3)} className="space-y-4 pt-4">
-                <span className="text-xs font-normal text-[#10b981] font-abyan-title block mb-2">
+                <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block mb-2">
                   تفاصيل ورصد التوثيق:
                 </span>
                 <div className="flex flex-col gap-3" dir="rtl">
                   {currentCategory.details.map((detail, idx) => (
                     <p
                       key={idx}
-                      className="text-xs sm:text-sm text-[#1e293b] font-abyan-body font-normal leading-relaxed"
+                      className="text-sm sm:text-base text-[#1e293b] font-abyan-body font-normal leading-relaxed"
                     >
                       {detail}
                     </p>

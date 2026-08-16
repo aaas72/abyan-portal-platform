@@ -47,6 +47,11 @@ export class CreateArchiveItemDto {
   @MaxLength(10000)
   @IsNotEmpty()
   description: string;
+
+  @IsString()
+  @MaxLength(500)
+  @IsNotEmpty()
+  authorName: string;
   @IsArray()
   @IsString({ each: true })
   @IsOptional()

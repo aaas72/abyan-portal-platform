@@ -25,6 +25,7 @@ export default function PioneerForm({ id, initialData, categories, districts = [
     title: '',
     category: '',
     origin: '',
+    authorName: '',
     startYear: '',
     endYear: '',
     biography: '',
@@ -44,6 +45,7 @@ export default function PioneerForm({ id, initialData, categories, districts = [
       setFormData({
         quote: '',
         ...initialData,
+        authorName: initialData.authorName || '',
         images: initialData.images || [],
         isPublished: isPublished ?? initialData.isPublished ?? true
       });
@@ -61,6 +63,7 @@ export default function PioneerForm({ id, initialData, categories, districts = [
         title: '',
         category: '',
         origin: '',
+        authorName: '',
         startYear: '',
         endYear: '',
         biography: '',
@@ -149,6 +152,16 @@ export default function PioneerForm({ id, initialData, categories, districts = [
           onChange={(e) => handleFieldChange('title', e.target.value)}
           error={errors.title}
           placeholder="مثال: رئيس جمهورية سابق..."
+        />
+
+        <AdminInput
+          label="اسم الكاتب / الباحث التوثيقي"
+          required
+          type="text"
+          value={formData.authorName || ''}
+          onChange={(e) => handleFieldChange('authorName', e.target.value)}
+          error={errors.authorName}
+          placeholder="مثال: أ. منصور بلعيدي"
         />
 
         {/* MEDIA UPLOAD SECTION - Left side column */}

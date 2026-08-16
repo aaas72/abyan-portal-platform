@@ -7,9 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { DistrictsService } from './districts.service';
 import { CreateDistrictDto } from './dto/create-district.dto';
 import { UpdateDistrictDto } from './dto/update-district.dto';
@@ -25,13 +23,11 @@ export class DistrictsController {
 
   // --- Public Endpoints ---
 
-  @UseInterceptors(CacheInterceptor)
   @Get('frontend')
   async getFrontendData() {
     return this.districtsService.findAllForFrontend();
   }
 
-  @UseInterceptors(CacheInterceptor)
   @Get('frontend/regions')
   async getFrontendRegions() {
     return this.districtsService.findAllRegionsForFrontend();

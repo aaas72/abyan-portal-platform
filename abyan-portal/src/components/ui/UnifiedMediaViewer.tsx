@@ -6,6 +6,7 @@ import {
   curtainOverlayVariants,
   curtainOverlayTransition,
 } from "@/lib/animations";
+import Image from "next/image";
 
 import { MediaItem } from "@/types/schemas";
 export type { MediaItem };
@@ -72,10 +73,13 @@ export default function UnifiedMediaViewer({
               }}
             >
               {allImages.length > 0 ? (
-                <img
+                <Image
                   src={allImages[0]}
                   alt={item.title}
-                  className="absolute inset-0 w-full h-full object-cover hover:scale-[1.03] transition-transform duration-500"
+                  fill
+                  className="object-cover hover:scale-[1.03] transition-transform duration-500 pointer-events-none"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center text-slate-300">
@@ -89,7 +93,7 @@ export default function UnifiedMediaViewer({
             {/* Information (Left side of the image in RTL) */}
             <div className="flex-1 space-y-2 mt-1 pr-2">
               {item.categoryLabel && (
-                <span className="text-xs font-normal text-[#10b981] font-abyan-title block">
+                <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block">
                   {item.categoryLabel}
                 </span>
               )}
@@ -103,7 +107,17 @@ export default function UnifiedMediaViewer({
                 </p>
               )}
 
-              <div className="flex items-center gap-2 pt-2 text-[12px] sm:text-[13px] font-abyan-body font-normal">
+              <div className="flex flex-wrap items-center gap-2 pt-2 text-xs sm:text-sm font-abyan-body font-normal">
+                {item.authorName && (
+                  <>
+                    <span className="text-[#10b981]">
+                      تدوين: {item.authorName}
+                    </span>
+                    {(item.location || item.startYear || item.endYear || item.year) && (
+                      <span className="text-slate-300">•</span>
+                    )}
+                  </>
+                )}
                 {item.location && (!item.subtitle || !item.subtitle.includes(item.location)) && (
                   <span className="text-sky-600">
                     {item.location}
@@ -145,16 +159,19 @@ export default function UnifiedMediaViewer({
                       <div
                         key={idx}
                         onClick={() => setExpandedImageIndex(idx)}
-                        className={`w-24 h-24 shrink-0 rounded-2xl overflow-hidden cursor-pointer border-2 transition-all duration-300 ${
+                        className={`relative w-24 h-24 shrink-0 rounded-2xl overflow-hidden cursor-pointer border-2 transition-all duration-300 ${
                           expandedImageIndex === idx
                             ? "border-[#10b981] opacity-100 shadow-md"
                             : "border-transparent opacity-80 hover:opacity-100 hover:scale-[1.02]"
                         }`}
                       >
-                        <img
+                        <Image
                           src={img}
                           alt={`${item.title} - ${idx + 1}`}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover pointer-events-none"
+                          draggable={false}
+                          onContextMenu={(e) => e.preventDefault()}
                         />
                       </div>
                     ))}
@@ -165,10 +182,20 @@ export default function UnifiedMediaViewer({
           </div>
           
           {/* Footer Bar */}
-          <div className="p-4 sm:p-5 bg-slate-50 border-t border-slate-200 mt-auto flex items-center justify-between shrink-0">
-            <span className="text-[11px] sm:text-xs text-slate-500 font-abyan-body font-normal">
-              محفوظ في الأرشيف الرقمي لبوابة أبين الثقافية
-            </span>
+          <div className="p-4 sm:p-5 bg-slate-50 border-t border-slate-200 mt-auto flex flex-wrap items-center justify-between gap-2 shrink-0">
+            <div className="flex items-center gap-2 text-[11px] sm:text-xs text-slate-500 font-abyan-body font-normal">
+              <span>
+                محفوظ في الأرشيف الرقمي لبوابة أبين الثقافية
+              </span>
+              {item.authorName && (
+                <>
+                  <span className="text-slate-300">•</span>
+                  <span className="text-slate-600">
+                    إعداد وتوثيق: {item.authorName}
+                  </span>
+                </>
+              )}
+            </div>
             <button
               onClick={onClose}
               className="p-1 bg-transparent hover:text-[#10b981] text-slate-700 text-xs font-abyan-title transition-colors border-none cursor-pointer"
@@ -204,13 +231,16 @@ export default function UnifiedMediaViewer({
 
               {/* Image in the Middle */}
               <div
-                className="w-full flex-1 flex items-center justify-center overflow-hidden bg-slate-100 cursor-default"
+                className="relative w-full flex-1 flex items-center justify-center overflow-hidden bg-slate-100 cursor-default"
                 onClick={(e) => e.stopPropagation()}
               >
-                <img
+                <Image
                   src={allImages[expandedImageIndex]}
                   alt={item.title}
-                  className="w-full h-full object-contain"
+                  fill
+                  className="object-contain pointer-events-none"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
                 />
               </div>
 

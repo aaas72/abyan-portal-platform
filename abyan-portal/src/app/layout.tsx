@@ -14,21 +14,92 @@ const abyanBodyFont = localFont({
   display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://abyanportal.org";
+
 export const metadata = {
-  title: "أبين - مهد الحضارة والتراث والدلتا الخضراء",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "بوابة أبين الثقافية | مهد الحضارة والتراث والدلتا الخضراء",
+    template: "%s | بوابة أبين الثقافية",
+  },
   description:
-    "بوابة إلكترونية وثقافية شاملة تستعرض تاريخ، تراث، جغرافيا، ومعالم محافظة أبين جنوبي اليمن.",
+    "الموسوعة الثقافية والتوثيقية الرسمية لمحافظة أبين: استكشف تاريخ المديريات والقرى، المعالم والحصون الأثرية، الأعلام والرواد، والموروث الشعبي والزراعي.",
   keywords: [
     "أبين",
     "محافظة أبين",
+    "بوابة أبين",
+    "بوابة أبين الثقافية",
+    "تاريخ أبين",
+    "مديريات أبين",
     "زنجبار",
-    "جعار",
     "خنفر",
+    "جعار",
+    "الكود",
+    "شقرة",
+    "لودر",
+    "دمان",
+    "العين",
+    "مودية",
+    "المحفد",
+    "أحور",
+    "الوضيع",
+    "جيشان",
+    "رصد",
+    "سرار",
+    "سباح",
+    "يافع بني قاصد",
     "حصن القارة",
     "سد باتيس",
+    "دلتا بنا",
+    "وادي حسان",
+    "وادي أحور",
+    "جبل ثرة",
+    "معالم أبين",
+    "أعلام أبين",
     "تراث أبين",
     "اليمن",
   ],
+  authors: [{ name: "فريق بوابة أبين الثقافية" }],
+  creator: "بوابة أبين الثقافية",
+  publisher: "بوابة أبين الثقافية",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  alternates: {
+    canonical: "/",
+    languages: {
+      "ar-YE": "/",
+      "ar": "/",
+    },
+  },
+  openGraph: {
+    title: "بوابة أبين الثقافية | مهد الحضارة والتراث والدلتا الخضراء",
+    description:
+      "الموسوعة الثقافية والتوثيقية الرسمية لمحافظة أبين: تاريخ المديريات، القرى، الحصون، الأعلام، والتراث الزراعي والبحري.",
+    url: siteUrl,
+    siteName: "بوابة أبين الثقافية",
+    locale: "ar_YE",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "بوابة أبين الثقافية | مهد الحضارة والتراث والدلتا الخضراء",
+    description:
+      "الموسوعة الثقافية والتوثيقية الرسمية لمحافظة أبين جنوبي اليمن.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 import AnalyticsTracker from "@/components/AnalyticsTracker";

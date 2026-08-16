@@ -14,6 +14,7 @@ import { UpdateLandmarkCategoryDto } from './dto/update-landmark-category.dto';
 import { CreateLandmarkPhotoCardDto } from './dto/create-landmark-photo-card.dto';
 import { UpdateLandmarkPhotoCardDto } from './dto/update-landmark-photo-card.dto';
 import { MediaMapper } from '../utils/media.mapper';
+import { UploadService } from '../upload/upload.service';
 
 @Injectable()
 export class LandmarksService {
@@ -22,6 +23,7 @@ export class LandmarksService {
     private categoryModel: Model<LandmarkCategoryDocument>,
     @InjectModel(LandmarkPhotoCard.name)
     private photoCardModel: Model<LandmarkPhotoCardDocument>,
+    private uploadService: UploadService,
   ) {}
 
   // --- Frontend Aggregation (Public) ---
@@ -77,13 +79,21 @@ export class LandmarksService {
     const updated = await this.categoryModel
       .findByIdAndUpdate(id, updateCategoryDto, { new: true })
       .exec();
-    if (!updated) throw new NotFoundException('ØªØµÙ†ÙŠÙ Ø§Ù„Ù…Ø¹Ø§Ù„Ù… ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯');
+    if (!updated) throw new NotFoundException('تصنيف المعالم غير موجود');
     return updated;
   }
 
   async deleteCategory(id: string): Promise<void> {
     const result = await this.categoryModel.findByIdAndDelete(id).exec();
-    if (!result) throw new NotFoundException('ØªØµÙ†ÙŠÙ Ø§Ù„Ù…Ø¹Ø§Ù„Ù… ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯');
+    if (!result) throw new NotFoundException('تصنيف المعالم غير موجود');
+    
+    // Find associated cards to delete their media
+    const cardsToDelete = await this.photoCardModel.find({ category: id }).exec();
+    for (const card of cardsToDelete) {
+      if (card.images && card.images.length > 0) {
+        await this.uploadService.deleteMultipleMedia(card.images, 'image');
+      }
+    }
     // Also delete associated photo cards
     await this.photoCardModel.deleteMany({ category: id }).exec();
   }
@@ -98,23 +108,66 @@ export class LandmarksService {
     createPhotoCardDto: CreateLandmarkPhotoCardDto,
   ): Promise<LandmarkPhotoCard> {
     const newPhotoCard = new this.photoCardModel(createPhotoCardDto);
-    return newPhotoCard.save();
+    const savedPhotoCard = await newPhotoCard.save();
+
+    let mediaUpdated = false;
+    if (savedPhotoCard.images && savedPhotoCard.images.length > 0) {
+      savedPhotoCard.images = await this.uploadService.renameMediaUrls(
+        savedPhotoCard._id.toString(),
+        savedPhotoCard.title,
+        savedPhotoCard.images,
+        'landmarks',
+        'image',
+      );
+      mediaUpdated = true;
+    }
+
+    if (mediaUpdated) {
+      return savedPhotoCard.save();
+    }
+    return savedPhotoCard;
   }
 
   async updatePhotoCard(
     id: string,
     updatePhotoCardDto: UpdateLandmarkPhotoCardDto,
   ): Promise<LandmarkPhotoCard> {
+    const existingCard = await this.photoCardModel.findById(id).exec();
+    if (!existingCard) throw new NotFoundException('صورة المعلم غير موجودة');
+
+    // Clean up removed images
+    if (updatePhotoCardDto.images && existingCard.images) {
+      const removedImages = existingCard.images.filter(img => !updatePhotoCardDto.images?.includes(img));
+      if (removedImages.length > 0) {
+        await this.uploadService.deleteMultipleMedia(removedImages, 'image');
+      }
+    }
+
+    if (updatePhotoCardDto.images && updatePhotoCardDto.images.length > 0) {
+      updatePhotoCardDto.images = await this.uploadService.renameMediaUrls(
+        id,
+        updatePhotoCardDto.title || existingCard.title,
+        updatePhotoCardDto.images,
+        'landmarks',
+        'image',
+      );
+    }
+
     const updated = await this.photoCardModel
       .findByIdAndUpdate(id, updatePhotoCardDto, { new: true })
       .exec();
-    if (!updated) throw new NotFoundException('ØµÙˆØ±Ø© Ø§Ù„Ù…Ø¹Ù„Ù… ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯Ø©');
-    return updated;
+    return updated!;
   }
 
   async deletePhotoCard(id: string): Promise<void> {
-    const result = await this.photoCardModel.findByIdAndDelete(id).exec();
-    if (!result) throw new NotFoundException('ØµÙˆØ±Ø© Ø§Ù„Ù…Ø¹Ù„Ù… ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯Ø©');
+    const existingCard = await this.photoCardModel.findById(id).exec();
+    if (!existingCard) throw new NotFoundException('صورة المعلم غير موجودة');
+
+    if (existingCard.images && existingCard.images.length > 0) {
+      await this.uploadService.deleteMultipleMedia(existingCard.images, 'image');
+    }
+
+    await this.photoCardModel.findByIdAndDelete(id).exec();
   }
 
   async findAllPhotoCards(): Promise<LandmarkPhotoCard[]> {

@@ -35,6 +35,11 @@ export class UpdateCultureItemDto {
   @IsString()
   @MaxLength(500)
   @IsOptional()
+  authorName?: string;
+
+  @IsString()
+  @MaxLength(500)
+  @IsOptional()
   bgGradient?: string;
   @IsBoolean()
   @IsOptional()

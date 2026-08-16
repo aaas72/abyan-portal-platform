@@ -23,6 +23,7 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
     category: '',
     title: '',
     tag: '',
+    authorName: '',
     images: [],
     location: '',
     startYear: '',
@@ -39,6 +40,7 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
     if (initialData) {
       setFormData({
         ...initialData,
+        authorName: initialData.authorName || '',
         images: initialData.images || [],
         isActive: isActive ?? initialData.isActive ?? true
       });
@@ -55,6 +57,7 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
         category: '',
         title: '',
         tag: '',
+        authorName: '',
         images: [],
         location: '',
         startYear: '',
@@ -185,6 +188,15 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
           onChange={(e) => handleFieldChange('title', e.target.value)}
           error={errors.title}
           placeholder="مثال: حصن القعيطي"
+        />
+
+        <AdminInput
+          label="اسم الكاتب / الباحث التوثيقي"
+          required
+          value={formData.authorName || ''}
+          onChange={(e) => handleFieldChange('authorName', e.target.value)}
+          error={errors.authorName}
+          placeholder="مثال: د. علوي عمر جابر"
         />
 
         <AdminInput

@@ -104,6 +104,9 @@ export class District {
   @Prop({ required: true })
   description: string;
 
+  @Prop({ required: false, default: 'فريق توثيق بوابة أبين' })
+  authorName?: string;
+
   @Prop({ required: true })
   geography: string;
 

@@ -36,6 +36,11 @@ export class UpdateEconomyPhotoCardDto {
   @IsString()
   @MaxLength(500)
   @IsOptional()
+  authorName?: string;
+
+  @IsString()
+  @MaxLength(500)
+  @IsOptional()
   bgGradient?: string;
   @IsBoolean()
   @IsOptional()

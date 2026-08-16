@@ -24,6 +24,9 @@ export class EconomyPhotoCard {
   @Prop({ required: true })
   description: string;
 
+  @Prop({ required: true, default: 'فريق توثيق بوابة أبين' })
+  authorName: string;
+
   @Prop({ required: true })
   bgGradient: string;
   @Prop({ default: true })

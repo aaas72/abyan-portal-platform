@@ -47,7 +47,7 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
 
         {/* MOBILE VIEW: ACCORDION LIST (Visible on Mobile & Tablet Portrait < lg) */}
         <div className="block lg:hidden space-y-4">
-          <span className="text-xs font-normal text-slate-900 font-abyan-title block text-right mb-3">
+          <span className="text-sm sm:text-base font-normal text-slate-900 font-abyan-title block text-right mb-3">
             انقر على الحقبة للاستعراض والتوسيع المفصل:
           </span>
 
@@ -63,14 +63,14 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
                   {/* Era Card Header */}
                   <div
                     onClick={() => setSelectedEraId(isSelected ? "" : era.id)}
-                    className="cursor-pointer py-2 flex items-center justify-between"
+                    className="cursor-pointer py-2.5 flex items-center justify-between"
                   >
-                    <div className="space-y-0.5 text-right flex-1 pl-3">
-                      <span className="text-[11px] font-normal text-[#10b981] font-abyan-title block">
+                    <div className="space-y-1 text-right flex-1 pl-3">
+                      <span className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block">
                         {era.startYear}&nbsp;&nbsp;-&nbsp;&nbsp;{era.endYear}
                       </span>
                       <h3
-                        className={`font-abyan-title text-base sm:text-lg font-normal transition-colors duration-300 ${
+                        className={`font-abyan-title text-lg sm:text-xl font-normal transition-colors duration-300 ${
                           isSelected
                             ? "text-sky-600 font-medium"
                             : "text-slate-900 hover:text-sky-600"
@@ -78,12 +78,12 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
                       >
                         {era.eraTitle}
                       </h3>
-                      <p className="text-xs text-slate-500 font-abyan-title font-normal">
+                      <p className="text-sm sm:text-base text-slate-600 font-abyan-body font-normal">
                         {era.shortSummary}
                       </p>
                     </div>
 
-                    <span className="text-xs font-abyan-title text-sky-600 font-normal shrink-0">
+                    <span className="text-sm font-abyan-title text-sky-600 font-normal shrink-0">
                       {isSelected ? "إغلاق" : "استعراض"}
                     </span>
                   </div>
@@ -99,24 +99,24 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
                         className="overflow-hidden pt-4 space-y-5"
                       >
                         <div className="space-y-1">
-                          <span className="text-xs text-slate-500 font-abyan-title block">
+                          <span className="text-sm sm:text-base text-slate-500 font-abyan-title block">
                             {era.historicalCapital}
                           </span>
                         </div>
 
-                        <p className="text-xs sm:text-sm text-slate-700 font-abyan-title font-normal leading-relaxed">
+                        <p className="text-sm sm:text-base text-slate-800 font-abyan-body font-normal leading-relaxed">
                           {era.fullDescription}
                         </p>
 
                         <div className="space-y-2 pt-1">
-                          <h5 className="text-sm sm:text-base font-normal text-slate-900 font-abyan-title block">
+                          <h5 className="text-base sm:text-lg font-normal text-slate-900 font-abyan-title block">
                             أبرز الأحداث والمشاهد التاريخية:
                           </h5>
                           <ul className="space-y-1.5 list-none p-0 m-0">
                             {era.keyEvents.map((evt, idx) => (
                               <li
                                 key={idx}
-                                className="text-xs sm:text-sm text-sky-600 font-abyan-title font-normal leading-relaxed"
+                                className="text-sm sm:text-base text-sky-600 font-abyan-body font-medium leading-relaxed"
                               >
                                 • {evt}
                               </li>
@@ -125,14 +125,14 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
                         </div>
 
                         <div className="space-y-2 pt-1">
-                          <h5 className="text-sm sm:text-base font-normal text-slate-900 font-abyan-title block">
+                          <h5 className="text-base sm:text-lg font-normal text-slate-900 font-abyan-title block">
                             المعالم والشواهد المرتبطة بالحقبة:
                           </h5>
                           <ul className="space-y-1.5 list-none p-0 m-0">
                             {(era.notableLandmarks || []).map((landmark, idx) => (
                               <li
                                 key={idx}
-                                className="text-xs sm:text-sm text-[#10b981] font-abyan-title font-normal leading-relaxed break-words whitespace-normal"
+                                className="text-sm sm:text-base text-[#10b981] font-abyan-body font-medium leading-relaxed break-words whitespace-normal"
                               >
                                 • {landmark}
                               </li>
@@ -153,7 +153,7 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
 
           {/* Right Column: Eras Selector List (col-4) */}
           <div className="lg:col-span-4 min-w-0 max-w-sm space-y-3">
-            <span className="text-xs font-normal text-slate-900 font-abyan-title block text-right mb-2">
+            <span className="text-sm sm:text-base font-normal text-slate-900 font-abyan-title block text-right mb-2">
               اختر الحقبة التاريخية للاستعراض المفصل:
             </span>
 
@@ -168,7 +168,7 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
                     className="py-3.5 px-1 text-right cursor-pointer bg-transparent border-b border-slate-100 last:border-none shadow-none transition-colors duration-300 min-w-0 w-full overflow-hidden"
                   >
                     <div className="flex flex-col text-right space-y-0.5 min-w-0 w-full">
-                      <span className="text-[11px] font-normal text-[#10b981] font-abyan-title">
+                      <span className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title">
                         {era.startYear}&nbsp;&nbsp;-&nbsp;&nbsp;{era.endYear}
                       </span>
                       <h3 className={`font-abyan-title text-base sm:text-lg font-normal transition-colors duration-300 break-words whitespace-normal ${
@@ -195,12 +195,17 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
                 className="p-6 sm:p-8 text-right bg-white border-none shadow-none space-y-6 min-w-0 w-full"
               >
                 <motion.div {...itemFadeInRight(0.05)} className="space-y-1 min-w-0">
-                  <span className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block">
+                  <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block">
                     {activeEra.startYear}&nbsp;&nbsp;-&nbsp;&nbsp;{activeEra.endYear}
                   </span>
-                  <span className="text-xs text-slate-500 font-abyan-title block break-words whitespace-normal">
+                  <span className="text-sm sm:text-base text-slate-500 font-abyan-title block break-words whitespace-normal">
                     {activeEra.historicalCapital}
                   </span>
+                  {activeEra.authorName && (
+                    <span className="text-sm text-[#10b981] font-abyan-body block">
+                      تدوين وبحث: {activeEra.authorName}
+                    </span>
+                  )}
                 </motion.div>
 
                 <motion.h2
@@ -214,7 +219,7 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
                 {activeEra.shortSummary && (
                   <motion.p
                     {...itemFadeInRight(0.14)}
-                    className="text-xs sm:text-sm lg:text-base text-slate-800 font-abyan-body font-normal leading-relaxed pt-1 break-words whitespace-normal max-w-full"
+                    className="text-sm sm:text-base lg:text-lg text-slate-800 font-abyan-body font-normal leading-relaxed pt-1 break-words whitespace-normal max-w-full"
                   >
                     {activeEra.shortSummary}
                   </motion.p>
@@ -223,20 +228,20 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
                 {/* Extended Narrative Description */}
                 <motion.p
                   {...itemFadeInRight(0.18)}
-                  className="text-xs sm:text-sm lg:text-base text-slate-700 font-abyan-body font-normal leading-relaxed pt-1 break-words whitespace-normal max-w-full"
+                  className="text-sm sm:text-base lg:text-lg text-slate-700 font-abyan-body font-normal leading-relaxed pt-1 break-words whitespace-normal max-w-full"
                 >
                   {activeEra.fullDescription}
                 </motion.p>
 
                 <motion.div {...itemFadeInRight(0.22)} className="space-y-2 pt-2 min-w-0">
-                  <h5 className="text-sm sm:text-base font-normal text-slate-900 font-abyan-title block">
+                  <h5 className="text-base sm:text-lg font-normal text-slate-900 font-abyan-title block">
                     أبرز الأحداث والمشاهد التاريخية:
                   </h5>
                   <ul className="space-y-1.5 list-none p-0 m-0 min-w-0">
                     {activeEra.keyEvents.map((evt, idx) => (
                       <li
                         key={idx}
-                        className="text-xs sm:text-sm text-sky-600 font-abyan-title font-normal leading-relaxed break-words whitespace-normal"
+                        className="text-sm sm:text-base text-sky-600 font-abyan-body font-medium leading-relaxed break-words whitespace-normal"
                       >
                         • {evt}
                       </li>
@@ -245,14 +250,14 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
                 </motion.div>
 
                 <motion.div {...itemFadeInRight(0.28)} className="space-y-2 pt-2 min-w-0">
-                  <h5 className="text-sm sm:text-base font-normal text-slate-900 font-abyan-title block">
+                  <h5 className="text-base sm:text-lg font-normal text-slate-900 font-abyan-title block">
                     المعالم والشواهد المرتبطة بالحقبة:
                   </h5>
                   <ul className="space-y-1.5 list-none p-0 m-0 min-w-0">
                     {(activeEra.notableLandmarks || []).map((landmark, idx) => (
                       <li
                         key={idx}
-                        className="text-xs sm:text-sm text-[#10b981] font-abyan-title font-normal leading-relaxed break-words whitespace-normal"
+                        className="text-sm sm:text-base text-[#10b981] font-abyan-body font-medium leading-relaxed break-words whitespace-normal"
                       >
                         • {landmark}
                       </li>

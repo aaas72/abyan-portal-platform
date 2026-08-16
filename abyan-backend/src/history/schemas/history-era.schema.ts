@@ -23,6 +23,9 @@ export class HistoryEra {
   @Prop({ required: true })
   fullDescription: string;
 
+  @Prop({ required: true, default: 'فريق توثيق بوابة أبين' })
+  authorName: string;
+
   @Prop({ type: [String], default: [] })
   keyEvents: string[];
 

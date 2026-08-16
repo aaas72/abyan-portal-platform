@@ -3,6 +3,9 @@ import AboutDataWrapper from "./AboutDataWrapper";
 import { AboutPageSkeleton } from "@/components/ui/Skeletons";
 import { Navbar, Footer } from "@/components/layout";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // Layer 1: sync Server Component — persistent shell + Suspense boundary
 export default function AboutPage() {
   return (

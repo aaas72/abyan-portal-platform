@@ -14,6 +14,7 @@ import { UpdateCultureCategoryDto } from './dto/update-culture-category.dto';
 import { CreateCultureItemDto } from './dto/create-culture-item.dto';
 import { UpdateCultureItemDto } from './dto/update-culture-item.dto';
 import { MediaMapper } from '../utils/media.mapper';
+import { UploadService } from '../upload/upload.service';
 
 @Injectable()
 export class CultureService {
@@ -22,6 +23,7 @@ export class CultureService {
     private categoryModel: Model<CultureCategoryDocument>,
     @InjectModel(CultureItem.name)
     private itemModel: Model<CultureItemDocument>,
+    private uploadService: UploadService,
   ) {}
 
   // --- Frontend Aggregation (Public) ---
@@ -92,13 +94,21 @@ export class CultureService {
     const updated = await this.categoryModel
       .findByIdAndUpdate(id, updateCategoryDto, { new: true })
       .exec();
-    if (!updated) throw new NotFoundException('ÙØ¦Ø© Ø§Ù„Ù…ÙˆØ±ÙˆØ« Ø§Ù„Ø´Ø¹Ø¨ÙŠ ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯Ø©');
+    if (!updated) throw new NotFoundException('Ù Ø¦Ø© Ø§Ù„Ù…ÙˆØ±ÙˆØ« Ø§Ù„Ø´Ø¹Ø¨ÙŠ ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯Ø©');
     return updated;
   }
 
   async deleteCategory(id: string): Promise<void> {
     const result = await this.categoryModel.findByIdAndDelete(id).exec();
-    if (!result) throw new NotFoundException('ÙØ¦Ø© Ø§Ù„Ù…ÙˆØ±ÙˆØ« Ø§Ù„Ø´Ø¹Ø¨ÙŠ ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯Ø©');
+    if (!result) throw new NotFoundException('فئة الموروث الشعبي غير موجودة');
+    
+    // Find associated items to delete their media
+    const itemsToDelete = await this.itemModel.find({ category: id }).exec();
+    for (const item of itemsToDelete) {
+      if (item.images && item.images.length > 0) {
+        await this.uploadService.deleteMultipleMedia(item.images, 'image');
+      }
+    }
     // Also delete associated items
     await this.itemModel.deleteMany({ category: id }).exec();
   }
@@ -113,20 +123,55 @@ export class CultureService {
     createItemDto: CreateCultureItemDto,
   ): Promise<CultureItem> {
     const newItem = new this.itemModel(createItemDto);
-    return newItem.save();
+    const savedItem = await newItem.save();
+
+    let mediaUpdated = false;
+    if (savedItem.images && savedItem.images.length > 0) {
+      savedItem.images = await this.uploadService.renameMediaUrls(
+        savedItem._id.toString(),
+        savedItem.title,
+        savedItem.images,
+        'culture',
+        'image',
+      );
+      mediaUpdated = true;
+    }
+
+    if (mediaUpdated) {
+      return savedItem.save();
+    }
+    return savedItem;
   }
 
   async updateItem(
     id: string,
     updateItemDto: UpdateCultureItemDto,
   ): Promise<CultureItem> {
+    const existingItem = await this.itemModel.findById(id).exec();
+    if (!existingItem) throw new NotFoundException(`Item #${id} not found`);
+
+    // Clean up removed images
+    if (updateItemDto.images && existingItem.images) {
+      const removedImages = existingItem.images.filter(img => !updateItemDto.images?.includes(img));
+      if (removedImages.length > 0) {
+        await this.uploadService.deleteMultipleMedia(removedImages, 'image');
+      }
+    }
+
+    if (updateItemDto.images && updateItemDto.images.length > 0) {
+      updateItemDto.images = await this.uploadService.renameMediaUrls(
+        id,
+        updateItemDto.title || existingItem.title,
+        updateItemDto.images,
+        'culture',
+        'image',
+      );
+    }
+
     const updated = await this.itemModel
       .findByIdAndUpdate(id, updateItemDto, { new: true })
       .exec();
-    if (!updated) {
-      throw new NotFoundException(`Item #${id} not found`);
-    }
-    return updated;
+    return updated!;
   }
 
   async findAllItems(): Promise<CultureItem[]> {
@@ -144,8 +189,14 @@ export class CultureService {
   }
   
   async deleteItem(id: string): Promise<void> {
-    const result = await this.itemModel.findByIdAndDelete(id).exec();
-    if (!result) throw new NotFoundException(`Item #${id} not found`);
+    const existingItem = await this.itemModel.findById(id).exec();
+    if (!existingItem) throw new NotFoundException(`Item #${id} not found`);
+
+    if (existingItem.images && existingItem.images.length > 0) {
+      await this.uploadService.deleteMultipleMedia(existingItem.images, 'image');
+    }
+
+    await this.itemModel.findByIdAndDelete(id).exec();
   }
 }
 

@@ -11,6 +11,7 @@ export const PhotoCardSchema = z.object({
   description: z.string().min(1),
   startYear: z.string().optional(),
   endYear: z.string().optional(),
+  authorName: z.string().optional(),
   bgGradient: z.string().optional(),
   images: z.array(z.string()).optional(),
 });
@@ -43,6 +44,7 @@ export const PioneerFigureSchema = z.object({
   location: z.string().min(1),
   biography: z.string().min(1),
   quote: z.string().optional(),
+  authorName: z.string().optional(),
   bgGradient: z.string().min(1),
   images: z.array(z.string()).optional(),
 });
@@ -62,6 +64,7 @@ export const PioneerFormDataSchema = z.object({
   title: z.string().trim().min(1, "اللقب / الصفة مطلوبة"),
   category: z.string().trim().min(1, "يرجى اختيار الفئة أو التصنيف"),
   origin: z.string().trim().min(1, "المنشأ / المديرية مطلوبة"),
+  authorName: z.string().trim().min(1, "اسم الكاتب / الباحث التوثيقي مطلوب"),
   startYear: z.string().trim().min(1, "سنة بداية الحقبة مطلوبة"),
   endYear: z.string().trim().min(1, "سنة نهاية الحقبة مطلوبة"),
   biography: z.string().trim().min(1, "السيرة الذاتية أو التفاصيل مطلوبة"),
@@ -131,6 +134,7 @@ export const LandmarkDetailSchema = z.object({
   name: z.string().min(1),
   category: z.string().optional(),
   description: z.string().min(1),
+  authorName: z.string().optional(),
   bgGradient: z.string().optional(),
   images: z.array(z.string()).optional(),
 });
@@ -143,6 +147,7 @@ export const PioneerDetailSchema = z.object({
   startYear: z.string().optional(),
   endYear: z.string().optional(),
   description: z.string().min(1),
+  authorName: z.string().optional(),
   bgGradient: z.string().optional(),
   images: z.array(z.string()).optional(),
 });
@@ -154,6 +159,7 @@ export const DistrictCardItemSchema = z.object({
   subtitle: z.string().optional(),
   description: z.string().min(1),
   fullBiography: z.string().optional(),
+  authorName: z.string().optional(),
   bgGradient: z.string().optional(),
   category: z.string().optional(),
   location: z.string().optional(),
@@ -180,6 +186,7 @@ export const DistrictItemSchema = z.object({
   villages: z.array(z.string()),
   description: z.string().min(1),
   geography: z.string().min(1),
+  authorName: z.string().optional(),
   oldName: z.string().optional(),
   historyOverview: z.string().optional(),
   historyMilestones: z.array(z.string()).optional(),
@@ -212,6 +219,7 @@ export const HistoryEraSchema = z.object({
   historicalCapital: z.string().min(1),
   shortSummary: z.string().min(1),
   fullDescription: z.string().min(1),
+  authorName: z.string().optional(),
   keyEvents: z.array(z.string()),
   notableLandmarks: z.array(z.string()),
 });
@@ -227,6 +235,7 @@ export const ArchiveItemSchema = z.object({
   title: z.string().min(1),
   year: z.string().min(1),
   location: z.string().min(1),
+  authorName: z.string().optional(),
   aspectRatio: z.string().min(1),
   bgGradient: z.string().min(1),
   description: z.string().min(1),
@@ -258,12 +267,13 @@ export const MediaItemSchema = z.object({
   startYear: z.string().optional(),
   endYear: z.string().optional(),
   location: z.string().optional(),
+  authorName: z.string().optional(),
   subtitle: z.string().optional(),
   description: z.string().optional(),
   fullBiography: z.string().optional(),
   bgGradient: z.string().optional(),
   images: z.array(z.string()).optional(),
-  });
+});
 export type MediaItem = z.infer<typeof MediaItemSchema>;
 
 /**
@@ -386,6 +396,7 @@ export const LandmarkPhotoCardFormDataSchema = z.object({
   title: z.string().trim().min(1, "اسم المعلم مطلوب"),
   tag: z.string().trim().min(1, "النوع مطلوب"),
   location: z.string().trim().min(1, "الموقع مطلوب"),
+  authorName: z.string().trim().min(1, "اسم الكاتب / الباحث التوثيقي مطلوب"),
   description: z.string().trim().min(1, "الوصف مطلوب"),
   bgGradient: z.string().optional(),
   startYear: z.string().optional(),
@@ -411,6 +422,7 @@ export const DistrictFormDataSchema = z.object({
   capital: z.string().trim().min(1, "عاصمة المديرية مطلوبة"),
   areaKm2: z.string().trim().min(1, "المساحة مطلوبة"),
   areaPercentage: z.string().trim().min(1, "النسبة المئوية للمساحة مطلوبة"),
+  authorName: z.string().trim().min(1, "اسم الكاتب / الباحث التوثيقي مطلوب"),
   crops: z.array(z.string()).min(1, "إضافة محصول واحد على الأقل مطلوب"),
   landmarks: z.array(z.string()).min(1, "إضافة معلم واحد على الأقل مطلوب"),
   villages: z.array(z.string()).min(1, "إضافة قرية واحدة على الأقل مطلوب"),
@@ -437,6 +449,7 @@ export const CultureItemFormDataSchema = z.object({
   title: z.string().trim().min(1, "العنوان مطلوب"),
   tag: z.string().trim().min(1, "التصنيف / النوع مطلوب"),
   location: z.string().trim().min(1, "الموقع أو المنشأ مطلوب"),
+  authorName: z.string().trim().min(1, "اسم الكاتب / الباحث التوثيقي مطلوب"),
   description: z.string().trim().min(1, "الوصف مطلوب"),
   bgGradient: z.string().optional(),
   isActive: z.boolean().default(true),
@@ -461,6 +474,7 @@ export const EconomyPhotoCardFormDataSchema = z.object({
   title: z.string().trim().min(1, "العنوان مطلوب"),
   tag: z.string().trim().min(1, "التصنيف / النوع مطلوب"),
   location: z.string().trim().min(1, "الموقع أو الانتشار مطلوب"),
+  authorName: z.string().trim().min(1, "اسم الكاتب / الباحث التوثيقي مطلوب"),
   description: z.string().trim().min(1, "الوصف مطلوب"),
   bgGradient: z.string().optional(),
   isActive: z.boolean().default(true),
@@ -473,6 +487,7 @@ export const HistoryEraFormDataSchema = z.object({
   endYear: z.string().trim().min(1, "سنة نهاية الحقبة مطلوبة"),
   eraTitle: z.string().trim().min(1, "اسم الحقبة مطلوب"),
   historicalCapital: z.string().trim().min(1, "العاصمة التاريخية مطلوبة"),
+  authorName: z.string().trim().min(1, "اسم الكاتب / الباحث التوثيقي مطلوب"),
   shortSummary: z.string().trim().min(1, "الموجز التاريخي مطلوب"),
   fullDescription: z.string().trim().min(1, "السرد التاريخي مطلوب"),
   keyEvents: z.array(z.string().trim()).min(1, "يجب إضافة حدث واحد على الأقل"),
@@ -498,6 +513,7 @@ export const ArchiveItemFormDataSchema = z.object({
   categoryLabel: z.string().trim().min(1, "تصنيف الوثيقة مطلوب"),
   year: z.string().trim().min(1, "سنة التوثيق مطلوبة"),
   location: z.string().trim().min(1, "موقع الوثيقة مطلوب"),
+  authorName: z.string().trim().min(1, "اسم الكاتب / الباحث التوثيقي مطلوب"),
   description: z.string().trim().min(1, "الشرح والتفاصيل الأرشيفية مطلوبة"),
   isPublished: z.boolean(),
   images: z.array(z.string()).max(5, "يُسمح بـ 5 صور كحد أقصى").optional(),
@@ -524,8 +540,6 @@ export const LandingSectionFormDataSchema = z.object({
 });
 export type LandingSectionFormData = z.infer<typeof LandingSectionFormDataSchema>;
 
-
-
 export interface AboutValueItem {
   title: string;
   description: string;
@@ -541,6 +555,7 @@ export interface AboutStatItem {
   number: string;
   label: string;
 }
+
 // Users & Writers Schemas
 export const UserFormDataSchema = z.object({
   name: z.string().min(2, 'الاسم يجب أن يتكون من حرفين على الأقل'),

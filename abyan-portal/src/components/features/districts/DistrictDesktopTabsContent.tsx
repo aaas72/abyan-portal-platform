@@ -38,7 +38,7 @@ export default function DistrictDesktopTabsContent({
       {/* TAB 1: HISTORY & MILESTONES */}
       {activeSubTab === "history" && (
         <div className="space-y-4">
-          <p className="text-xs sm:text-sm lg:text-base text-slate-700 font-abyan-body font-normal leading-relaxed">
+          <p className="text-sm sm:text-base lg:text-lg text-slate-800 font-abyan-body font-normal leading-relaxed">
             {activeDistrict.description}
           </p>
           {activeDistrict.historyOverview && (
@@ -46,7 +46,7 @@ export default function DistrictDesktopTabsContent({
               <h4 className="font-abyan-title text-base sm:text-lg font-normal text-slate-900 block mb-2">
                 النشأة والمسار التاريخي:
               </h4>
-              <p className="text-xs sm:text-sm text-slate-700 font-abyan-body font-normal leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-700 font-abyan-body font-normal leading-relaxed">
                 {activeDistrict.historyOverview}
               </p>
             </div>
@@ -72,7 +72,7 @@ export default function DistrictDesktopTabsContent({
             <h4 className="font-abyan-title text-base sm:text-lg font-normal text-slate-900 block mb-2">
               التضاريس والموقع الجغرافي:
             </h4>
-            <p className="text-xs sm:text-sm text-slate-700 font-abyan-body font-normal leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-700 font-abyan-body font-normal leading-relaxed">
               {activeDistrict.geography}
             </p>
           </div>
@@ -81,7 +81,7 @@ export default function DistrictDesktopTabsContent({
               <h4 className="font-abyan-title text-base sm:text-lg font-normal text-slate-900 block mb-2">
                 المناخ والطبيعة البيئية:
               </h4>
-              <p className="text-xs sm:text-sm text-slate-700 font-abyan-body font-normal leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-700 font-abyan-body font-normal leading-relaxed">
                 {activeDistrict.climateAndNature}
               </p>
             </div>
@@ -92,7 +92,7 @@ export default function DistrictDesktopTabsContent({
       {/* TAB 3: PIONEERS & FIGURES */}
       {activeSubTab === "pioneers" && (
         <div className="space-y-4">
-          <h4 className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block border-none">
+          <h4 className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block border-none">
             أعلام وشخصيات المديرية الوطنية والتاريخية:
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -107,6 +107,7 @@ export default function DistrictDesktopTabsContent({
                         id: pioneer.id,
                         title: pioneer.title,
                         subtitle: pioneer.subtitle,
+                        authorName: pioneer.authorName || activeDistrict.authorName,
                         fullBiography:
                           pioneer.fullBiography || pioneer.description,
                         categoryLabel: pioneer.category || "رمز وطني وتاريخي",
@@ -122,6 +123,7 @@ export default function DistrictDesktopTabsContent({
                       subtitle: pioneer.subtitle,
                       description: pioneer.description,
                       location: pioneer.location || activeDistrict.name,
+                      authorName: pioneer.authorName || activeDistrict.authorName,
                       startYear: pioneer.startYear || "",
                       endYear: pioneer.endYear || "",
                       bgGradient: pioneer.bgGradient,
@@ -163,7 +165,7 @@ export default function DistrictDesktopTabsContent({
       {/* TAB 4: SITES & LANDMARKS */}
       {activeSubTab === "sites" && (
         <div className="space-y-4">
-          <h4 className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block border-none">
+          <h4 className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block border-none">
             الشواهد والمعالم والحصون الأثرية بالمديرية:
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -230,11 +232,11 @@ export default function DistrictDesktopTabsContent({
       {activeSubTab === "economy" && (
         <div className="space-y-5">
           {activeDistrict.economyDetails && (
-            <p className="text-xs sm:text-sm text-slate-700 font-abyan-body font-normal leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-800 font-abyan-body font-normal leading-relaxed">
               {activeDistrict.economyDetails}
             </p>
           )}
-          <h4 className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block border-none">
+          <h4 className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block border-none">
             أبرز المحاصيل والمنتجات الزراعية والحيوانية:
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -301,12 +303,12 @@ export default function DistrictDesktopTabsContent({
       {activeSubTab === "culture" && (
         <div className="space-y-5">
           {activeDistrict.traditionsAndCulture && (
-            <p className="text-xs sm:text-sm text-slate-700 font-abyan-body font-normal leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-800 font-abyan-body font-normal leading-relaxed">
               {activeDistrict.traditionsAndCulture}
             </p>
           )}
           <div className="space-y-3">
-            <h4 className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block border-none">
+            <h4 className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block border-none">
               الفنون الشعبية وأصالة الموروث الأبيني:
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

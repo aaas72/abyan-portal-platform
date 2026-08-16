@@ -85,10 +85,10 @@ export default function Footer() {
 
       {/* حقوق النشر والروابط الهامة في أقصى أسفل المكون خارج اللوحة الخضراء */}
       <div className="px-2 sm:px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
-        <p className="text-xs text-slate-600 font-abyan-body font-normal text-center md:text-right">
+        <p className="text-sm text-slate-600 font-abyan-body font-normal text-center md:text-right">
           جميع الحقوق محفوظة © {new Date().getFullYear()} بوابة أبين الثقافية
         </p>
-        <div className="flex items-center flex-wrap justify-center gap-4 sm:gap-6 text-xs text-slate-600 font-abyan-title font-normal">
+        <div className="flex items-center flex-wrap justify-center gap-4 sm:gap-6 text-sm text-slate-600 font-abyan-title font-normal">
           <Link href="/about" className="hover:text-[#10b981] transition-colors">عن المنصة</Link>
           <Link href="/terms" className="hover:text-[#10b981] transition-colors">شروط الاستخدام</Link>
           <Link href="/privacy" className="hover:text-[#10b981] transition-colors">سياسة الخصوصية</Link>

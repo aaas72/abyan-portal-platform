@@ -24,6 +24,7 @@ export default function ArchiveItemForm({ id, initialData, categories = [], dist
     categoryLabel: '',
     year: '',
     location: '',
+    authorName: '',
     description: '',
     images: [],
     isPublished: isPublished ?? true
@@ -38,6 +39,7 @@ export default function ArchiveItemForm({ id, initialData, categories = [], dist
     if (initialData) {
       setFormData({
         ...initialData,
+        authorName: initialData.authorName || '',
         images: initialData.images || [],
         isPublished: isPublished ?? initialData.isPublished ?? true
       });
@@ -55,6 +57,7 @@ export default function ArchiveItemForm({ id, initialData, categories = [], dist
         categoryLabel: '',
         year: '',
         location: '',
+        authorName: '',
         description: '',
         images: [],
         isPublished: isPublished ?? true
@@ -134,6 +137,16 @@ export default function ArchiveItemForm({ id, initialData, categories = [], dist
         onChange={(e) => handleFieldChange('title', e.target.value)}
         error={errors.title}
         placeholder="مثال: وثيقة إنشاء سد باتيس التاريخية..."
+      />
+
+      <AdminInput
+        label="اسم الكاتب / الباحث التوثيقي"
+        type="text"
+        required
+        value={formData.authorName || ''}
+        onChange={(e) => handleFieldChange('authorName', e.target.value)}
+        error={errors.authorName}
+        placeholder="مثال: د. قاسم المحبشي"
       />
 
       <AdminSelect

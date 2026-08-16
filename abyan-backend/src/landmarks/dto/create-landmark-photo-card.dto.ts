@@ -35,6 +35,11 @@ export class CreateLandmarkPhotoCardDto {
 
   @IsString()
   @MaxLength(500)
+  @IsNotEmpty()
+  authorName: string;
+
+  @IsString()
+  @MaxLength(500)
   @IsOptional()
   bgGradient?: string;
 

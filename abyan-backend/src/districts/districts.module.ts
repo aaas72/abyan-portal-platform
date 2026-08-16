@@ -7,6 +7,7 @@ import {
 } from './schemas/district-region.schema';
 import { DistrictsService } from './districts.service';
 import { DistrictsController } from './districts.controller';
+import { UploadModule } from '../upload/upload.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { DistrictsController } from './districts.controller';
       { name: District.name, schema: DistrictSchema },
       { name: DistrictRegion.name, schema: DistrictRegionSchema },
     ]),
+    UploadModule,
   ],
   controllers: [DistrictsController],
   providers: [DistrictsService],

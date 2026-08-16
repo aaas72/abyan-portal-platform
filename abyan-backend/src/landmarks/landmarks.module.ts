@@ -10,6 +10,7 @@ import {
 } from './schemas/landmark-photo-card.schema';
 import { LandmarksService } from './landmarks.service';
 import { LandmarksController } from './landmarks.controller';
+import { UploadModule } from '../upload/upload.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { LandmarksController } from './landmarks.controller';
       { name: LandmarkCategory.name, schema: LandmarkCategorySchema },
       { name: LandmarkPhotoCard.name, schema: LandmarkPhotoCardSchema },
     ]),
+    UploadModule,
   ],
   controllers: [LandmarksController],
   providers: [LandmarksService],

@@ -30,6 +30,7 @@ export default function CultureItemForm({
   const [formData, setFormData] = useState<CultureItemFormData>({
     category: "",
     title: "",
+    authorName: "",
     images: [],
     tag: "",
     location: "",
@@ -44,6 +45,7 @@ export default function CultureItemForm({
     if (initialData) {
       setFormData({
         ...initialData,
+        authorName: initialData.authorName || "",
         images: initialData.images || [],
         isActive: isPublished ?? initialData.isActive ?? true,
       });
@@ -51,6 +53,7 @@ export default function CultureItemForm({
       setFormData({
         category: "",
         title: "",
+        authorName: "",
         tag: "",
         images: [],
         location: "",
@@ -168,6 +171,16 @@ export default function CultureItemForm({
           onChange={(e) => handleFieldChange("title", e.target.value)}
           error={errors.title}
           placeholder="مثال: رقصة الشرح، المزمار، الحناء، الجلّ،..."
+        />
+
+        <AdminInput
+          label="اسم الكاتب / الباحث التوثيقي"
+          required
+          type="text"
+          value={formData.authorName || ""}
+          onChange={(e) => handleFieldChange("authorName", e.target.value)}
+          error={errors.authorName}
+          placeholder="مثال: أ. صالح أحمد الحيدري"
         />
 
         <AdminInput

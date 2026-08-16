@@ -156,6 +156,11 @@ export class CreateDistrictDto {
   @IsString()
   @MaxLength(500)
   @IsNotEmpty()
+  authorName: string;
+
+  @IsString()
+  @MaxLength(500)
+  @IsNotEmpty()
   geography: string;
 
   @IsString()

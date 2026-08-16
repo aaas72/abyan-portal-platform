@@ -46,6 +46,11 @@ export class UpdateArchiveItemDto {
   @MaxLength(10000)
   @IsOptional()
   description?: string;
+
+  @IsString()
+  @MaxLength(500)
+  @IsOptional()
+  authorName?: string;
   @IsBoolean()
   @IsOptional()
   isActive?: boolean;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 export interface AdminMediaUploadProps {
   label: string;
@@ -165,11 +166,15 @@ export default function AdminMediaUpload({
     }
 
     return (
-      <img 
-        src={preview} 
-        alt="معاينة المرفق" 
-        className="h-10 w-16 sm:w-20 object-cover rounded border border-slate-200/80 shadow-sm shrink-0"
-      />
+      <div className="relative h-10 w-16 sm:w-20 shrink-0 border border-slate-200/80 shadow-sm rounded overflow-hidden">
+        <Image 
+          src={preview} 
+          alt="معاينة المرفق" 
+          fill
+          unoptimized
+          className="object-cover"
+        />
+      </div>
     );
   };
 

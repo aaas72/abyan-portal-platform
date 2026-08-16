@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export interface FoodCardData {
   id: string;
@@ -32,10 +33,13 @@ export default function FoodCard({ foodCard, onClick }: FoodCardProps) {
         } flex flex-col justify-between text-white shadow-inner`}
       >
         {foodCard.images?.[0] ? (
-          <img 
+          <Image 
             src={foodCard.images[0]}
             alt={foodCard.title}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500"
+            fill
+            className="object-cover transition-transform duration-500 pointer-events-none"
+            draggable={false}
+            onContextMenu={(e) => e.preventDefault()}
           />
         ) : null}
       </div>
@@ -43,25 +47,25 @@ export default function FoodCard({ foodCard, onClick }: FoodCardProps) {
       {/* Title & Short Description */}
       <div className="space-y-1 overflow-hidden">
         {foodCard.tag && (
-          <span className="text-xs font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
+          <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
             {foodCard.tag}
           </span>
         )}
-        <h3 className="font-abyan-title text-sm sm:text-base font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
+        <h3 className="font-abyan-title text-base sm:text-lg font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
           {foodCard.title}
         </h3>
         {foodCard.location && (
-          <span className="text-[13px] font-normal text-sky-700 font-abyan-title block break-words leading-snug">
+          <span className="text-sm sm:text-base font-normal text-sky-700 font-abyan-title block break-words leading-snug">
             {foodCard.location}
           </span>
         )}
-        <p className="text-[11px] text-slate-600 font-abyan-body font-normal line-clamp-2 leading-relaxed overflow-hidden">
+        <p className="text-base sm:text-lg text-slate-700 font-abyan-body font-normal line-clamp-2 leading-relaxed overflow-hidden">
           {foodCard.description}
         </p>
       </div>
 
       {/* Prompt Link */}
-      <div className="pt-1 text-left text-xs text-sky-600 font-abyan-title border-none">
+      <div className="pt-1 text-left text-sm text-sky-600 font-abyan-title border-none">
         <span className="group-hover:translate-x-[-3px] transition-transform font-normal inline-block">
           معاينة ←
         </span>

@@ -26,6 +26,7 @@ interface GalleryImage {
   isActive: boolean;
   year?: string;
   location?: string;
+  authorName?: string;
   description?: string;
   images?: string[];
 }
@@ -103,6 +104,7 @@ export default function AdminGalleryPage() {
       categoryLabel: item.categoryLabel || item.category || "",
       year: item.year || item.date || "",
       location: item.location || "",
+      authorName: item.authorName || "",
       description: item.description || "",
       images: item.images || [],
       isPublished: item.isActive,

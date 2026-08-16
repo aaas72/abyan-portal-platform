@@ -20,6 +20,9 @@ export class PioneerFigure {
   @Prop({ required: true })
   biography: string;
 
+  @Prop({ required: true, default: 'فريق توثيق بوابة أبين' })
+  authorName: string;
+
   @Prop()
   startYear: string;
 

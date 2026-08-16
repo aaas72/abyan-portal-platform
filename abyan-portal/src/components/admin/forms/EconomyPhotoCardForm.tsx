@@ -20,6 +20,7 @@ export default function EconomyPhotoCardForm({ id, initialData, pillars, isPubli
   const [formData, setFormData] = useState<EconomyPhotoCardFormData>({
     pillar: '',
     title: '',
+    authorName: '',
     tag: '',
     images: [],
     location: '',
@@ -34,6 +35,7 @@ export default function EconomyPhotoCardForm({ id, initialData, pillars, isPubli
     if (initialData) {
       setFormData({
         ...initialData,
+        authorName: initialData.authorName || '',
         images: initialData.images || [],
         isActive: isPublished ?? initialData.isActive ?? true
       });
@@ -41,6 +43,7 @@ export default function EconomyPhotoCardForm({ id, initialData, pillars, isPubli
       setFormData({
         pillar: '',
         title: '',
+        authorName: '',
         tag: '',
         images: [],
         location: '',
@@ -150,6 +153,16 @@ export default function EconomyPhotoCardForm({ id, initialData, pillars, isPubli
           onChange={(e) => handleFieldChange('title', e.target.value)}
           error={errors.title}
           placeholder="مثال: قطن أبين طويل التيلة، العسل الأبيني..."
+        />
+
+        <AdminInput
+          label="اسم الكاتب / الباحث التوثيقي"
+          required
+          type="text"
+          value={formData.authorName || ''}
+          onChange={(e) => handleFieldChange('authorName', e.target.value)}
+          error={errors.authorName}
+          placeholder="مثال: م. فضل قاسم"
         />
 
         <AdminInput

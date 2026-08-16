@@ -26,6 +26,7 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
     capital: '',
     areaKm2: '',
     areaPercentage: '',
+    authorName: '',
     crops: [],
     landmarks: [],
     villages: [],
@@ -41,6 +42,7 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
     if (initialData) {
       setFormData({
         ...initialData,
+        authorName: initialData.authorName || '',
         isPublished: isPublished ?? initialData.isPublished ?? true
       });
     } else {
@@ -52,6 +54,7 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
         capital: '',
         areaKm2: '',
         areaPercentage: '',
+        authorName: '',
         crops: [],
         landmarks: [],
         villages: [],
@@ -119,6 +122,16 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
         onChange={(e) => handleFieldChange('title', e.target.value)}
         error={errors.title}
         placeholder="مثال: قلب الدلتا ومجمع الزراعة الأبينية..."
+      />
+
+      <AdminInput
+        label="اسم الكاتب / الباحث التوثيقي"
+        type="text"
+        required
+        value={formData.authorName || ''}
+        onChange={(e) => handleFieldChange('authorName', e.target.value)}
+        error={errors.authorName}
+        placeholder="مثال: الباحث جمال حسين"
       />
 
       {/* MEDIA UPLOAD SECTION - Left side column */}

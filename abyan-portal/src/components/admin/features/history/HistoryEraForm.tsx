@@ -25,6 +25,7 @@ export default function HistoryEraForm({
     endYear: '',
     eraTitle: '',
     historicalCapital: '',
+    authorName: '',
     shortSummary: '',
     fullDescription: '',
     images: [],
@@ -42,6 +43,7 @@ export default function HistoryEraForm({
         endYear: initialData.endYear || '',
         eraTitle: initialData.eraTitle || '',
         historicalCapital: initialData.historicalCapital || '',
+        authorName: initialData.authorName || '',
         shortSummary: initialData.shortSummary || '',
         fullDescription: initialData.fullDescription || '',
         images: initialData.images || [],
@@ -55,6 +57,7 @@ export default function HistoryEraForm({
         endYear: '',
         eraTitle: '',
         historicalCapital: '',
+        authorName: '',
         shortSummary: '',
         fullDescription: '',
         images: [],
@@ -143,6 +146,15 @@ export default function HistoryEraForm({
         error={errors.historicalCapital}
         required
         placeholder="أدخل العاصمة أو المركز التاريخي"
+      />
+
+      <AdminInput
+        label="اسم الكاتب / الباحث التوثيقي"
+        value={formData.authorName}
+        onChange={(e) => handleFieldChange('authorName', e.target.value)}
+        error={errors.authorName}
+        required
+        placeholder="أدخل اسم الكاتب أو الباحث الموثّق لهذه الحقبة"
       />
 
       <div className="col-span-1 space-y-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">

@@ -93,14 +93,14 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
       </SmartContainer>
 
       <SmartContainer className="w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center min-h-[480px] relative">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-1 sm:gap-6 lg:gap-8 items-center min-h-[480px] relative">
           <motion.div
             {...sectionFadeUpVariants}
-            className="lg:col-span-8 relative flex flex-col items-center justify-center p-1"
+            className="lg:col-span-8 relative flex flex-col items-center justify-center p-0 w-full"
           >
             <svg
-              viewBox="40 -15 645 330"
-              className="w-full h-auto max-h-[520px] sm:max-h-[600px] lg:max-h-[660px] drop-shadow-md select-none"
+              viewBox="125 -18 545 278"
+              className="w-full h-auto max-h-[580px] sm:max-h-[640px] lg:max-h-[700px] drop-shadow-md select-none scale-100 transform-gpu"
             >
               <filter id="mapGlow" x="-10%" y="-10%" width="120%" height="120%">
                 <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#0ea5e9" floodOpacity="0.2" />
@@ -146,7 +146,7 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
                         <motion.circle
                           cx={district.anchorX}
                           cy={district.anchorY}
-                          r={isSelected || isHovered ? 4 : 3}
+                          r={isSelected || isHovered ? 4.5 : 3.5}
                           onClick={() => setSelectedDistrictId(district.id)}
                           onMouseEnter={() => setHoveredDistrictId(district.id)}
                           onMouseLeave={() => setHoveredDistrictId(null)}
@@ -179,7 +179,7 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
                         <motion.circle
                           cx={endX}
                           cy={endY}
-                          r={isSelected || isHovered ? 2.5 : 1.8}
+                          r={isSelected || isHovered ? 3 : 2.2}
                           onClick={() => setSelectedDistrictId(district.id)}
                           onMouseEnter={() => setHoveredDistrictId(district.id)}
                           onMouseLeave={() => setHoveredDistrictId(null)}
@@ -199,9 +199,9 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
                           onMouseLeave={() => setHoveredDistrictId(null)}
                           whileHover={{ scale: 1.04 }}
                           transition={{ duration: 0.2, ease: "easeOut" }}
-                          className={`font-abyan-title text-[11px] sm:text-[12.5px] font-normal cursor-pointer ${
+                          className={`font-abyan-title text-[13px] sm:text-[13.5px] font-normal cursor-pointer ${
                             isSelected
-                              ? "fill-sky-700"
+                              ? "fill-sky-700 font-medium"
                               : isHovered
                               ? "fill-sky-600"
                               : "fill-slate-900"
@@ -227,11 +227,11 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
                 animate={curtainOverlayVariants.animate}
                 exit={curtainOverlayVariants.exit}
                 transition={curtainOverlayTransition}
-                className="w-full space-y-3 py-6 px-6 sm:px-8 text-right bg-gradient-to-r from-transparent via-white/95 via-30% to-white shadow-none border-none backdrop-blur-none cursor-default"
+                className="w-full space-y-2.5 sm:space-y-3 pt-0 sm:pt-6 pb-6 px-2 sm:px-8 text-right bg-gradient-to-r from-transparent via-white/95 via-30% to-white shadow-none border-none backdrop-blur-none cursor-default"
               >
                 <motion.span
                   {...itemFadeInRight(0.05)}
-                  className="text-xs font-normal text-sky-600 font-abyan-title block"
+                  className="text-sm sm:text-base font-normal text-sky-600 font-abyan-title block"
                 >
                   {activeDistrict.category}
                 </motion.span>
@@ -271,7 +271,7 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
                   {...itemFadeInRight(0.2)}
                   className="pt-2 space-y-1"
                 >
-                  <span className="text-xs text-slate-900 font-abyan-title font-normal block">
+                  <span className="text-sm sm:text-base text-slate-900 font-abyan-title font-normal block">
                     المحاصيل والخيرات الإنتاجية:
                   </span>
                   <p className="text-sm md:text-base text-sky-600 font-abyan-body font-normal leading-relaxed">
@@ -283,7 +283,7 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
                   {...itemFadeInRight(0.24)}
                   className="pt-1 space-y-1"
                 >
-                  <span className="text-xs text-slate-900 font-abyan-title font-normal block">
+                  <span className="text-sm sm:text-base text-slate-900 font-abyan-title font-normal block">
                     أبرز المعالم والجغرافيا:
                   </span>
                   <p className="text-sm md:text-base text-sky-600 font-abyan-body font-normal leading-relaxed">

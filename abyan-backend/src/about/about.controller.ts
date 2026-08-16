@@ -1,6 +1,4 @@
-import { Controller, Get, Put, Body, UseGuards, UseInterceptors, Inject } from '@nestjs/common';
-import { CacheInterceptor, CACHE_MANAGER } from '@nestjs/cache-manager';
-import type { Cache } from 'cache-manager';
+import { Controller, Get, Put, Body, UseGuards } from '@nestjs/common';
 import { AboutService } from './about.service';
 import { UpdateAboutContentDto } from './dto/update-about.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -11,11 +9,9 @@ import { Roles } from '../auth/decorators/roles.decorator';
 export class AboutController {
   constructor(
     private readonly aboutService: AboutService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   // Public frontend endpoint
-  @UseInterceptors(CacheInterceptor)
   @Get('frontend')
   async getFrontendContent() {
     const content = await this.aboutService.getAboutContent();
@@ -34,7 +30,6 @@ export class AboutController {
   @Put()
   async updateContent(@Body() updateDto: UpdateAboutContentDto) {
     const res = await this.aboutService.updateAboutContent(updateDto);
-    await this.cacheManager.clear();
     return res;
   }
 }

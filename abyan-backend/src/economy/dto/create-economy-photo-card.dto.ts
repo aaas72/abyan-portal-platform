@@ -36,6 +36,11 @@ export class CreateEconomyPhotoCardDto {
   @IsString()
   @MaxLength(500)
   @IsNotEmpty()
+  authorName: string;
+
+  @IsString()
+  @MaxLength(500)
+  @IsNotEmpty()
   bgGradient: string;
   @IsBoolean()
   @IsOptional()

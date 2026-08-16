@@ -55,6 +55,7 @@ export default function AdminHistoryPage() {
       endYear: row.endYear,
       eraTitle: row.eraTitle,
       historicalCapital: row.historicalCapital,
+      authorName: row.authorName || "",
       shortSummary: row.shortSummary,
       fullDescription: row.fullDescription,
       keyEvents: row.keyEvents || [],

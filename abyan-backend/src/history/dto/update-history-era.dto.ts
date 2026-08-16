@@ -42,6 +42,11 @@ export class UpdateHistoryEraDto {
   @IsOptional()
   fullDescription?: string;
 
+  @IsString()
+  @MaxLength(500)
+  @IsOptional()
+  authorName?: string;
+
   @IsArray()
   @IsString({ each: true })
   @IsOptional()

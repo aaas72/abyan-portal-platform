@@ -24,6 +24,9 @@ export class LandmarkPhotoCard {
   @Prop({ required: true })
   description: string;
 
+  @Prop({ required: true, default: 'فريق توثيق بوابة أبين' })
+  authorName: string;
+
   @Prop({ required: false, default: 'from-emerald-500/20 to-sky-500/20' })
   bgGradient: string;
   @Prop({ required: false })

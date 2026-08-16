@@ -36,6 +36,11 @@ export class UpdateLandmarkPhotoCardDto {
   @IsString()
   @MaxLength(500)
   @IsOptional()
+  authorName?: string;
+
+  @IsString()
+  @MaxLength(500)
+  @IsOptional()
   bgGradient?: string;
   @IsBoolean()
   @IsOptional()

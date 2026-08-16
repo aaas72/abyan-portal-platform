@@ -7,9 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { GalleryService } from './gallery.service';
 import { CreateArchiveItemDto } from './dto/create-archive-item.dto';
 import { UpdateArchiveItemDto } from './dto/update-archive-item.dto';
@@ -25,7 +23,6 @@ export class GalleryController {
 
   // --- Public Endpoints ---
 
-  @UseInterceptors(CacheInterceptor)
   @Get('frontend')
   async getFrontendData() {
     return this.galleryService.findAllForFrontend();

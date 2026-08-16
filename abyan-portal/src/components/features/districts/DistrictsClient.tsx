@@ -137,7 +137,7 @@ export default function DistrictsClient({
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 className="max-w-4xl mx-auto px-6 lg:px-10 -mt-2 mb-8 text-center"
               >
-                <p className="font-abyan-body text-sm sm:text-base text-slate-600 leading-relaxed">
+                <p className="font-abyan-body text-base sm:text-lg text-slate-700 leading-relaxed">
                   {activeRegion.description}
                 </p>
               </motion.div>
@@ -151,7 +151,7 @@ export default function DistrictsClient({
       <SmartContainer>
         {/* MOBILE VIEW */}
         <div className="block lg:hidden space-y-4">
-          <span className="text-xs font-normal text-slate-900 font-abyan-title block text-right mb-3">
+          <span className="text-sm sm:text-base font-normal text-slate-900 font-abyan-title block text-right mb-3">
             انقر على المديرية للاستعراض الموسوعي التفصيلي:
           </span>
 
@@ -169,11 +169,11 @@ export default function DistrictsClient({
                     onClick={() =>
                       setSelectedDistrictId(isSelected ? "" : dist.id)
                     }
-                    className="cursor-pointer py-2 flex items-center justify-between"
+                    className="cursor-pointer py-2.5 flex items-center justify-between"
                   >
-                    <div className="space-y-0.5 text-right flex-1 pl-3">
+                    <div className="space-y-1 text-right flex-1 pl-3">
                       <h3
-                        className={`font-abyan-title text-base sm:text-lg font-normal leading-snug transition-colors duration-300 ${
+                        className={`font-abyan-title text-lg sm:text-xl font-normal leading-snug transition-colors duration-300 ${
                           isSelected
                             ? "text-sky-600 font-medium"
                             : "text-slate-900 hover:text-sky-600"
@@ -181,12 +181,12 @@ export default function DistrictsClient({
                       >
                         مديرية {dist.name}
                       </h3>
-                      <p className="text-xs text-slate-500 font-abyan-body font-normal">
+                      <p className="text-sm sm:text-base text-slate-600 font-abyan-body font-normal">
                         {dist.title}
                       </p>
                     </div>
 
-                    <span className="text-xs font-abyan-title text-sky-600 font-normal shrink-0">
+                    <span className="text-sm font-abyan-title text-sky-600 font-normal shrink-0">
                       {isSelected ? "إغلاق" : "استعراض الموسوعة"}
                     </span>
                   </div>

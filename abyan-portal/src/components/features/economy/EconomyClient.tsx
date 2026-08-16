@@ -76,10 +76,10 @@ export default function EconomyClient({ initialPillars }: EconomyClientProps) {
           >
             {/* Pillar Header */}
             <motion.div {...itemFadeInRight(0.05)} className="space-y-1">
-              <span className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block">
+              <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block">
                 قطاع {currentPillar.pillarName}
               </span>
-              <span className="text-xs text-slate-500 font-abyan-title block">
+              <span className="text-sm sm:text-base text-slate-500 font-abyan-title block">
                 {currentPillar.subtitle}
               </span>
             </motion.div>
@@ -95,7 +95,7 @@ export default function EconomyClient({ initialPillars }: EconomyClientProps) {
             {/* Description Paragraph */}
             <motion.p
               {...itemFadeInRight(0.16)}
-              className="text-xs sm:text-sm lg:text-base text-slate-700 font-abyan-title font-normal leading-relaxed pt-1"
+              className="text-sm sm:text-base lg:text-lg text-slate-800 font-abyan-body font-normal leading-relaxed pt-1"
             >
               {currentPillar.description}
             </motion.p>
@@ -103,7 +103,7 @@ export default function EconomyClient({ initialPillars }: EconomyClientProps) {
             {/* VISUAL ECONOMY CARDS GRID USING FOODCARD CONTAINER */}
             {currentPillar.photoCards && (
               <motion.div {...itemFadeInRight(0.2)} className="pt-2 space-y-4">
-                <span className="text-xs font-normal text-[#10b981] font-abyan-title block">
+                <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block">
                   معرض صور ومشاهد قطاع {currentPillar.pillarName}:
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -116,6 +116,7 @@ export default function EconomyClient({ initialPillars }: EconomyClientProps) {
                           id: photoCard.id,
                           title: photoCard.title,
                           subtitle: photoCard.tag,
+                          authorName: photoCard.authorName,
                           fullBiography: photoCard.description,
                           location: photoCard.location,
                           categoryLabel: currentPillar.pillarName,
@@ -132,14 +133,14 @@ export default function EconomyClient({ initialPillars }: EconomyClientProps) {
 
             {/* Key Products List */}
             <motion.div {...itemFadeInRight(0.24)} className="space-y-2 pt-2">
-              <span className="text-xs font-normal text-slate-900 font-abyan-title block">
+              <span className="text-sm sm:text-base font-normal text-slate-900 font-abyan-title block">
                 أبرز المنتجات أو المشاريع المرتبطة بالقطاع:
               </span>
               <ul className="space-y-1.5 list-none p-0 m-0">
                 {currentPillar.keyProducts.map((prod, idx) => (
                   <li
                     key={idx}
-                    className="text-xs sm:text-sm text-sky-600 font-abyan-title font-normal leading-relaxed"
+                    className="text-sm sm:text-base text-sky-600 font-abyan-body font-medium leading-relaxed"
                   >
                     • {prod}
                   </li>
@@ -149,14 +150,14 @@ export default function EconomyClient({ initialPillars }: EconomyClientProps) {
 
             {/* Details & Economic Impact */}
             <motion.div {...itemFadeInRight(0.28)} className="space-y-1 pt-2">
-              <span className="text-xs font-normal text-slate-900 font-abyan-title block">
+              <span className="text-sm sm:text-base font-normal text-slate-900 font-abyan-title block">
                 الأهمية الاقتصادية والتفاصيل التنموية:
               </span>
               <ul className="space-y-1.5 list-none p-0 m-0">
                 {currentPillar.details.map((detail, idx) => (
                   <li
                     key={idx}
-                    className="text-xs sm:text-sm text-sky-600 font-abyan-title font-normal leading-relaxed"
+                    className="text-sm sm:text-base text-sky-600 font-abyan-body font-medium leading-relaxed"
                   >
                     • {detail}
                   </li>

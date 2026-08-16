@@ -148,6 +148,7 @@ export default function AdminPioneersPage() {
       startYear: item.startYear || "",
       endYear: item.endYear || "",
       origin: item.origin || "",
+      authorName: item.authorName || "",
       category: item.category || "",
       biography: item.biography || "",
       quote: item.quote || "",

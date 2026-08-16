@@ -48,6 +48,7 @@ export default function PioneersClient({ initialData }: PioneersClientProps) {
       id: fig.id,
       title: fig.name,
       subtitle: fig.role,
+      authorName: fig.authorName,
       fullBiography: `${fig.biography}${fig.quote ? `\n\nالمقولة والشاهد التراثي: « ${fig.quote} »` : ""}`,
       year: `${fig.startYear || ""}\u00A0\u00A0-\u00A0\u00A0${fig.endYear || ""}`,
       location: fig.location,
@@ -97,13 +98,13 @@ export default function PioneersClient({ initialData }: PioneersClientProps) {
           >
             {/* Category Header Title */}
             <div className="text-right space-y-1">
-              <span className="text-xs font-normal text-[#10b981] font-abyan-title block">
+              <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block">
                 الأعلام والرواد
               </span>
               <h2 className="font-abyan-title text-2xl sm:text-3xl text-slate-900 font-normal">
                 {currentCategory.title}
               </h2>
-              <p className="text-xs text-slate-500 font-abyan-body font-normal">
+              <p className="text-sm sm:text-base text-slate-600 font-abyan-body font-normal">
                 {currentCategory.subtitle}
               </p>
             </div>

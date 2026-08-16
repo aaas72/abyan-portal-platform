@@ -45,6 +45,11 @@ export class UpdatePioneerFigureDto {
   @IsString()
   @MaxLength(500)
   @IsOptional()
+  authorName?: string;
+
+  @IsString()
+  @MaxLength(500)
+  @IsOptional()
   quote?: string;
 
   @IsString()

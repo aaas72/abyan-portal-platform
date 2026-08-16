@@ -15,7 +15,7 @@ export default function DistrictDesktopSidebar({
 }: DistrictDesktopSidebarProps) {
   return (
     <div className="w-[270px] shrink-0 space-y-3">
-      <span className="text-xs font-normal text-slate-900 font-abyan-title block text-right mb-2">
+      <span className="text-sm sm:text-base font-normal text-slate-900 font-abyan-title block text-right mb-2">
         اختر المديرية للاستعراض الموسوعي الشامل:
       </span>
 
@@ -30,7 +30,7 @@ export default function DistrictDesktopSidebar({
               className="py-3 px-1 text-right cursor-pointer bg-transparent border-b border-slate-100 last:border-none shadow-none transition-colors duration-300"
             >
               <h3
-                className={`font-abyan-title text-base font-normal leading-snug transition-colors duration-300 ${
+                className={`font-abyan-title text-base sm:text-lg font-normal leading-snug transition-colors duration-300 ${
                   isSelected
                     ? "text-sky-600 font-medium"
                     : "text-slate-900 hover:text-sky-600"
@@ -38,7 +38,7 @@ export default function DistrictDesktopSidebar({
               >
                 مديرية {dist.name}
               </h3>
-              <p className="text-xs text-slate-500 font-abyan-body font-normal truncate pt-0.5">
+              <p className="text-sm text-slate-600 font-abyan-body font-normal truncate pt-0.5">
                 {dist.title}
               </p>
             </motion.div>

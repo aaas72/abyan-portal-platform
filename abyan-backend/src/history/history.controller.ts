@@ -7,9 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { HistoryService } from './history.service';
 import { CreateHistoryEraDto } from './dto/create-history-era.dto';
 import { UpdateHistoryEraDto } from './dto/update-history-era.dto';
@@ -23,7 +21,6 @@ export class HistoryController {
 
   // --- Public Endpoints ---
 
-  @UseInterceptors(CacheInterceptor)
   @Get('frontend')
   async getFrontendData() {
     return this.historyService.findAllForFrontend();

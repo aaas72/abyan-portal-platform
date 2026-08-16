@@ -40,6 +40,7 @@ export interface AdminDistrict {
   capital: string;
   areaKm2: string;
   areaPercentage: string;
+  authorName?: string;
   crops: string[];
   landmarks: string[];
   villages: string[];
@@ -64,6 +65,7 @@ export interface AdminPioneer {
   startYear: string;
   endYear: string;
   origin?: string;
+  authorName?: string;
   isActive: boolean;
   category?: string;
   biography?: string;
@@ -90,6 +92,7 @@ export interface AdminHistoryEra {
   endYear: string;
   eraTitle: string;
   historicalCapital: string;
+  authorName?: string;
   shortSummary: string;
   fullDescription: string;
   keyEvents: string[];
@@ -114,6 +117,7 @@ export interface AdminLandmarkPhotoCard {
   title: string;
   tag: string;
   location: string;
+  authorName?: string;
   description: string;
   bgGradient?: string;
   images?: string[];
@@ -152,6 +156,7 @@ export interface AdminCultureItem {
   title: string;
   tag: string;
   location: string;
+  authorName?: string;
   description: string;
   bgGradient: string;
   images?: string[];
@@ -176,6 +181,7 @@ export interface AdminEconomyPhotoCard {
   title: string;
   tag: string;
   location: string;
+  authorName?: string;
   description: string;
   bgGradient: string;
   images?: string[];
@@ -190,6 +196,7 @@ export interface AdminGalleryImage {
   date: string;
   year?: string;
   location?: string;
+  authorName?: string;
   description?: string;
   images?: string[];
   isActive: boolean;

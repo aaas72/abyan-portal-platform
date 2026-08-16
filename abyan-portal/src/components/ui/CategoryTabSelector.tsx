@@ -108,8 +108,8 @@ export default function CategoryTabSelector({
         {...subtleMicroHover}
         className={`font-abyan-title font-normal bg-transparent border-none px-2 cursor-pointer whitespace-nowrap shrink-0 transition-colors duration-300 leading-normal ${
           size === "sm"
-            ? "text-xs sm:text-sm"
-            : "text-xs sm:text-sm lg:text-base"
+            ? "text-sm sm:text-base"
+            : "text-sm sm:text-base lg:text-lg"
         } ${
           isActive
             ? "text-[#10b981] font-medium"

@@ -38,6 +38,11 @@ export class CreateHistoryEraDto {
   @IsNotEmpty()
   fullDescription: string;
 
+  @IsString()
+  @MaxLength(500)
+  @IsNotEmpty()
+  authorName: string;
+
   @IsArray()
   @IsString({ each: true })
   @IsOptional()

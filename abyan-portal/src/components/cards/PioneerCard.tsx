@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export interface PioneerData {
   id: string;
@@ -38,23 +39,26 @@ export default function PioneerCard({ figure, onClick }: PioneerCardProps) {
           } flex flex-col justify-between text-white shadow-inner`}
         >
           {figure.images?.[0] ? (
-            <img 
+            <Image 
               src={figure.images[0]}
               alt={figure.name}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500"
+              fill
+              className="object-cover transition-transform duration-500 pointer-events-none"
+              draggable={false}
+              onContextMenu={(e) => e.preventDefault()}
             />
           ) : null}
         </div>
 
         {/* Title & Role Info Side Container */}
         <div className="space-y-1 overflow-hidden flex-1">
-          <span className="text-xs font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
+          <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
             {figure.role}
           </span>
-          <h3 className="font-abyan-title text-base sm:text-lg font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
+          <h3 className="font-abyan-title text-lg sm:text-xl font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
             {figure.name}
           </h3>
-          <div className="flex items-center gap-1.5 mt-1 text-[11px] font-abyan-title">
+          <div className="flex items-center gap-1.5 mt-1 text-sm font-abyan-title">
             {figure.location && <span className="text-sky-600 truncate">{figure.location}</span>}
             {figure.location && (figure.startYear || figure.endYear) && <span className="text-slate-300 mx-0.5">•</span>}
             {(figure.startYear || figure.endYear) && (
@@ -68,20 +72,20 @@ export default function PioneerCard({ figure, onClick }: PioneerCardProps) {
 
       {/* Short Bio */}
       <div className="space-y-2 overflow-hidden w-full">
-        <p className="text-xs text-slate-700 font-abyan-body font-normal line-clamp-3 leading-relaxed overflow-hidden break-words">
+        <p className="text-base sm:text-lg text-slate-700 font-abyan-body font-normal line-clamp-3 leading-relaxed overflow-hidden break-words">
           {figure.biography}
         </p>
       </div>
 
       {/* Quote Excerpt if available */}
       {figure.quote && (
-        <p className="text-xs text-sky-600 font-abyan-body font-normal leading-relaxed pt-1 line-clamp-2 overflow-hidden break-words w-full">
+        <p className="text-base sm:text-lg text-sky-600 font-abyan-body font-normal leading-relaxed pt-1 line-clamp-2 overflow-hidden break-words w-full">
           « {figure.quote} »
         </p>
       )}
 
       {/* Footer Prompt */}
-      <div className="pt-2 flex justify-end items-center text-xs text-sky-600 font-abyan-title overflow-hidden border-none">
+      <div className="pt-2 flex justify-end items-center text-sm text-sky-600 font-abyan-title overflow-hidden border-none">
         <span className="group-hover:translate-x-[-3px] transition-transform font-normal">
           معاينة ←
         </span>

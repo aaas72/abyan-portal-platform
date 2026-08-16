@@ -97,6 +97,7 @@ export default function AdminDistrictsPage() {
       capital: item.capital || "",
       areaKm2: item.areaKm2 || "",
       areaPercentage: item.areaPercentage || "",
+      authorName: item.authorName || "",
       crops: item.crops || [],
       landmarks: item.landmarks || [],
       villages: item.villages || [],

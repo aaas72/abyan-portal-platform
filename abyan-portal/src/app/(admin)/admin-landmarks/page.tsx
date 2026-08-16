@@ -137,6 +137,7 @@ export default function AdminLandmarksPage() {
       title: item.title,
       tag: item.tag,
       location: item.location,
+      authorName: item.authorName || "",
       description: item.description || "",
       startYear: item.startYear || "",
       endYear: item.endYear || "",

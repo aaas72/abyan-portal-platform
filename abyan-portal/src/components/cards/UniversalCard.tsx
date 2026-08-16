@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export interface UniversalCardData {
   id?: string;
@@ -19,6 +20,7 @@ export interface UniversalCardData {
   quote?: string;
   bgGradient?: string;
   aspectRatio?: string;
+  authorName?: string;
   images?: string[];
 }
 
@@ -71,10 +73,13 @@ export default function UniversalCard({
           } flex flex-col justify-between text-white shadow-inner`}
         >
           {data.images?.[0] ? (
-            <img
+            <Image
               src={data.images[0]}
               alt={data.title}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500"
+              fill
+              className="object-cover transition-transform duration-500 pointer-events-none"
+              draggable={false}
+              onContextMenu={(e) => e.preventDefault()}
             />
           ) : (
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
@@ -82,9 +87,9 @@ export default function UniversalCard({
         </div>
 
         {/* Title & Short Description Below Photo Box */}
-        <div className="space-y-1 overflow-hidden">
+        <div className="space-y-1.5 overflow-hidden">
           {data.category && (
-            <span className="text-xs font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
+            <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
               {data.category}
             </span>
           )}
@@ -92,11 +97,11 @@ export default function UniversalCard({
             {data.title}
           </h3>
           {data.location && (
-            <span className="text-[13px] font-normal text-sky-700 font-abyan-title block break-words leading-snug">
+            <span className="text-sm sm:text-base font-normal text-sky-700 font-abyan-title block break-words leading-snug">
               {data.location}
             </span>
           )}
-          <p className="text-[11px] text-slate-600 font-abyan-body font-normal line-clamp-2 leading-relaxed overflow-hidden">
+          <p className="text-base sm:text-lg text-slate-700 font-abyan-body font-normal line-clamp-2 leading-relaxed overflow-hidden">
             {data.description}
           </p>
         </div>
@@ -120,10 +125,13 @@ export default function UniversalCard({
             } flex flex-col justify-between shadow-inner`}
           >
             {data.images?.[0] ? (
-              <img
+              <Image
                 src={data.images[0]}
                 alt={data.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500"
+                fill
+                className="object-cover transition-transform duration-500 pointer-events-none"
+                draggable={false}
+                onContextMenu={(e) => e.preventDefault()}
               />
             ) : (
               <div className="absolute inset-0 opacity-25 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:12px_12px]" />
@@ -132,9 +140,9 @@ export default function UniversalCard({
 
           {/* Title, Role & Button Side Container */}
           <div className="flex flex-col justify-between flex-1 py-1 overflow-hidden">
-            <div className="space-y-1 overflow-hidden">
+            <div className="space-y-1.5 overflow-hidden">
               {data.category && (
-                <span className="text-xs font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
+                <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
                   {data.category}
                 </span>
               )}
@@ -142,25 +150,25 @@ export default function UniversalCard({
                 {data.title}
               </h3>
               {data.subtitle && (
-                <span className="text-[13px] font-normal text-sky-700 font-abyan-title block break-words leading-snug">
+                <span className="text-sm sm:text-base font-normal text-sky-700 font-abyan-title block break-words leading-snug">
                   {data.subtitle}
                 </span>
               )}
               {/* Info details moved from image */}
               {data.location && (
-                <span className="text-[12px] font-normal text-sky-600 font-abyan-title block break-words leading-snug mt-1">
+                <span className="text-xs sm:text-sm font-normal text-sky-600 font-abyan-title block break-words leading-snug mt-1">
                   {data.location}
                 </span>
               )}
               {(data.startYear || data.endYear || data.era) && (
-                <span className="text-[12px] font-normal text-slate-500 font-abyan-title block break-words leading-snug">
+                <span className="text-xs sm:text-sm font-normal text-slate-500 font-abyan-title block break-words leading-snug">
                   {data.startYear || data.endYear ? <>{data.startYear || ""}&nbsp;&nbsp;-&nbsp;&nbsp;{data.endYear || ""}</> : data.era}
                 </span>
               )}
             </div>
 
             {/* Footer Prompt */}
-            <div className="flex justify-end items-center text-xs text-sky-600 font-abyan-title overflow-hidden border-none mt-auto">
+            <div className="flex justify-end items-center text-sm text-sky-600 font-abyan-title overflow-hidden border-none mt-auto">
               <span className="group-hover:translate-x-[-3px] transition-transform font-normal">
                 معاينة ←
               </span>
@@ -191,7 +199,7 @@ export default function UniversalCard({
       </div>
 
       <div className="space-y-2 overflow-hidden w-full">
-        <p className="text-sm md:text-base leading-relaxed text-slate-700 font-abyan-body font-normal line-clamp-3 overflow-hidden break-words">
+        <p className="text-base sm:text-lg leading-relaxed text-slate-700 font-abyan-body font-normal line-clamp-3 overflow-hidden break-words">
           {data.description}
         </p>
       </div>

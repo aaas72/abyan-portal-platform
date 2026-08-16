@@ -7,9 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { HighlightsService } from './highlights.service';
 import { CreateHighlightItemDto } from './dto/create-highlight-item.dto';
 import { UpdateHighlightItemDto } from './dto/update-highlight-item.dto';
@@ -23,7 +21,6 @@ export class HighlightsController {
 
   // --- Public Endpoints ---
 
-  @UseInterceptors(CacheInterceptor)
   @Get('frontend')
   async getFrontendData() {
     return this.highlightsService.findAllForFrontend();
@@ -66,7 +63,6 @@ export class HighlightsController {
 
   // --- Landing Sections Endpoints ---
 
-  @UseInterceptors(CacheInterceptor)
   @Get('sections/frontend')
   async getFrontendLandingSections() {
     return this.highlightsService.findFrontendLandingSections();

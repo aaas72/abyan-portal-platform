@@ -8,9 +8,7 @@ import {
   Delete,
   UseGuards,
   Query,
-  UseInterceptors,
 } from '@nestjs/common';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { LandmarksService } from './landmarks.service';
 import { CreateLandmarkCategoryDto } from './dto/create-landmark-category.dto';
 import { UpdateLandmarkCategoryDto } from './dto/update-landmark-category.dto';
@@ -26,7 +24,6 @@ export class LandmarksController {
 
   // --- Public Endpoints ---
 
-  @UseInterceptors(CacheInterceptor)
   @Get('frontend')
   async getFrontendData(@Query('district') district?: string) {
     return this.landmarksService.findAllForFrontend(district);

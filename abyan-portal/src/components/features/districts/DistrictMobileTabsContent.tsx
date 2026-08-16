@@ -27,15 +27,15 @@ export default function DistrictMobileTabsContent({
     <div className="space-y-4 pt-1">
       {activeSubTab === "history" && (
         <div className="space-y-3">
-          <p className="text-xs sm:text-sm text-slate-700 font-abyan-body font-normal leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-800 font-abyan-body font-normal leading-relaxed">
             {dist.description}
           </p>
           {dist.historyOverview && (
-            <div className="space-y-1 pt-1">
+            <div className="space-y-1.5 pt-1">
               <h4 className="font-abyan-title text-base sm:text-lg font-normal text-slate-900 block mb-2">
                 النشأة والمسار التاريخي:
               </h4>
-              <p className="text-xs sm:text-sm text-slate-600 font-abyan-body font-normal leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-700 font-abyan-body font-normal leading-relaxed">
                 {dist.historyOverview}
               </p>
             </div>
@@ -55,20 +55,20 @@ export default function DistrictMobileTabsContent({
 
       {activeSubTab === "nature" && (
         <div className="space-y-3">
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             <h4 className="font-abyan-title text-base sm:text-lg font-normal text-slate-900 block mb-2">
               التضاريس والموقع الجغرافي:
             </h4>
-            <p className="text-xs sm:text-sm text-slate-600 font-abyan-body font-normal leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-700 font-abyan-body font-normal leading-relaxed">
               {dist.geography}
             </p>
           </div>
           {dist.climateAndNature && (
-            <div className="space-y-1 pt-1">
+            <div className="space-y-1.5 pt-1">
               <h4 className="font-abyan-title text-base sm:text-lg font-normal text-slate-900 block mb-2">
                 المناخ والطبيعة البيئية:
               </h4>
-              <p className="text-xs sm:text-sm text-slate-600 font-abyan-body font-normal leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-700 font-abyan-body font-normal leading-relaxed">
                 {dist.climateAndNature}
               </p>
             </div>
@@ -78,7 +78,7 @@ export default function DistrictMobileTabsContent({
 
       {activeSubTab === "pioneers" && (
         <div className="space-y-4">
-          <h4 className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block border-none">
+          <h4 className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block border-none mb-2">
             أعلام وشخصيات المديرية الوطنية والتاريخية:
           </h4>
           <div className="grid grid-cols-1 gap-4">
@@ -169,7 +169,7 @@ export default function DistrictMobileTabsContent({
       {activeSubTab === "economy" && (
         <div className="space-y-3">
           {dist.economyDetails && (
-            <p className="text-xs sm:text-sm text-slate-700 font-abyan-body font-normal leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-800 font-abyan-body font-normal leading-relaxed">
               {dist.economyDetails}
             </p>
           )}
@@ -195,7 +195,7 @@ export default function DistrictMobileTabsContent({
       {activeSubTab === "culture" && (
         <div className="space-y-3">
           {dist.traditionsAndCulture && (
-            <p className="text-xs sm:text-sm text-sky-600 font-abyan-body font-normal leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-800 font-abyan-body font-normal leading-relaxed">
               {dist.traditionsAndCulture}
             </p>
           )}

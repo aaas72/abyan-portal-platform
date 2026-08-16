@@ -71,7 +71,7 @@ export default function GalleryClient({ initialCategories, galleryItems }: Galle
           >
             {/* Header Title */}
             <motion.div {...itemFadeInRight(0.05)} className="space-y-1">
-              <span className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block">
+              <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block">
                 الأرشيف الرقمي الموثق
               </span>
               <h2 className="font-abyan-title text-2xl sm:text-3xl text-slate-900 font-normal">
@@ -89,6 +89,7 @@ export default function GalleryClient({ initialCategories, galleryItems }: Galle
                     title: item.title,
                     tag: item.year,
                     location: item.location,
+                    authorName: item.authorName,
                     description: item.description,
                     bgGradient: item.bgGradient,
                     images: item.images, // Pass all images
@@ -98,6 +99,7 @@ export default function GalleryClient({ initialCategories, galleryItems }: Galle
                       id: item.id,
                       title: item.title,
                       subtitle: `${item.year} • ${item.location}`,
+                      authorName: item.authorName,
                       fullBiography: item.description,
                       location: item.location,
                       year: item.year,

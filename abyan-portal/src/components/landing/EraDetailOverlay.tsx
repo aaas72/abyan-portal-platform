@@ -38,7 +38,7 @@ export default function EraDetailOverlay({
             {/* Era Period Tag */}
             <motion.span
               {...itemFadeInRight(0.05)}
-              className="text-xs font-bold text-sky-600 font-abyan-title block"
+              className="text-xs sm:text-sm font-normal text-sky-600 font-abyan-title block"
             >
               {era.startYear}&nbsp;&nbsp;-&nbsp;&nbsp;{era.endYear}
             </motion.span>

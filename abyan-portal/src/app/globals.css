@@ -51,14 +51,14 @@ p.font-abyan-title,
 p.font-abyan-body {
   font-family: 'ThmanyahSerifRegular', var(--font-abyan-body), serif !important;
   color: #1e293b !important;
-  line-height: 1.6;
+  line-height: 1.7;
   overflow: visible;
   font-weight: 400;
 }
 
 .font-abyan-body {
   font-family: 'ThmanyahSerifRegular', var(--font-abyan-body), serif !important;
-  line-height: 1.6;
+  line-height: 1.7;
   overflow: visible;
   font-weight: 400;
 }

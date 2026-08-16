@@ -8,9 +8,7 @@ import {
   Delete,
   UseGuards,
   Query,
-  UseInterceptors,
 } from '@nestjs/common';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { EconomyService } from './economy.service';
 import { CreateEconomyPillarDto } from './dto/create-economy-pillar.dto';
 import { UpdateEconomyPillarDto } from './dto/update-economy-pillar.dto';
@@ -26,7 +24,6 @@ export class EconomyController {
 
   // --- Public Endpoints ---
 
-  @UseInterceptors(CacheInterceptor)
   @Get('frontend')
   async getFrontendData(@Query('district') district?: string) {
     return this.economyService.findAllForFrontend(district);

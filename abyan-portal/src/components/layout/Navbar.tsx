@@ -53,7 +53,7 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
         className="absolute top-6 sm:top-8 lg:top-10 left-4 sm:left-6 lg:left-8 right-4 sm:right-6 lg:right-8 z-30 h-auto bg-transparent border-none shadow-none flex items-start pt-3 sm:pt-4 lg:pt-5 overflow-visible pointer-events-none"
       >
         <SmartContainer className="flex items-start justify-between overflow-visible pointer-events-auto w-full">
-          {/* Right Side: Brand Title "أَبيَن" */}
+          {/* Right Side: Brand Title "بوابة أبين" */}
           <Link href="/" className="no-underline">
             <motion.h1
               {...subtleMicroHover}
@@ -61,7 +61,7 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
                 isHomePage ? "text-white" : "text-slate-900"
               }`}
             >
-              أَبيَن
+              بوابة أبين
             </motion.h1>
           </Link>
 
@@ -84,8 +84,8 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
                       isActive
                         ? "text-[#10b981] font-normal opacity-100"
                         : isHomePage
-                          ? "text-white/90 hover:text-white"
-                          : "text-slate-800 hover:text-sky-600"
+                          ? "text-white/95 hover:text-white font-normal"
+                          : "text-slate-700 hover:text-sky-600 font-normal"
                     }`}
                   >
                     {sec.label}
@@ -95,15 +95,13 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
             })}
           </nav>
 
-          {/* Left Side (Mobile): Pure Typography Menu Toggle Word Adapting to Page Context */}
+          {/* Left Side (Mobile Only): Drawer Hamburger Menu Trigger */}
           <div className="flex md:hidden items-center pt-1">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="فتح القائمة"
-              className={`font-abyan-title text-xl md:text-2xl font-normal bg-transparent border-none cursor-pointer px-2 py-1 transition-colors select-none ${
-                isHomePage
-                  ? "text-white drop-shadow-md hover:text-emerald-300"
-                  : "text-slate-900 hover:text-sky-600"
+              aria-label="Open navigation menu"
+              className={`font-abyan-title text-base sm:text-lg font-normal bg-transparent border-none cursor-pointer drop-shadow-md ${
+                isHomePage ? "text-white" : "text-slate-900"
               }`}
             >
               القائمة
@@ -138,7 +136,7 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
                 {/* Header Row in Drawer: Logo Right + Close Button Left */}
                 <div className="flex items-center justify-between border-b border-white/20 pb-5 text-right">
                   <h2 className="font-abyan-title text-3xl md:text-4xl text-white font-normal">
-                    أَبيَن
+                    بوابة أبين
                   </h2>
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -219,7 +217,7 @@ export default function Navbar({ activeSection, onNavigate }: NavbarProps) {
 
               {/* Bottom Drawer Footer Tag */}
               <div className="pt-6 border-t border-white/20 text-right">
-                <span className="font-abyan-title text-xs text-sky-200 font-normal block">
+                <span className="font-abyan-title text-sm text-sky-200 font-normal block">
                   بوابة أبين الثقافية
                 </span>
               </div>

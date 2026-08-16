@@ -29,6 +29,9 @@ export class ArchiveItem {
   @Prop({ required: true })
   description: string;
 
+  @Prop({ required: true, default: 'فريق توثيق بوابة أبين' })
+  authorName: string;
+
   @Prop({ type: [String], default: [] })
   images: string[];
 

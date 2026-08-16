@@ -1,4 +1,4 @@
-﻿import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { District, DistrictDocument } from './schemas/district.schema';
@@ -11,6 +11,7 @@ import {
 } from './schemas/district-region.schema';
 import { CreateDistrictRegionDto } from './dto/create-district-region.dto';
 import { UpdateDistrictRegionDto } from './dto/update-district-region.dto';
+import { UploadService } from '../upload/upload.service';
 
 @Injectable()
 export class DistrictsService {
@@ -18,6 +19,7 @@ export class DistrictsService {
     @InjectModel(District.name) private districtModel: Model<DistrictDocument>,
     @InjectModel(DistrictRegion.name)
     private districtRegionModel: Model<DistrictRegionDocument>,
+    private uploadService: UploadService,
   ) {}
 
   // --- Frontend Aggregation (Public) ---
@@ -108,29 +110,96 @@ export class DistrictsService {
     }));
   }
 
+  // --- Image Extraction Helper ---
+  private extractAllDistrictImages(district: any): string[] {
+    const images: string[] = [];
+    if (district.images && Array.isArray(district.images)) images.push(...district.images);
+    
+    const lists = [
+      district.landmarksList,
+      district.pioneersList,
+      district.pioneersCardList,
+      district.sitesCardList,
+      district.cropsCardList,
+      district.heritageCardList
+    ];
+    
+    lists.forEach(list => {
+      if (list && Array.isArray(list)) {
+        list.forEach(item => {
+          if (item.images && Array.isArray(item.images)) {
+            images.push(...item.images);
+          }
+        });
+      }
+    });
+    
+    return images.filter(img => typeof img === 'string' && img.includes('cloudinary.com'));
+  }
+
   // --- District Management (Protected) ---
 
   async createDistrict(
     createDistrictDto: CreateDistrictDto,
   ): Promise<District> {
     const newDistrict = new this.districtModel(createDistrictDto);
-    return newDistrict.save();
+    const savedDistrict = await newDistrict.save();
+
+    if (savedDistrict.images && savedDistrict.images.length > 0) {
+      savedDistrict.images = await this.uploadService.renameMediaUrls(
+        savedDistrict._id.toString(),
+        savedDistrict.name || 'district',
+        savedDistrict.images,
+        'districts',
+        'image',
+      );
+      return savedDistrict.save();
+    }
+    return savedDistrict;
   }
 
   async updateDistrict(
     id: string,
     updateDistrictDto: UpdateDistrictDto,
   ): Promise<District> {
+    const existingDistrict = await this.districtModel.findById(id).exec();
+    if (!existingDistrict) throw new NotFoundException('المديرية غير موجودة');
+
+    // Clean up removed images
+    const oldImages = this.extractAllDistrictImages(existingDistrict);
+    const newImages = this.extractAllDistrictImages(updateDistrictDto);
+    
+    const removedImages = oldImages.filter(img => !newImages.includes(img));
+    if (removedImages.length > 0) {
+      await this.uploadService.deleteMultipleMedia(removedImages, 'image');
+    }
+
+    if (updateDistrictDto.images && updateDistrictDto.images.length > 0) {
+      updateDistrictDto.images = await this.uploadService.renameMediaUrls(
+        id,
+        updateDistrictDto.name || existingDistrict.name || 'district',
+        updateDistrictDto.images,
+        'districts',
+        'image',
+      );
+    }
+
     const updated = await this.districtModel
       .findByIdAndUpdate(id, updateDistrictDto, { new: true })
       .exec();
-    if (!updated) throw new NotFoundException('Ø§Ù„Ù…Ø¯ÙŠØ±ÙŠØ© ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯Ø©');
-    return updated;
+    return updated!;
   }
 
   async deleteDistrict(id: string): Promise<void> {
-    const result = await this.districtModel.findByIdAndDelete(id).exec();
-    if (!result) throw new NotFoundException('Ø§Ù„Ù…Ø¯ÙŠØ±ÙŠØ© ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯Ø©');
+    const existingDistrict = await this.districtModel.findById(id).exec();
+    if (!existingDistrict) throw new NotFoundException('المديرية غير موجودة');
+
+    const imagesToDelete = this.extractAllDistrictImages(existingDistrict);
+    if (imagesToDelete.length > 0) {
+      await this.uploadService.deleteMultipleMedia(imagesToDelete, 'image');
+    }
+
+    await this.districtModel.findByIdAndDelete(id).exec();
   }
 
   async findAllDistricts(): Promise<District[]> {

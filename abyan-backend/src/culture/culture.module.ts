@@ -7,6 +7,7 @@ import {
 import { CultureItem, CultureItemSchema } from './schemas/culture-item.schema';
 import { CultureService } from './culture.service';
 import { CultureController } from './culture.controller';
+import { UploadModule } from '../upload/upload.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { CultureController } from './culture.controller';
       { name: CultureCategory.name, schema: CultureCategorySchema },
       { name: CultureItem.name, schema: CultureItemSchema },
     ]),
+    UploadModule,
   ],
   controllers: [CultureController],
   providers: [CultureService],

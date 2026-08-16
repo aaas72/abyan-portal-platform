@@ -28,6 +28,10 @@ export class CreatePioneerFigureDto {
   @IsNotEmpty({ message: 'السيرة الذاتية مطلوبة' })
   biography: string;
 
+  @IsString({ message: 'اسم الكاتب / الباحث التوثيقي يجب أن يكون نصاً' })
+  @IsNotEmpty({ message: 'اسم الكاتب / الباحث التوثيقي مطلوب' })
+  authorName: string;
+
   @IsString()
   @MaxLength(500)
   @IsNotEmpty()

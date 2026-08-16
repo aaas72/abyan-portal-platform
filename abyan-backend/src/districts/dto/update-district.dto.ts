@@ -158,6 +158,11 @@ export class UpdateDistrictDto {
   @IsString()
   @MaxLength(500)
   @IsOptional()
+  authorName?: string;
+
+  @IsString()
+  @MaxLength(500)
+  @IsOptional()
   geography?: string;
 
   @IsString()

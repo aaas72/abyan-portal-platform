@@ -10,6 +10,7 @@ import {
 } from './schemas/economy-photo-card.schema';
 import { EconomyService } from './economy.service';
 import { EconomyController } from './economy.controller';
+import { UploadModule } from '../upload/upload.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { EconomyController } from './economy.controller';
       { name: EconomyPillar.name, schema: EconomyPillarSchema },
       { name: EconomyPhotoCard.name, schema: EconomyPhotoCardSchema },
     ]),
+    UploadModule,
   ],
   controllers: [EconomyController],
   providers: [EconomyService],

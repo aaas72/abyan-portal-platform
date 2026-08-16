@@ -42,6 +42,7 @@ export default function LandmarksClient({ initialData }: LandmarksClientProps) {
       id: photoCard.id,
       title: photoCard.title,
       subtitle: photoCard.tag,
+      authorName: photoCard.authorName,
       fullBiography: photoCard.description,
       location: photoCard.location,
       startYear: photoCard.startYear,
@@ -92,10 +93,10 @@ export default function LandmarksClient({ initialData }: LandmarksClientProps) {
           >
             {/* Category Subtitle & Header */}
             <motion.div {...itemFadeInRight(0.05)} className="space-y-1">
-              <span className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block">
+              <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block">
                 {currentCategory.categoryName}
               </span>
-              <span className="text-xs text-slate-500 font-abyan-title block">
+              <span className="text-sm sm:text-base text-slate-500 font-abyan-title block">
                 {currentCategory.subtitle}
               </span>
             </motion.div>
@@ -111,7 +112,7 @@ export default function LandmarksClient({ initialData }: LandmarksClientProps) {
             {/* Description Paragraph */}
             <motion.p
               {...itemFadeInRight(0.16)}
-              className="text-xs sm:text-sm lg:text-base text-slate-700 font-abyan-title font-normal leading-relaxed pt-1"
+              className="text-sm sm:text-base lg:text-lg text-slate-800 font-abyan-body font-normal leading-relaxed pt-1"
             >
               {currentCategory.description}
             </motion.p>
@@ -119,7 +120,7 @@ export default function LandmarksClient({ initialData }: LandmarksClientProps) {
             {/* VISUAL LANDMARK CARDS GRID USING DEDICATED IMAGE SHOWCASE CARD */}
             {currentCategory.photoCards && (
               <motion.div {...itemFadeInRight(0.2)} className="pt-2 space-y-4">
-                <span className="text-xs font-normal text-[#10b981] font-abyan-title block">
+                <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block">
                   معرض مشاهد ومعالم {currentCategory.categoryName}:
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -136,14 +137,14 @@ export default function LandmarksClient({ initialData }: LandmarksClientProps) {
 
             {/* Key Landmarks List */}
             <motion.div {...itemFadeInRight(0.24)} className="space-y-2 pt-2">
-              <span className="text-xs font-normal text-slate-900 font-abyan-title block">
+              <span className="text-sm sm:text-base font-normal text-slate-900 font-abyan-title block">
                 أبرز الشواهد والمعالم الجغرافية:
               </span>
               <ul className="space-y-1.5 list-none p-0 m-0">
                 {currentCategory.keyLandmarks.map((lm, idx) => (
                   <li
                     key={idx}
-                    className="text-xs sm:text-sm text-sky-600 font-abyan-title font-normal leading-relaxed"
+                    className="text-sm sm:text-base text-sky-600 font-abyan-body font-medium leading-relaxed"
                   >
                     • {lm}
                   </li>
@@ -153,10 +154,10 @@ export default function LandmarksClient({ initialData }: LandmarksClientProps) {
 
             {/* Unique Features */}
             <motion.div {...itemFadeInRight(0.28)} className="space-y-1 pt-2">
-              <span className="text-xs font-normal text-slate-900 font-abyan-title block">
+              <span className="text-sm sm:text-base font-normal text-slate-900 font-abyan-title block">
                 الأهمية والقيمة التاريخية والطبيعية:
               </span>
-              <p className="text-xs sm:text-sm text-[#10b981] font-abyan-title font-normal leading-relaxed">
+              <p className="text-sm sm:text-base text-[#10b981] font-abyan-body font-medium leading-relaxed">
                 {currentCategory.details.join(" • ")}
               </p>
             </motion.div>

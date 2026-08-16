@@ -3,6 +3,9 @@ import GalleryDataWrapper from "./GalleryDataWrapper";
 import { GalleryPageSkeleton } from "@/components/ui/Skeletons";
 import { Navbar, Footer } from "@/components/layout";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default function GalleryPage() {
   return (
     <div className="min-h-screen bg-white text-slate-900 font-cairo selection:bg-sky-500 selection:text-white">

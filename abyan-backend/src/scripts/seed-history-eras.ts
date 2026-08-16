@@ -120,7 +120,7 @@ async function bootstrap() {
   }
 
   for (const era of historyErasData) {
-    await historyService.createEra(era);
+    await historyService.createEra({ ...era, authorName: 'فريق توثيق بوابة أبين' });
     console.log(`Created era: ${era.eraTitle}`);
   }
 

@@ -8,9 +8,7 @@ import {
   Delete,
   UseGuards,
   Query,
-  UseInterceptors,
 } from '@nestjs/common';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { CultureService } from './culture.service';
 import { CreateCultureCategoryDto } from './dto/create-culture-category.dto';
 import { UpdateCultureCategoryDto } from './dto/update-culture-category.dto';
@@ -26,7 +24,6 @@ export class CultureController {
 
   // --- Public Endpoints ---
 
-  @UseInterceptors(CacheInterceptor)
   @Get('frontend')
   async getFrontendData(@Query('district') district?: string) {
     return this.cultureService.findAllForFrontend(district);

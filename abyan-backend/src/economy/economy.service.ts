@@ -14,6 +14,7 @@ import { UpdateEconomyPillarDto } from './dto/update-economy-pillar.dto';
 import { CreateEconomyPhotoCardDto } from './dto/create-economy-photo-card.dto';
 import { UpdateEconomyPhotoCardDto } from './dto/update-economy-photo-card.dto';
 import { MediaMapper } from '../utils/media.mapper';
+import { UploadService } from '../upload/upload.service';
 
 @Injectable()
 export class EconomyService {
@@ -22,6 +23,7 @@ export class EconomyService {
     private pillarModel: Model<EconomyPillarDocument>,
     @InjectModel(EconomyPhotoCard.name)
     private photoCardModel: Model<EconomyPhotoCardDocument>,
+    private uploadService: UploadService,
   ) {}
 
   // --- Frontend Aggregation (Public) ---
@@ -66,23 +68,74 @@ export class EconomyService {
     createPillarDto: CreateEconomyPillarDto,
   ): Promise<EconomyPillar> {
     const newPillar = new this.pillarModel(createPillarDto);
-    return newPillar.save();
+    const savedPillar = await newPillar.save();
+
+    let mediaUpdated = false;
+    if (savedPillar.images && savedPillar.images.length > 0) {
+      savedPillar.images = await this.uploadService.renameMediaUrls(
+        savedPillar._id.toString(),
+        savedPillar.title,
+        savedPillar.images,
+        'economy',
+        'image',
+      );
+      mediaUpdated = true;
+    }
+
+    if (mediaUpdated) {
+      return savedPillar.save();
+    }
+    return savedPillar;
   }
 
   async updatePillar(
     id: string,
     updatePillarDto: UpdateEconomyPillarDto,
   ): Promise<EconomyPillar> {
+    const existingPillar = await this.pillarModel.findById(id).exec();
+    if (!existingPillar) throw new NotFoundException('الركيزة الاقتصادية غير موجودة');
+
+    // Clean up removed images
+    if (updatePillarDto.images && existingPillar.images) {
+      const removedImages = existingPillar.images.filter(img => !updatePillarDto.images?.includes(img));
+      if (removedImages.length > 0) {
+        await this.uploadService.deleteMultipleMedia(removedImages, 'image');
+      }
+    }
+
+    if (updatePillarDto.images && updatePillarDto.images.length > 0) {
+      updatePillarDto.images = await this.uploadService.renameMediaUrls(
+        id,
+        updatePillarDto.title || existingPillar.title,
+        updatePillarDto.images,
+        'economy',
+        'image',
+      );
+    }
+
     const updated = await this.pillarModel
       .findByIdAndUpdate(id, updatePillarDto, { new: true })
       .exec();
-    if (!updated) throw new NotFoundException('Ø§Ù„Ø±ÙƒÙŠØ²Ø© Ø§Ù„Ø§Ù‚ØªØµØ§Ø¯ÙŠØ© ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯Ø©');
-    return updated;
+    return updated!;
   }
 
   async deletePillar(id: string): Promise<void> {
-    const result = await this.pillarModel.findByIdAndDelete(id).exec();
-    if (!result) throw new NotFoundException('Ø§Ù„Ø±ÙƒÙŠØ²Ø© Ø§Ù„Ø§Ù‚ØªØµØ§Ø¯ÙŠØ© ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯Ø©');
+    const existingPillar = await this.pillarModel.findById(id).exec();
+    if (!existingPillar) throw new NotFoundException('الركيزة الاقتصادية غير موجودة');
+
+    if (existingPillar.images && existingPillar.images.length > 0) {
+      await this.uploadService.deleteMultipleMedia(existingPillar.images, 'image');
+    }
+
+    // Find associated cards to delete their media
+    const cardsToDelete = await this.photoCardModel.find({ pillar: id }).exec();
+    for (const card of cardsToDelete) {
+      if (card.images && card.images.length > 0) {
+        await this.uploadService.deleteMultipleMedia(card.images, 'image');
+      }
+    }
+
+    await this.pillarModel.findByIdAndDelete(id).exec();
     // Also delete associated photo cards
     await this.photoCardModel.deleteMany({ pillar: id }).exec();
   }
@@ -97,23 +150,66 @@ export class EconomyService {
     createPhotoCardDto: CreateEconomyPhotoCardDto,
   ): Promise<EconomyPhotoCard> {
     const newPhotoCard = new this.photoCardModel(createPhotoCardDto);
-    return newPhotoCard.save();
+    const savedPhotoCard = await newPhotoCard.save();
+
+    let mediaUpdated = false;
+    if (savedPhotoCard.images && savedPhotoCard.images.length > 0) {
+      savedPhotoCard.images = await this.uploadService.renameMediaUrls(
+        savedPhotoCard._id.toString(),
+        savedPhotoCard.title,
+        savedPhotoCard.images,
+        'economy',
+        'image',
+      );
+      mediaUpdated = true;
+    }
+
+    if (mediaUpdated) {
+      return savedPhotoCard.save();
+    }
+    return savedPhotoCard;
   }
 
   async updatePhotoCard(
     id: string,
     updatePhotoCardDto: UpdateEconomyPhotoCardDto,
   ): Promise<EconomyPhotoCard> {
+    const existingCard = await this.photoCardModel.findById(id).exec();
+    if (!existingCard) throw new NotFoundException('صورة الركيزة غير موجودة');
+
+    // Clean up removed images
+    if (updatePhotoCardDto.images && existingCard.images) {
+      const removedImages = existingCard.images.filter(img => !updatePhotoCardDto.images?.includes(img));
+      if (removedImages.length > 0) {
+        await this.uploadService.deleteMultipleMedia(removedImages, 'image');
+      }
+    }
+
+    if (updatePhotoCardDto.images && updatePhotoCardDto.images.length > 0) {
+      updatePhotoCardDto.images = await this.uploadService.renameMediaUrls(
+        id,
+        updatePhotoCardDto.title || existingCard.title,
+        updatePhotoCardDto.images,
+        'economy',
+        'image',
+      );
+    }
+
     const updated = await this.photoCardModel
       .findByIdAndUpdate(id, updatePhotoCardDto, { new: true })
       .exec();
-    if (!updated) throw new NotFoundException('ØµÙˆØ±Ø© Ø§Ù„Ø±ÙƒÙŠØ²Ø© ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯Ø©');
-    return updated;
+    return updated!;
   }
 
   async deletePhotoCard(id: string): Promise<void> {
-    const result = await this.photoCardModel.findByIdAndDelete(id).exec();
-    if (!result) throw new NotFoundException('ØµÙˆØ±Ø© Ø§Ù„Ø±ÙƒÙŠØ²Ø© ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯Ø©');
+    const existingCard = await this.photoCardModel.findById(id).exec();
+    if (!existingCard) throw new NotFoundException('صورة الركيزة غير موجودة');
+
+    if (existingCard.images && existingCard.images.length > 0) {
+      await this.uploadService.deleteMultipleMedia(existingCard.images, 'image');
+    }
+
+    await this.photoCardModel.findByIdAndDelete(id).exec();
   }
 
   async findAllPhotoCards(): Promise<EconomyPhotoCard[]> {

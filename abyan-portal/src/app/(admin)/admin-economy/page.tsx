@@ -126,6 +126,7 @@ export default function AdminEconomyPage() {
       title: item.title,
       tag: item.tag,
       location: item.location,
+      authorName: item.authorName || "",
       description: item.description || "",
       bgGradient: item.bgGradient || "",
       images: item.images || [],

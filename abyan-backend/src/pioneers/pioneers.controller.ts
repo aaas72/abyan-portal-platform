@@ -8,9 +8,7 @@ import {
   Delete,
   UseGuards,
   Query,
-  UseInterceptors,
 } from '@nestjs/common';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { PioneersService } from './pioneers.service';
 import { CreatePioneerCategoryDto } from './dto/create-pioneer-category.dto';
 import { UpdatePioneerCategoryDto } from './dto/update-pioneer-category.dto';

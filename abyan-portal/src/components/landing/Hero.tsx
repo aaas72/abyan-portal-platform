@@ -3,7 +3,10 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { sectionFadeUpVariants, itemFadeInRight } from "@/lib/animations";
+
+const MotionImage = motion.create(Image);
 import { AdminLandingSection } from "@/types/admin.types";
 
 export default function Hero({ data }: { data?: AdminLandingSection }) {
@@ -49,15 +52,18 @@ export default function Hero({ data }: { data?: AdminLandingSection }) {
       >
         {/* Background Image Slider */}
         <AnimatePresence>
-          <motion.img
+          <MotionImage
             key={currentImageIndex}
             src={images[currentImageIndex]}
             alt="صورة خلفية أبين"
+            fill
+            priority
+            quality={85}
             initial={{ opacity: 0, scale: 1.05 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="object-cover"
           />
         </AnimatePresence>
 
@@ -98,12 +104,13 @@ export default function Hero({ data }: { data?: AdminLandingSection }) {
 
         {/* Bottom Right: Motivational Link to Admin Login */}
         <div className="absolute bottom-4 sm:bottom-6 lg:bottom-8 right-4 sm:right-6 lg:right-8 z-20">
-          <Link href="/admin-login" className="no-underline">
+          <Link href="/admin-login" className="no-underline group">
             <motion.div
               {...itemFadeInRight(0.35)}
-              className="font-abyan-title text-[#10b981] hover:text-sky-300 transition-colors text-sm md:text-base lg:text-lg drop-shadow-md tracking-wide font-normal cursor-pointer"
+              className="font-abyan-title text-[#10b981] group-hover:text-sky-300 transition-colors text-sm md:text-base lg:text-lg drop-shadow-md tracking-wide font-normal cursor-pointer inline-flex items-center gap-1.5"
             >
-              ابدأ بكتابة وتوثيق تاريخ أبين
+              <span>ابدأ بكتابة وتوثيق تاريخ أبين</span>
+              <span className="inline-block group-hover:-translate-x-1 transition-transform duration-300">←</span>
             </motion.div>
           </Link>
         </div>
