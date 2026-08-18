@@ -1,0 +1,49 @@
+services:
+  # ════════════════════════════════════════════════════════════
+  # 1. خدمة الواجهة الخلفية (NestJS Backend Service)
+  # ════════════════════════════════════════════════════════════
+  backend:
+    build:
+      context: ./abyan-backend
+      dockerfile: Dockerfile
+    container_name: abyan_backend
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT:-4000}:4000"
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000}
+      - INITIAL_ADMIN_PASSWORD=${INITIAL_ADMIN_PASSWORD:-AbyanAdmin2026!Secure}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+    networks:
+      - abyan-network
+
+  # ════════════════════════════════════════════════════════════
+  # 2. خدمة الواجهة الأمامية (Next.js Frontend Service)
+  # ════════════════════════════════════════════════════════════
+  frontend:
+    build:
+      context: ./abyan-portal
+      dockerfile: Dockerfile
+    container_name: abyan_frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:4000/api}
+      - INTERNAL_API_URL=http://backend:4000/api
+    depends_on:
+      - backend
+    networks:
+      - abyan-network
+
+networks:
+  abyan-network:
+    driver: bridge

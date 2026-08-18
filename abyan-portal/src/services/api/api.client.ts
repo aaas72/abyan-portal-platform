@@ -8,7 +8,11 @@ export interface ApiResponse<T = any> {
   error?: any;
 }
 
-let baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+const isServer = typeof window === 'undefined';
+let baseURL = isServer
+  ? (process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://backend:4000/api')
+  : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api');
+
 // Ensure the URL ends with /api (useful for Render Blueprint which only provides the base URL)
 if (baseURL && !baseURL.endsWith('/api')) {
   baseURL = `${baseURL}/api`;
@@ -27,6 +31,14 @@ const apiClient: AxiosInstance = axios.create({
 // Request Interceptor
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    // Dynamically adjust baseURL on server-side if INTERNAL_API_URL is present
+    if (typeof window === 'undefined' && process.env.INTERNAL_API_URL) {
+      let serverBase = process.env.INTERNAL_API_URL;
+      if (!serverBase.endsWith('/api')) {
+        serverBase = `${serverBase}/api`;
+      }
+      config.baseURL = serverBase;
+    }
     // Enable sending cookies with every request
     config.withCredentials = true;
     return config;
