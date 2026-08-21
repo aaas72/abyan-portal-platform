@@ -1,7 +1,7 @@
 import React from "react";
 import { UseFormReturn, Controller } from "react-hook-form";
 import AdminInput from "../../form-fields/AdminInput";
-import AdminParagraphsInput from "../../form-fields/AdminParagraphsInput";
+import AdminRichTextEditor from "../../form-fields/AdminRichTextEditor";
 import { AboutPillarFormData } from "@/types/schemas";
 
 interface AboutPillarFormProps {
@@ -25,9 +25,9 @@ export function AboutPillarForm({ form }: AboutPillarFormProps) {
         control={control}
         name="description"
         render={({ field }) => (
-          <AdminParagraphsInput
+          <AdminRichTextEditor
             label="وصف الركيزة"
-            placeholder="أدخل وصفاً تفصيلياً للركيزة"
+            placeholder="أدخل وصفاً تفصيلياً للركيزة..."
             value={field.value}
             onChange={field.onChange}
             error={errors.description?.message}

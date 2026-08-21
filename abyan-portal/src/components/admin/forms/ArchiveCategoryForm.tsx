@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import AdminInput from '../form-fields/AdminInput';
 import AdminTextarea from '../form-fields/AdminTextarea';
 import AdminTagsInput from '../form-fields/AdminTagsInput';
-import AdminParagraphsInput from '../form-fields/AdminParagraphsInput';
+import AdminRichTextEditor from '../form-fields/AdminRichTextEditor';
 import { ArchiveCategoryFormDataSchema, ArchiveCategoryFormData } from '@/types/schemas';
 
 export type { ArchiveCategoryFormData };
@@ -127,12 +127,13 @@ export default function ArchiveCategoryForm({ id, initialData, isPublished, onPu
         containerClassName="md:col-span-2"
       />
 
-      <AdminParagraphsInput
-        label="تفاصيل إضافية (Details)"
+      <AdminRichTextEditor
+        label="تفاصيل وشرح إضافي للفئة"
         value={formData.details?.join('\n\n') || ''}
-        onChange={(paragraphs) => handleFieldChange('details', paragraphs ? paragraphs.split('\n\n') : [])}
+        onChange={(content) => handleFieldChange('details', content ? [content] : [])}
         error={errors.details}
         containerClassName="md:col-span-2"
+        placeholder="أدخل الشرح التوثيقي والتفاصيل الإضافية..."
       />
     </form>
   );

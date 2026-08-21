@@ -5,6 +5,7 @@ import Image from "next/image";
 import { MediaItem } from "@/types/schemas";
 import { formatFormalArabicDate, formatFormalArabicPeriod } from "@/lib/utils";
 import { getCareerPeriodLabel } from "./media-viewer-utils";
+import { getOptimizedImageUrl } from "@/lib/image-utils";
 
 interface MediaViewerHeaderProps {
   item: MediaItem;
@@ -17,6 +18,8 @@ export default function MediaViewerHeader({
   allImages,
   onExpandImage,
 }: MediaViewerHeaderProps) {
+  const displayImage = allImages.length > 0 ? getOptimizedImageUrl(allImages[0], { width: 800 }) : null;
+
   return (
     <div className="flex items-center gap-4 sm:gap-6 p-5 sm:p-7 bg-gradient-to-br from-emerald-100/70 via-white to-sky-100/70 border-b border-emerald-100/40 shrink-0 relative">
       {/* Square Image Box (Right side in RTL) */}
@@ -28,11 +31,12 @@ export default function MediaViewerHeader({
           if (allImages.length > 0) onExpandImage(0);
         }}
       >
-        {allImages.length > 0 ? (
+        {displayImage ? (
           <Image
-            src={allImages[0]}
+            src={displayImage}
             alt={item.title}
             fill
+            sizes="(max-width: 640px) 128px, 176px"
             className="object-cover hover:scale-[1.03] transition-transform duration-500 pointer-events-none"
             draggable={false}
             onContextMenu={(e) => e.preventDefault()}

@@ -109,7 +109,7 @@ export default async function DistrictsDataWrapper() {
       }
     });
 
-    // 2. Landmarks / Sites matching
+    // 2. Landmarks / Sites matching (Exclusively fetched from general Landmarks section)
     const siteItemsMap = new Map<string, any>();
     flatLandmarks.forEach(l => {
       if (matchesGeo(l.location, district.name)) {
@@ -126,38 +126,8 @@ export default async function DistrictsDataWrapper() {
         });
       }
     });
-    [...(district.landmarks || []), ...(district.historicalSites || [])].forEach((sName, idx) => {
-      const match = flatLandmarks.find(l => 
-        (l.title && (l.title.includes(sName) || sName.includes(l.title))) ||
-        (l.tag && (l.tag.includes(sName) || sName.includes(l.tag)))
-      );
-      if (match && !siteItemsMap.has(match.id)) {
-        siteItemsMap.set(match.id, {
-          id: match.id,
-          title: match.title,
-          subtitle: match.tag,
-          description: match.description,
-          fullBiography: match.description,
-          bgGradient: match.bgGradient,
-          images: match.images,
-          category: match.categoryTitle || "معلم أثري",
-          location: match.location || district.name,
-        });
-      } else if (!match && !siteItemsMap.has(`site-${idx}`)) {
-        siteItemsMap.set(`site-${idx}`, {
-          id: `site-${idx}`,
-          title: sName,
-          subtitle: `معلم بارز في مديرية ${district.name}`,
-          description: `${sName} أحد المعالم والشواهد الجغرافية والتاريخية البارزة في مديرية ${district.name}.`,
-          fullBiography: `${sName} أحد المعالم والشواهد الجغرافية والتاريخية البارزة في مديرية ${district.name}.`,
-          category: "معلم بارز",
-          location: district.name,
-          bgGradient: "from-emerald-950 via-sky-900 to-slate-900",
-        });
-      }
-    });
 
-    // 3. Economy / Crops matching
+    // 3. Economy / Crops matching (Exclusively fetched from general Economy section)
     const cropItemsMap = new Map<string, any>();
     flatEconomy.forEach(e => {
       if (matchesGeo(e.location, district.name)) {
@@ -171,37 +141,6 @@ export default async function DistrictsDataWrapper() {
           images: e.images,
           category: e.categoryTitle || "خيرات الأرض",
           location: e.location || district.name,
-        });
-      }
-    });
-    (district.crops || []).forEach((cName, idx) => {
-      const match = flatEconomy.find(e => 
-        (e.title && (e.title.includes(cName) || cName.includes(e.title))) ||
-        (e.tag && (e.tag.includes(cName) || cName.includes(e.tag))) ||
-        (e.description && e.description.includes(cName))
-      );
-      if (match && !cropItemsMap.has(match.id)) {
-        cropItemsMap.set(match.id, {
-          id: match.id,
-          title: match.title,
-          subtitle: match.tag,
-          description: match.description,
-          fullBiography: match.description,
-          bgGradient: match.bgGradient,
-          images: match.images,
-          category: match.categoryTitle || "خيرات الأرض",
-          location: match.location || district.name,
-        });
-      } else if (!match && !cropItemsMap.has(`crop-${idx}`)) {
-        cropItemsMap.set(`crop-${idx}`, {
-          id: `crop-${idx}`,
-          title: cName,
-          subtitle: `محصول وثروة خصيبة في ${district.name}`,
-          description: `${cName} ركن أساسي من الثروات والمحاصيل التي تعتز بها مديرية ${district.name}.`,
-          fullBiography: `${cName} ركن أساسي من الثروات والمحاصيل التي تعتز بها مديرية ${district.name}.`,
-          category: "خيرات الأرض",
-          location: district.name,
-          bgGradient: "from-emerald-950 via-slate-800 to-sky-900",
         });
       }
     });

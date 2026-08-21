@@ -19,6 +19,8 @@ const ADMIN_LINKS = [
   { href: '/admin-landing', label: 'أقسام صفحة الهبوط', roles: ['admin'] },
   { href: '/admin-about', label: 'صفحة عن البوابة', roles: ['admin'] },
   { href: '/admin-copyright', label: 'حقوق الملكية الفكرية', roles: ['admin'] },
+  { href: '/admin-terms', label: 'شروط الاستخدام', roles: ['admin'] },
+  { href: '/admin-privacy', label: 'سياسة الخصوصية', roles: ['admin'] },
   { href: '/admin-contact', label: 'إدارة التواصل', roles: ['admin'] },
 ];
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminInput from '../../form-fields/AdminInput';
 import AdminMediaUpload from '../../form-fields/AdminMediaUpload';
-import AdminParagraphsInput from '../../form-fields/AdminParagraphsInput';
+import AdminRichTextEditor from '../../form-fields/AdminRichTextEditor';
 import AdminTagsInput from '../../form-fields/AdminTagsInput';
 import AdminSourcesInput from '../../form-fields/AdminSourcesInput';
 import { HistoryEraFormDataSchema, HistoryEraFormData } from '@/types/schemas';
@@ -222,7 +222,7 @@ export default function HistoryEraForm({
       </div>
 
       <div className="md:col-span-2">
-        <AdminParagraphsInput
+        <AdminRichTextEditor
           label="الموجز التاريخي السريع"
           value={formData.shortSummary}
           onChange={(val) => handleFieldChange('shortSummary', val)}
@@ -233,7 +233,7 @@ export default function HistoryEraForm({
       </div>
 
       <div className="md:col-span-2">
-        <AdminParagraphsInput
+        <AdminRichTextEditor
           label="السرد التاريخي والتفاصيل الممتدة"
           value={formData.fullDescription}
           onChange={(val) => handleFieldChange('fullDescription', val)}

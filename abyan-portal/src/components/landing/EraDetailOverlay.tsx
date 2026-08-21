@@ -10,6 +10,7 @@ import {
 
 import { HistoryEra } from "@/types/schemas";
 import { formatFormalArabicPeriod } from "@/lib/utils";
+import RichTextRenderer from "@/components/ui/RichTextRenderer";
 
 interface EraDetailOverlayProps {
   era: HistoryEra | null;
@@ -61,12 +62,12 @@ export default function EraDetailOverlay({
             </motion.h3>
 
             {/* Description */}
-            <motion.p
+            <motion.div
               {...itemFadeInRight(0.16)}
-              className="text-sm md:text-base leading-relaxed text-slate-700 font-abyan-body font-normal pt-0.5 max-w-xl break-words"
+              className="pt-0.5 max-w-xl break-words"
             >
-              {era.shortSummary}
-            </motion.p>
+              <RichTextRenderer content={era.shortSummary} />
+            </motion.div>
 
             {/* Sources / References */}
             {(() => {

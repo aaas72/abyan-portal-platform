@@ -3,7 +3,7 @@ import AdminInput from '../form-fields/AdminInput';
 import AdminSelect from '../form-fields/AdminSelect';
 import AdminMediaUpload from '../form-fields/AdminMediaUpload';
 import AdminTagsInput from '../form-fields/AdminTagsInput';
-import AdminParagraphsInput from '../form-fields/AdminParagraphsInput';
+import AdminRichTextEditor from '../form-fields/AdminRichTextEditor';
 import AdminSourcesInput from '../form-fields/AdminSourcesInput';
 import { PioneerFormDataSchema, PioneerFormData } from '@/types/schemas';
 import { AdminDistrict } from '@/types/admin.types';
@@ -146,7 +146,7 @@ export default function PioneerForm({ id, initialData, categories, districts = [
         {/* RIGHT COLUMN: ALL DETAILS */}
         <div className="space-y-4">
           <AdminInput
-            label="اسم الشخصية"
+            label="اسم الشخصية أو العلم الوطني"
             type="text"
             required
             value={formData.name}
@@ -156,7 +156,7 @@ export default function PioneerForm({ id, initialData, categories, districts = [
           />
 
           <AdminInput
-            label="اللقب أو الصفة"
+            label="اللقب أو الوصف الموجز (الدور البارز)"
             type="text"
             required
             value={formData.title}
@@ -175,7 +175,7 @@ export default function PioneerForm({ id, initialData, categories, districts = [
           />
 
           <AdminSelect
-            label="الفئة / التصنيف"
+            label="مجال أو تصنيف الشخصية"
             required
             options={categories.map(c => ({ value: c, label: c }))}
             value={formData.category}
@@ -205,21 +205,21 @@ export default function PioneerForm({ id, initialData, categories, districts = [
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <AdminInput
-              label="سنة البداية"
+              label="بداية فترة العطاء أو النشاط"
               type="text"
               value={formData.startYear}
               onChange={(e) => handleFieldChange('startYear', e.target.value)}
               error={errors.startYear}
-              placeholder="مثال: 1990"
+              placeholder="مثال: 1969"
             />
 
             <AdminInput
-              label="سنة النهاية"
+              label="نهاية فترة العطاء أو النشاط"
               type="text"
               value={formData.endYear}
               onChange={(e) => handleFieldChange('endYear', e.target.value)}
               error={errors.endYear}
-              placeholder="مثال: 2020"
+              placeholder="مثال: 1978"
             />
           </div>
 
@@ -302,25 +302,24 @@ export default function PioneerForm({ id, initialData, categories, districts = [
             )}
           </div>
         </div>
+      </div>
 
-        {/* FULL WIDTH: BIOGRAPHY & SOURCES */}
-        <div className="col-span-1 md:col-span-2 space-y-4">
-          <AdminParagraphsInput
-            label="السيرة الذاتية و التفاصيل (فقرات موثقة)"
-            required
-            value={formData.biography}
-            onChange={(val) => handleFieldChange('biography', val)}
-            error={errors.biography}
-            placeholder="اكتب تفاصيل السيرة هنا..."
-            containerClassName="mt-2"
-          />
+      {/* FULL WIDTH: BIOGRAPHY & SOURCES */}
+      <div className="space-y-4">
+        <AdminRichTextEditor
+          label="السيرة الذاتية والشرح التوثيقي المفصل"
+          required
+          value={formData.biography}
+          onChange={(val) => handleFieldChange('biography', val)}
+          error={errors.biography}
+          placeholder="اكتب السيرة الذاتية والشرح التوثيقي هنا..."
+        />
 
-          <AdminSourcesInput
-            sources={formData.sources || []}
-            onChange={(sources) => handleFieldChange('sources', sources)}
-            containerClassName="mt-2"
-          />
-        </div>
+        <AdminSourcesInput
+          sources={formData.sources || []}
+          onChange={(sources) => handleFieldChange('sources', sources)}
+          containerClassName="mt-2"
+        />
       </div>
     </form>
   );

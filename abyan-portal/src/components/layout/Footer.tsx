@@ -90,6 +90,7 @@ export default function Footer() {
         </p>
         <div className="flex items-center flex-wrap justify-center gap-4 sm:gap-6 text-sm text-slate-600 font-abyan-title font-normal">
           <Link href="/about" className="hover:text-[#10b981] transition-colors">عن المنصة</Link>
+          <Link href="/copyright" className="hover:text-[#10b981] transition-colors">حقوق الملكية الفكرية</Link>
           <Link href="/terms" className="hover:text-[#10b981] transition-colors">شروط الاستخدام</Link>
           <Link href="/privacy" className="hover:text-[#10b981] transition-colors">سياسة الخصوصية</Link>
           <Link href="/contact" className="hover:text-[#10b981] transition-colors">اتصل بنا</Link>

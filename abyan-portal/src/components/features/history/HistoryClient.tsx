@@ -12,6 +12,7 @@ import {
   itemFadeInRight,
 } from "@/lib/animations";
 import { updateUrlParams } from "@/lib/url-sync";
+import RichTextRenderer from "@/components/ui/RichTextRenderer";
 
 interface HistoryClientProps {
   historyEras: HistoryEra[];
@@ -132,9 +133,7 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
                           </span>
                         </div>
 
-                        <p className="text-sm sm:text-base text-slate-800 font-abyan-body font-normal leading-relaxed">
-                          {era.fullDescription}
-                        </p>
+                        <RichTextRenderer content={era.fullDescription} />
 
                         <div className="space-y-2 pt-1">
                           <h5 className="text-base sm:text-lg font-normal text-slate-900 font-abyan-title block">
@@ -245,21 +244,21 @@ export default function HistoryClient({ historyEras }: HistoryClientProps) {
 
                 {/* Main Highlight Summary */}
                 {activeEra.shortSummary && (
-                  <motion.p
+                  <motion.div
                     {...itemFadeInRight(0.14)}
-                    className="text-sm sm:text-base lg:text-lg text-slate-800 font-abyan-body font-normal leading-relaxed pt-1 break-words whitespace-normal max-w-full"
+                    className="pt-1 break-words whitespace-normal max-w-full"
                   >
-                    {activeEra.shortSummary}
-                  </motion.p>
+                    <RichTextRenderer content={activeEra.shortSummary} />
+                  </motion.div>
                 )}
 
                 {/* Extended Narrative Description */}
-                <motion.p
+                <motion.div
                   {...itemFadeInRight(0.18)}
-                  className="text-sm sm:text-base lg:text-lg text-slate-700 font-abyan-body font-normal leading-relaxed pt-1 break-words whitespace-normal max-w-full"
+                  className="pt-1 break-words whitespace-normal max-w-full"
                 >
-                  {activeEra.fullDescription}
-                </motion.p>
+                  <RichTextRenderer content={activeEra.fullDescription} />
+                </motion.div>
 
                 <motion.div {...itemFadeInRight(0.22)} className="space-y-2 pt-2 min-w-0">
                   <h5 className="text-base sm:text-lg font-normal text-slate-900 font-abyan-title block">

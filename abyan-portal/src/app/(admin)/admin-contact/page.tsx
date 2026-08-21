@@ -9,7 +9,7 @@ import { useToast } from "@/contexts/ToastContext";
 
 export default function AdminContactPage() {
   const toast = useToast();
-  const [data, setData] = useState<ContactInfo>({ emails: [], phones: [] });
+  const [data, setData] = useState<ContactInfo>({ emails: [], emailChannels: [], phones: [], phoneChannels: [] });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -61,7 +61,7 @@ export default function AdminContactPage() {
         description="تعديل أرقام الهواتف ورسائل البريد الإلكتروني الخاصة بالمنصة"
       />
 
-      <div className="bg-white rounded-2xl p-6 md:p-8 max-w-2xl mt-8">
+      <div className="bg-white rounded-2xl p-6 md:p-8 max-w-5xl mt-8">
         <ContactForm
           id="contact-form"
           initialData={data}

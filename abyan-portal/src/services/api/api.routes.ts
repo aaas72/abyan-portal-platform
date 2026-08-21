@@ -44,6 +44,14 @@ export const API_ROUTES = {
     FRONTEND: '/copyright/frontend',
     BASE: '/copyright'
   },
+  TERMS: {
+    FRONTEND: '/terms/frontend',
+    BASE: '/terms'
+  },
+  PRIVACY: {
+    FRONTEND: '/privacy/frontend',
+    BASE: '/privacy'
+  },
   AUTH: {
     LOGIN: '/auth/login',
     PROFILE: '/auth/profile',

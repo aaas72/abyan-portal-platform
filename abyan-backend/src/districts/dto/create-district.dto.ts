@@ -136,17 +136,19 @@ export class CreateDistrictDto {
   @IsNotEmpty()
   areaPercentage: string;
 
-  @IsArray()
-  @IsString({ each: true })
-  crops: string[];
-
-  @IsArray()
-  @IsString({ each: true })
-  landmarks: string[];
-
-  @IsArray()
-  @IsString({ each: true })
-  villages: string[];
+   @IsArray()
+   @IsString({ each: true })
+   @IsOptional()
+   crops?: string[];
+ 
+   @IsArray()
+   @IsString({ each: true })
+   @IsOptional()
+   landmarks?: string[];
+ 
+   @IsArray()
+   @IsString({ each: true })
+   villages: string[];
 
   @IsString()
   @MaxLength(10000)
@@ -173,7 +175,7 @@ export class CreateDistrictDto {
   sources?: Array<{ name: string; url?: string }>;
 
   @IsString()
-  @MaxLength(500)
+  @MaxLength(50000)
   @IsNotEmpty()
   geography: string;
 
@@ -193,7 +195,7 @@ export class CreateDistrictDto {
   historyMilestones?: string[];
 
   @IsString()
-  @MaxLength(500)
+  @MaxLength(20000)
   @IsOptional()
   climateAndNature?: string;
 
@@ -213,7 +215,7 @@ export class CreateDistrictDto {
   historicalSites?: string[];
 
   @IsString()
-  @MaxLength(10000)
+  @MaxLength(30000)
   @IsOptional()
   economyDetails?: string;
 
@@ -223,7 +225,7 @@ export class CreateDistrictDto {
   naturalResources?: string[];
 
   @IsString()
-  @MaxLength(500)
+  @MaxLength(20000)
   @IsOptional()
   traditionsAndCulture?: string;
 

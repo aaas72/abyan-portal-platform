@@ -106,8 +106,6 @@ export default function AdminDistrictsPage() {
       sourceName: item.sourceName || "",
       sourceUrl: item.sourceUrl || "",
       sources: item.sources && item.sources.length > 0 ? item.sources : (item.sourceName ? [{ name: item.sourceName, url: item.sourceUrl }] : []),
-      crops: item.crops || [],
-      landmarks: item.landmarks || [],
       villages: item.villages || [],
       description: item.description || "",
       geography: item.geography || "",

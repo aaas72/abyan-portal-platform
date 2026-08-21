@@ -1,28 +1,13 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { SmartContainer } from "@/components/layout";
 import { SubpageHero, EmptyState } from "@/components/ui";
 import { sectionFadeUpVariants, itemFadeInRight } from "@/lib/animations";
-
-interface AboutPillar {
-  title: string;
-  description: string;
-}
-interface AboutValue {
-  title: string;
-  description: string;
-}
-interface AboutScope {
-  title: string;
-  summary: string;
-  items: string[];
-}
-interface AboutStat {
-  number: string;
-  label: string;
-}
+import { AboutPillar, AboutValue, AboutScope, AboutStat } from "@/types/schemas";
+import RichTextRenderer from "@/components/ui/RichTextRenderer";
 
 interface AboutClientProps {
   pillars: AboutPillar[];
@@ -46,7 +31,7 @@ export default function AboutClient({
   if (isEmpty) {
     return (
       <EmptyState
-        title="لا توجد بيانات متاحة"
+        title="لا توجد بيانات مضافة بعد"
         message="لم يتم إضافة أي بيانات في هذا القسم حتى الآن. سيتم تحديث المحتوى قريباً."
       />
     );
@@ -121,19 +106,17 @@ export default function AboutClient({
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
             {(pillars || []).slice(0, 15).map((pillar, idx) => (
               <motion.div
                 key={idx}
                 {...itemFadeInRight(idx * 0.08)}
-                className="p-5 sm:p-6 bg-gradient-to-br from-emerald-50/80 via-white to-sky-50/80 rounded-2xl border-none shadow-none space-y-2 text-right hover:from-emerald-100 hover:to-sky-100 transition-all duration-300"
+                className="bg-transparent border-none shadow-none space-y-2 text-right"
               >
-                <h3 className="font-abyan-title text-lg sm:text-xl text-slate-900 font-normal">
+                <h3 className="font-abyan-title text-base md:text-lg text-slate-900 font-normal">
                   {pillar.title}
                 </h3>
-                <p className="text-sm sm:text-base text-slate-700 font-abyan-body font-normal leading-relaxed">
-                  {pillar.description}
-                </p>
+                <RichTextRenderer content={pillar.description} />
               </motion.div>
             ))}
           </div>
@@ -152,14 +135,14 @@ export default function AboutClient({
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {(scopes || []).slice(0, 15).map((sc, idx) => (
               <motion.div
                 key={idx}
                 {...itemFadeInRight(idx * 0.1)}
-                className="p-5 bg-white rounded-2xl space-y-3 text-right"
+                className="bg-transparent border-none shadow-none space-y-3 text-right"
               >
-                <h3 className="font-abyan-title text-lg sm:text-xl text-slate-900 font-normal leading-snug">
+                <h3 className="font-abyan-title text-base md:text-lg text-slate-900 font-normal leading-snug">
                   {sc.title}
                 </h3>
                 <p className="text-sm sm:text-base text-[#1e293b] font-abyan-body font-normal leading-relaxed">
@@ -169,7 +152,7 @@ export default function AboutClient({
                   {sc.items?.map((it, itemIdx) => (
                     <li
                       key={itemIdx}
-                      className="text-sm sm:text-base text-sky-600 font-abyan-body font-semibold leading-relaxed"
+                      className="text-sm sm:text-base text-sky-600 font-abyan-body font-normal leading-relaxed"
                     >
                       • {it}
                     </li>
@@ -193,23 +176,48 @@ export default function AboutClient({
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
             {(values || []).slice(0, 15).map((val, idx) => (
               <motion.div
                 key={idx}
                 {...itemFadeInRight(idx * 0.08)}
-                className="p-5 sm:p-6 bg-slate-50/60 rounded-2xl space-y-2 text-right"
+                className="bg-transparent border-none shadow-none space-y-2 text-right"
               >
-                <h3 className="font-abyan-title text-lg sm:text-xl text-slate-900 font-normal">
+                <h3 className="font-abyan-title text-base md:text-lg text-slate-900 font-normal">
                   {val.title}
                 </h3>
-                <p className="text-sm sm:text-base text-slate-700 font-abyan-body font-normal leading-relaxed">
-                  {val.description}
-                </p>
+                <RichTextRenderer content={val.description} />
               </motion.div>
             ))}
           </div>
         </div>
+      </SmartContainer>
+
+      {/* SECTION 5: COMMUNITY ENGAGEMENT & CALL TO ACTION */}
+      <SmartContainer className="pt-6 pb-12">
+        <motion.div
+          {...sectionFadeUpVariants}
+          className="max-w-4xl mx-auto text-center space-y-4 py-12 px-6 sm:px-10 rounded-3xl bg-gradient-to-br from-emerald-200/80 via-white/70 to-sky-200/80 border-none shadow-none"
+        >
+          <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block">
+            المساهمة والشراكة المجتمعية
+          </span>
+          <h2 className="font-abyan-title text-2xl sm:text-3xl lg:text-4xl text-slate-900 font-normal leading-snug">
+            وثّق أبين رقمياً معنا.. <span className="text-sky-600">لأن تاريخها يستحق أن يُروى</span>
+          </h2>
+          <p className="text-sm sm:text-base lg:text-lg text-slate-700 font-abyan-body font-normal leading-relaxed max-w-2xl mx-auto">
+            تاريخ أبين وتراثها ملكٌ لكل أبنائها. إذا كنت تملك وثيقة تاريخية، صورة نادرة، سيرة لشخصية ملهمة، أو قصة من موروث مديريتك، شاركنا لنحفظها معاً في الذاكرة الرقمية للمحافظة.
+          </p>
+          <div className="pt-2">
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 text-base sm:text-lg font-normal text-sky-600 hover:text-[#10b981] font-abyan-title transition-colors no-underline cursor-pointer group"
+            >
+              تواصل معنا للمساهمة في التوثيق
+              <span className="group-hover:translate-x-1 transition-transform duration-300">←</span>
+            </Link>
+          </div>
+        </motion.div>
       </SmartContainer>
     </>
   );

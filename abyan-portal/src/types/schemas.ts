@@ -220,8 +220,8 @@ export const DistrictItemSchema = z.object({
   capital: z.string().min(1),
   areaKm2: z.string().min(1),
   areaPercentage: z.string().min(1),
-  crops: z.array(z.string()),
-  landmarks: z.array(z.string()),
+  crops: z.array(z.string()).optional(),
+  landmarks: z.array(z.string()).optional(),
   villages: z.array(z.string()),
   description: z.string().min(1),
   geography: z.string().min(1),
@@ -339,6 +339,8 @@ export const AboutPillarItemSchema = z.object({
   description: z.string().min(1),
 });
 export type AboutPillarItem = z.infer<typeof AboutPillarItemSchema>;
+export const AboutPillarSchema = AboutPillarItemSchema;
+export type AboutPillar = AboutPillarItem;
 
 export const AboutValueSchema = z.object({
   title: z.string().min(1),
@@ -394,6 +396,46 @@ export const CopyrightSectionFormDataSchema = z.object({
   items: z.array(z.string()).optional(),
 });
 export type CopyrightSectionFormData = z.infer<typeof CopyrightSectionFormDataSchema>;
+
+/**
+ * 13. Terms of Service Schemas
+ */
+export const TermsItemSchema = z.object({
+  _id: z.string().optional(),
+  title: z.string().min(1, "العنوان مطلوب"),
+  description: z.string().min(1, "الوصف مطلوب"),
+  summary: z.string().optional(),
+  items: z.array(z.string()).optional(),
+});
+export type TermsItem = z.infer<typeof TermsItemSchema>;
+
+export const TermsContentSchema = z.object({
+  intro: z.array(TermsItemSchema).default([]),
+  usageRules: z.array(TermsItemSchema).default([]),
+  intellectualProperty: z.array(TermsItemSchema).default([]),
+  disclaimer: z.array(TermsItemSchema).default([]),
+});
+export type TermsContent = z.infer<typeof TermsContentSchema>;
+
+/**
+ * 14. Privacy Policy Schemas
+ */
+export const PrivacyItemSchema = z.object({
+  _id: z.string().optional(),
+  title: z.string().min(1, "العنوان مطلوب"),
+  description: z.string().min(1, "الوصف مطلوب"),
+  summary: z.string().optional(),
+  items: z.array(z.string()).optional(),
+});
+export type PrivacyItem = z.infer<typeof PrivacyItemSchema>;
+
+export const PrivacyContentSchema = z.object({
+  intro: z.array(PrivacyItemSchema).default([]),
+  dataCollection: z.array(PrivacyItemSchema).default([]),
+  usageAndProtection: z.array(PrivacyItemSchema).default([]),
+  cookiesAndAnalytics: z.array(PrivacyItemSchema).default([]),
+});
+export type PrivacyContent = z.infer<typeof PrivacyContentSchema>;
 
 /**
  * Admin Forms Zod Schemas
@@ -484,8 +526,6 @@ export const DistrictFormDataSchema = z.object({
   sourceName: z.string().trim().optional(),
   sourceUrl: z.string().trim().optional(),
   sources: z.array(ContentSourceSchema).optional(),
-  crops: z.array(z.string()).min(1, "إضافة محصول واحد على الأقل مطلوب"),
-  landmarks: z.array(z.string()).min(1, "إضافة معلم واحد على الأقل مطلوب"),
   villages: z.array(z.string()).min(1, "إضافة قرية واحدة على الأقل مطلوب"),
   description: z.string().trim().min(1, "الوصف والشرح التوثيقي مطلوب"),
   geography: z.string().trim().min(1, "معلومات التضاريس والموقع مطلوبة"),
@@ -640,8 +680,24 @@ export const UserFormDataSchema = z.object({
 export type UserFormData = z.infer<typeof UserFormDataSchema>;
 
 // Contact Info Schema
+export const ContactEmailChannelSchema = z.object({
+  title: z.string().min(1, 'اسم القناة أو نوع البريد مطلوب'),
+  description: z.string().optional().default(''),
+  email: z.string().email('يجب إدخال بريد إلكتروني صحيح')
+});
+export type ContactEmailChannel = z.infer<typeof ContactEmailChannelSchema>;
+
+export const ContactPhoneChannelSchema = z.object({
+  title: z.string().min(1, 'اسم القناة أو نوع الرقم مطلوب'),
+  description: z.string().optional().default(''),
+  phone: z.string().min(6, 'رقم الهاتف قصير جداً')
+});
+export type ContactPhoneChannel = z.infer<typeof ContactPhoneChannelSchema>;
+
 export const ContactInfoSchema = z.object({
-  emails: z.array(z.string().email("يجب إدخال بريد إلكتروني صحيح")).max(5, "لا يمكن إضافة أكثر من 5 إيميلات").default([]),
-  phones: z.array(z.string().min(6, "رقم الهاتف قصير جداً")).max(5, "لا يمكن إضافة أكثر من 5 أرقام").default([]),
+  emails: z.array(z.string()).default([]),
+  emailChannels: z.array(ContactEmailChannelSchema).default([]),
+  phones: z.array(z.string()).default([]),
+  phoneChannels: z.array(ContactPhoneChannelSchema).default([]),
 });
 export type ContactInfo = z.infer<typeof ContactInfoSchema>;

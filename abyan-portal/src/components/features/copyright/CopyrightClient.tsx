@@ -6,6 +6,7 @@ import { SmartContainer } from "@/components/layout";
 import { SubpageHero, EmptyState } from "@/components/ui";
 import { sectionFadeUpVariants, itemFadeInRight } from "@/lib/animations";
 import { CopyrightItem } from "@/types/schemas";
+import RichTextRenderer from "@/components/ui/RichTextRenderer";
 
 interface CopyrightClientProps {
   declarations: CopyrightItem[];
@@ -76,9 +77,7 @@ export default function CopyrightClient({
                 <h3 className="font-abyan-title text-lg sm:text-xl text-slate-900 font-normal">
                   {item.title}
                 </h3>
-                <p className="text-sm sm:text-base text-slate-700 font-abyan-body font-normal leading-relaxed">
-                  {item.description}
-                </p>
+                <RichTextRenderer content={item.description} />
               </motion.div>
             ))}
           </div>
@@ -110,9 +109,7 @@ export default function CopyrightClient({
                 <h3 className="font-abyan-title text-lg sm:text-xl text-slate-900 font-normal leading-snug">
                   {item.title}
                 </h3>
-                <p className="text-sm sm:text-base text-slate-700 font-abyan-body font-normal leading-relaxed">
-                  {item.description}
-                </p>
+                <RichTextRenderer content={item.description} />
               </motion.div>
             ))}
           </div>
@@ -141,9 +138,7 @@ export default function CopyrightClient({
                 <h3 className="font-abyan-title text-lg sm:text-xl text-slate-900 font-normal">
                   {item.title}
                 </h3>
-                <p className="text-sm sm:text-base text-slate-700 font-abyan-body font-normal leading-relaxed">
-                  {item.description}
-                </p>
+                <RichTextRenderer content={item.description} />
               </motion.div>
             ))}
           </div>
@@ -172,9 +167,7 @@ export default function CopyrightClient({
                 <h3 className="font-abyan-title text-lg sm:text-xl text-slate-900 font-normal">
                   {item.title}
                 </h3>
-                <p className="text-sm sm:text-base text-slate-700 font-abyan-body font-normal leading-relaxed">
-                  {item.description}
-                </p>
+                <RichTextRenderer content={item.description} />
               </motion.div>
             ))}
           </div>

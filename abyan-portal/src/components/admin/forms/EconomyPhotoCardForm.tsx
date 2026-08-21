@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import AdminInput from '../form-fields/AdminInput';
 import AdminSelect from '../form-fields/AdminSelect';
 import AdminMediaUpload from '../form-fields/AdminMediaUpload';
-import AdminParagraphsInput from '../form-fields/AdminParagraphsInput';
+import AdminRichTextEditor from '../form-fields/AdminRichTextEditor';
 import AdminSourcesInput from '../form-fields/AdminSourcesInput';
 import { EconomyPhotoCardFormDataSchema, EconomyPhotoCardFormData } from '@/types/schemas';
 
@@ -99,7 +99,7 @@ export default function EconomyPhotoCardForm({ id, initialData, pillars, isPubli
         {/* RIGHT COLUMN: ALL INPUTS */}
         <div className="space-y-4">
           <AdminSelect
-            label="قطاع الاقتصاد"
+            label="القطاع الاقتصادي"
             required
             options={pillars}
             value={formData.pillar}
@@ -109,8 +109,9 @@ export default function EconomyPhotoCardForm({ id, initialData, pillars, isPubli
           />
 
           <AdminInput
-            label="عنوان العنصر"
+            label="اسم المحصول أو الثروة الاقتصادية"
             type="text"
+            required
             value={formData.title}
             onChange={(e) => handleFieldChange('title', e.target.value)}
             error={errors.title}
@@ -127,30 +128,21 @@ export default function EconomyPhotoCardForm({ id, initialData, pillars, isPubli
           />
 
           <AdminInput
-            label="النوع / التصنيف الفرعي"
+            label="اللقب أو الوصف الموجز"
             type="text"
             value={formData.tag}
             onChange={(e) => handleFieldChange('tag', e.target.value)}
             error={errors.tag}
-            placeholder="مثال: محصول زراعي، منتج حيواني..."
+            placeholder="مثال: الذهب الأبيض • دلتا أبين"
           />
 
           <AdminInput
-            label="الموقع أو المنشأة"
+            label="موقع الإنتاج أو النطاق الجغرافي"
             type="text"
             value={formData.location}
             onChange={(e) => handleFieldChange('location', e.target.value)}
             error={errors.location}
             placeholder="مثال: دلتا أبين، مزارع مديرية خنفر..."
-          />
-
-          <AdminParagraphsInput
-            label="الوصف والشرح التوثيقي"
-            required
-            value={formData.description}
-            onChange={(val) => handleFieldChange('description', val)}
-            error={errors.description}
-            placeholder="اكتب التوثيق الاقتصادي..."
           />
         </div>
 
@@ -195,15 +187,24 @@ export default function EconomyPhotoCardForm({ id, initialData, pillars, isPubli
             )}
           </div>
         </div>
+      </div>
 
-        {/* FULL WIDTH: SOURCES */}
-        <div className="col-span-1 md:col-span-2">
-          <AdminSourcesInput
-            sources={formData.sources || []}
-            onChange={(sources) => handleFieldChange('sources', sources)}
-            containerClassName="mt-2"
-          />
-        </div>
+      {/* FULL WIDTH: DESCRIPTION & SOURCES */}
+      <div className="space-y-4">
+        <AdminRichTextEditor
+          label="الوصف والشرح التوثيقي"
+          required
+          value={formData.description}
+          onChange={(val) => handleFieldChange('description', val)}
+          error={errors.description}
+          placeholder="اكتب التوثيق الاقتصادي والشرح المفصل..."
+        />
+
+        <AdminSourcesInput
+          sources={formData.sources || []}
+          onChange={(sources) => handleFieldChange('sources', sources)}
+          containerClassName="mt-2"
+        />
       </div>
     </form>
   );

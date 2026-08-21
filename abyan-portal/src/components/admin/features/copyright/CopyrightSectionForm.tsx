@@ -1,7 +1,7 @@
 import React from "react";
 import { UseFormReturn, Controller } from "react-hook-form";
 import AdminInput from "../../form-fields/AdminInput";
-import AdminParagraphsInput from "../../form-fields/AdminParagraphsInput";
+import AdminRichTextEditor from "../../form-fields/AdminRichTextEditor";
 import { CopyrightSectionFormData } from "@/types/schemas";
 
 interface CopyrightSectionFormProps {
@@ -29,9 +29,9 @@ export function CopyrightSectionForm({ form }: CopyrightSectionFormProps) {
         control={control}
         name="description"
         render={({ field }) => (
-          <AdminParagraphsInput
+          <AdminRichTextEditor
             label="الوصف والشرح التفصيلي"
-            placeholder="أدخل الشرح التوثيقي والتفصيلي للبند"
+            placeholder="أدخل الشرح التوثيقي والتفصيلي للبند..."
             value={field.value}
             onChange={field.onChange}
             error={errors.description?.message}

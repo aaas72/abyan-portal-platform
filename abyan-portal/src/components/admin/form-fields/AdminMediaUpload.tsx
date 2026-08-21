@@ -90,6 +90,13 @@ export default function AdminMediaUpload({
       
       try {
         setIsUploading(true);
+
+        let fileToUpload = file;
+        if (type === 'image') {
+          const { compressImageFile } = await import('@/lib/image-utils');
+          fileToUpload = await compressImageFile(file, { maxWidth: 1920, maxHeight: 1920, quality: 0.82 });
+        }
+
         // We dynamically import UploadService to avoid circular deps or server-side issues if any
         const { UploadService } = await import('@/services/upload.service');
         
@@ -97,11 +104,11 @@ export default function AdminMediaUpload({
         const cleanFolder = (folderName || 'general').replace(/^abyan-portal\//, '');
         const finalFolderName = `${cleanFolder}/${type}s`;
         
-        const response = await UploadService.uploadFile(file, finalFolderName);
+        const response = await UploadService.uploadFile(fileToUpload, finalFolderName);
         
         // Update with real Cloudinary URL
         setPreview(response.url);
-        if (onChange) onChange(file, response.url, type);
+        if (onChange) onChange(fileToUpload, response.url, type);
       } catch (err) {
         console.error("Upload failed", err);
         alert('فشل الرفع إلى Cloudinary. يرجى التحقق من إعدادات API.');

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { MediaItem } from "@/types/schemas";
 import { toArabicDigits } from "@/lib/utils";
 import { getQuoteLabel } from "./media-viewer-utils";
+import RichTextRenderer from "@/components/ui/RichTextRenderer";
 
 interface MediaViewerBodyProps {
   item: MediaItem;
@@ -27,9 +28,7 @@ export default function MediaViewerBody({
           <h4 className="font-abyan-title text-lg sm:text-xl text-slate-900 font-normal border-none">
             نبذة وتفاصيل:
           </h4>
-          <p className="text-sm sm:text-base text-slate-700 font-abyan-body font-normal leading-relaxed whitespace-pre-line text-justify">
-            {item.fullBiography || item.description}
-          </p>
+          <RichTextRenderer content={item.fullBiography || item.description} />
         </div>
 
         {/* Key Achievements Section */}

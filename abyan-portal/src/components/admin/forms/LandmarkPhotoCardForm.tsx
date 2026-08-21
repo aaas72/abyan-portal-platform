@@ -3,6 +3,7 @@ import AdminInput from '../form-fields/AdminInput';
 import AdminTextarea from '../form-fields/AdminTextarea';
 import AdminSelect from '../form-fields/AdminSelect';
 import AdminMediaUpload from '../form-fields/AdminMediaUpload';
+import AdminRichTextEditor from '../form-fields/AdminRichTextEditor';
 import AdminSourcesInput from '../form-fields/AdminSourcesInput';
 import { LandmarkPhotoCardFormDataSchema, LandmarkPhotoCardFormData } from '@/types/schemas';
 import { AdminDistrict } from '@/types/admin.types';
@@ -145,7 +146,7 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
           />
 
           <AdminInput
-            label="اسم المعلم"
+            label="اسم المعلم أو الشاهد الأثري"
             required
             value={formData.title}
             onChange={(e) => handleFieldChange('title', e.target.value)}
@@ -162,12 +163,12 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
           />
 
           <AdminInput
-            label="النوع (Tag)"
+            label="اللقب أو الوصف الموجز للمعلم"
             required
             value={formData.tag}
             onChange={(e) => handleFieldChange('tag', e.target.value)}
             error={errors.tag}
-            placeholder="مثال: حصن تاريخي"
+            placeholder="مثال: رمز المعمار الحجري • يافع أبين"
           />
 
           <AdminSelect
@@ -190,7 +191,7 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <AdminInput
-              label="سنة البداية"
+              label="سنة التشييد أو البداية"
               type="text"
               value={formData.startYear}
               onChange={(e) => handleFieldChange('startYear', e.target.value)}
@@ -199,7 +200,7 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
             />
 
             <AdminInput
-              label="سنة النهاية"
+              label="سنة النهاية أو الاندثار"
               type="text"
               value={formData.endYear}
               onChange={(e) => handleFieldChange('endYear', e.target.value)}
@@ -207,16 +208,6 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
               placeholder="مثال: 2020"
             />
           </div>
-
-          <AdminTextarea
-            label="وصف المعلم"
-            required
-            value={formData.description}
-            onChange={(e) => handleFieldChange('description', e.target.value)}
-            error={errors.description}
-            placeholder="اكتب وصف المعلم هنا..."
-            rows={5}
-          />
         </div>
 
         {/* LEFT COLUMN: MEDIA UPLOADS ONLY */}
@@ -260,15 +251,24 @@ export default function LandmarkPhotoCardForm({ id, initialData, isActive, onAct
             )}
           </div>
         </div>
+      </div>
 
-        {/* FULL WIDTH SOURCES & REFERENCES */}
-        <div className="col-span-1 md:col-span-2">
-          <AdminSourcesInput
-            sources={formData.sources || []}
-            onChange={(sources) => handleFieldChange('sources', sources)}
-            containerClassName="mt-2"
-          />
-        </div>
+      {/* FULL WIDTH: DESCRIPTION & SOURCES */}
+      <div className="space-y-4">
+        <AdminRichTextEditor
+          label="الوصف والشرح التوثيقي للمعلم"
+          required
+          value={formData.description}
+          onChange={(val) => handleFieldChange('description', val)}
+          error={errors.description}
+          placeholder="اكتب التوثيق التاريخي والمعماري للمعلم هنا..."
+        />
+
+        <AdminSourcesInput
+          sources={formData.sources || []}
+          onChange={(sources) => handleFieldChange('sources', sources)}
+          containerClassName="mt-2"
+        />
       </div>
     </form>
   );

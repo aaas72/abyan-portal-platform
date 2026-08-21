@@ -3,7 +3,7 @@ import AdminInput from '../form-fields/AdminInput';
 import AdminMediaUpload from '../form-fields/AdminMediaUpload';
 import AdminSelect from '../form-fields/AdminSelect';
 import AdminTagsInput from '../form-fields/AdminTagsInput';
-import AdminParagraphsInput from '../form-fields/AdminParagraphsInput';
+import AdminRichTextEditor from '../form-fields/AdminRichTextEditor';
 import { EconomyPillarFormDataSchema, EconomyPillarFormData } from '@/types/schemas';
 
 export type { EconomyPillarFormData };
@@ -169,8 +169,8 @@ export default function EconomyPillarForm({ id, initialData, isPublished, onPubl
         error={errors.details}
       />
 
-      <AdminParagraphsInput
-        label="الشرح التوثيقي التنموي والاقتصادي (فقرات)"
+      <AdminRichTextEditor
+        label="الشرح التوثيقي التنموي والاقتصادي"
         required
         value={formData.description}
         onChange={(description) => handleFieldChange('description', description)}

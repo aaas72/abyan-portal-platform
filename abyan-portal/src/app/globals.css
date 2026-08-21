@@ -168,4 +168,114 @@ p.font-abyan-body {
   animation: abyanShimmerLtr 2.2s infinite linear;
 }
 
+/* 🖋️ Abyan Rich Text & Tiptap Styling */
+.abyan-rich-text,
+.tiptap {
+  direction: rtl;
+  text-align: right;
+}
+
+.abyan-rich-text p,
+.tiptap p {
+  margin-bottom: 0.85rem;
+  line-height: 1.8;
+  color: #1e293b !important;
+}
+
+.abyan-rich-text p:last-child,
+.tiptap p:last-child {
+  margin-bottom: 0;
+}
+
+.abyan-rich-text h2,
+.tiptap h2 {
+  font-family: 'ThmanyahSerifBlack', var(--font-abyan-title), serif !important;
+  font-size: 1.35rem;
+  color: #0f172a !important;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-weight: normal;
+}
+
+.abyan-rich-text h3,
+.tiptap h3 {
+  font-family: 'ThmanyahSerifBlack', var(--font-abyan-title), serif !important;
+  font-size: 1.18rem;
+  color: #0f172a !important;
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
+  font-weight: normal;
+}
+
+.abyan-rich-text h4,
+.tiptap h4 {
+  font-family: 'ThmanyahSerifBlack', var(--font-abyan-title), serif !important;
+  font-size: 1.05rem;
+  color: #0f172a !important;
+  margin-top: 0.85rem;
+  margin-bottom: 0.35rem;
+  font-weight: normal;
+}
+
+.abyan-rich-text ul,
+.tiptap ul {
+  list-style-type: disc;
+  padding-right: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.85rem;
+  space-y: 0.35rem;
+}
+
+.abyan-rich-text ol,
+.tiptap ol {
+  list-style-type: decimal;
+  padding-right: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.85rem;
+  space-y: 0.35rem;
+}
+
+.abyan-rich-text li,
+.tiptap li {
+  color: #1e293b !important;
+  line-height: 1.7;
+  margin-bottom: 0.25rem;
+}
+
+.abyan-rich-text blockquote,
+.tiptap blockquote {
+  border-right: 3px solid #10b981;
+  padding: 0.5rem 1rem;
+  margin: 0.85rem 0;
+  background: rgba(248, 250, 252, 0.8);
+  border-radius: 0.5rem 0 0 0.5rem;
+  color: #0369a1 !important;
+  font-family: 'ThmanyahSerifBlack', var(--font-abyan-title), serif !important;
+}
+
+.abyan-rich-text a,
+.tiptap a {
+  color: #0284c7;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.abyan-rich-text a:hover,
+.tiptap a:hover {
+  color: #059669;
+}
+
+.abyan-rich-text hr,
+.tiptap hr {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 1.25rem 0;
+}
+
+.tiptap:focus {
+  outline: none;
+}
+
+
 

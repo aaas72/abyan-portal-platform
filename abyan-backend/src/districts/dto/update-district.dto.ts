@@ -175,7 +175,7 @@ export class UpdateDistrictDto {
   sources?: Array<{ name: string; url?: string }>;
 
   @IsString()
-  @MaxLength(500)
+  @MaxLength(50000)
   @IsOptional()
   geography?: string;
 
@@ -195,7 +195,7 @@ export class UpdateDistrictDto {
   historyMilestones?: string[];
 
   @IsString()
-  @MaxLength(500)
+  @MaxLength(20000)
   @IsOptional()
   climateAndNature?: string;
 
@@ -215,7 +215,7 @@ export class UpdateDistrictDto {
   historicalSites?: string[];
 
   @IsString()
-  @MaxLength(10000)
+  @MaxLength(30000)
   @IsOptional()
   economyDetails?: string;
 
@@ -225,7 +225,7 @@ export class UpdateDistrictDto {
   naturalResources?: string[];
 
   @IsString()
-  @MaxLength(500)
+  @MaxLength(20000)
   @IsOptional()
   traditionsAndCulture?: string;
 

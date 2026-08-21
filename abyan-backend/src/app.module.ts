@@ -25,6 +25,8 @@ import { LogsModule } from './logs/logs.module';
 import { HealthModule } from './health/health.module';
 import { UploadModule } from './upload/upload.module';
 import { ContactModule } from './contact/contact.module';
+import { TermsModule } from './terms/terms.module';
+import { PrivacyModule } from './privacy/privacy.module';
 @Module({
   imports: [
     // Configuration
@@ -93,6 +95,8 @@ import { ContactModule } from './contact/contact.module';
     LogsModule,
     HealthModule,
     ContactModule,
+    TermsModule,
+    PrivacyModule,
   ],
   controllers: [AppController],
   providers: [

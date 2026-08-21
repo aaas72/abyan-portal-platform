@@ -1,7 +1,7 @@
 import React from "react";
 import { UseFormReturn, Controller } from "react-hook-form";
 import AdminInput from "../../form-fields/AdminInput";
-import AdminParagraphsInput from "../../form-fields/AdminParagraphsInput";
+import AdminRichTextEditor from "../../form-fields/AdminRichTextEditor";
 import { AboutValueFormData } from "@/types/schemas";
 
 interface AboutValueFormProps {
@@ -25,9 +25,9 @@ export function AboutValueForm({ form }: AboutValueFormProps) {
         control={control}
         name="description"
         render={({ field }) => (
-          <AdminParagraphsInput
+          <AdminRichTextEditor
             label="وصف القيمة"
-            placeholder="أدخل وصفاً تفصيلياً للقيمة"
+            placeholder="أدخل وصفاً تفصيلياً للقيمة..."
             value={field.value || ""}
             onChange={field.onChange}
             error={errors.description?.message}

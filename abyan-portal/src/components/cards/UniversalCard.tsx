@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 
 import { ContentSource } from "@/types/schemas";
+import { getOptimizedImageUrl } from "@/lib/image-utils";
 
 export interface UniversalCardData {
   id?: string;
@@ -42,31 +43,52 @@ export default function UniversalCard({
   variant = "highlight",
 }: UniversalCardProps) {
   const categoryText = data.category ? data.category.split("•")[0].trim() : undefined;
-  const cardImage = data.images && data.images.length > 0 ? data.images[0] : null;
+  const cardImage = data.images && data.images.length > 0 ? getOptimizedImageUrl(data.images[0], { width: 600 }) : null;
 
-  // VARIANT 1: HIGHLIGHT CARD (TEXT ONLY WITH GRADIENT ACCENTS)
+  // VARIANT 1: HIGHLIGHT CARD (PURE TYPOGRAPHY LINKED SECTION WITHOUT CARD BOX)
   if (variant === "highlight" || variant === "plain" || variant === "stat") {
-    return (
+    const cardBody = (
       <motion.div
         onClick={onClick}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="group cursor-pointer text-right bg-gradient-to-br from-emerald-100/70 via-white to-sky-100/70 hover:from-sky-100/90 hover:to-emerald-100/90 transition-all duration-500 ease-in-out rounded-2xl p-5 border-none space-y-2 shadow-none overflow-hidden w-full relative"
+        whileHover={{ y: -3 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+        className="group cursor-pointer text-right bg-transparent border-none space-y-3 shadow-none overflow-hidden w-full relative flex flex-col justify-between"
       >
-        {categoryText && (
-          <span className="text-sm font-normal text-[#10b981] font-abyan-title block">
-            {categoryText}
-          </span>
-        )}
-        <span className="block font-abyan-title text-2xl md:text-3xl lg:text-4xl text-slate-900 font-normal leading-none group-hover:text-sky-600 transition-colors">
-          {data.title}
-        </span>
-        {data.subtitle && (
-          <span className="text-sm text-slate-600 font-abyan-body font-normal block">
-            {data.subtitle}
-          </span>
+        <div className="space-y-2 overflow-hidden text-right">
+          {categoryText && (
+            <span className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block">
+              {categoryText}
+            </span>
+          )}
+          <h3 className="block font-abyan-title text-xl md:text-2xl text-slate-900 font-normal leading-snug group-hover:text-sky-600 transition-colors">
+            {data.title}
+          </h3>
+          {(data.description || data.subtitle) && (
+            <p className="text-sm md:text-base leading-relaxed text-[#1e293b] font-abyan-body font-normal block">
+              {data.description || data.subtitle}
+            </p>
+          )}
+        </div>
+
+        {data.linkText && (
+          <div className="pt-2 text-right">
+            <span className="text-sm md:text-base leading-relaxed text-sky-600 font-abyan-title font-normal group-hover:translate-x-[-4px] transition-transform inline-block">
+              {data.linkText}
+            </span>
+          </div>
         )}
       </motion.div>
     );
+
+    if (data.href) {
+      return (
+        <Link href={data.href} className="no-underline block w-full h-full">
+          {cardBody}
+        </Link>
+      );
+    }
+
+    return cardBody;
   }
 
   // VARIANT 2: FOOD CARD (VERTICAL LAYOUT: TOP FULL-WIDTH SQUARE IMAGE BOX + TEXT UNDERNEATH)
@@ -83,11 +105,12 @@ export default function UniversalCard({
             data.bgGradient || "from-emerald-900 via-sky-900 to-slate-900"
           } flex flex-col justify-between text-white shadow-inner`}
         >
-          {data.images?.[0] ? (
+          {cardImage ? (
             <Image
-              src={data.images[0]}
+              src={cardImage}
               alt={data.title}
               fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover transition-transform duration-500 pointer-events-none"
               draggable={false}
               onContextMenu={(e) => e.preventDefault()}
@@ -98,15 +121,15 @@ export default function UniversalCard({
         {/* Title & Details Below Photo Box */}
         <div className="space-y-1.5 overflow-hidden">
           {categoryText && (
-            <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
+            <span className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
               {categoryText}
             </span>
           )}
-          <h3 className="font-abyan-title text-lg md:text-xl font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
+          <h3 className="font-abyan-title text-base md:text-lg font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
             {data.title}
           </h3>
           {data.location && (
-            <span className="text-sm sm:text-base font-normal text-sky-700 font-abyan-title block break-words leading-snug">
+            <span className="text-xs sm:text-sm font-normal text-sky-700 font-abyan-title block break-words leading-snug">
               {data.location}
             </span>
           )}
@@ -137,11 +160,12 @@ export default function UniversalCard({
               data.bgGradient || "from-emerald-50 via-white to-sky-50"
             } flex flex-col justify-between shadow-inner`}
           >
-            {data.images?.[0] ? (
+            {cardImage ? (
               <Image
-                src={data.images[0]}
+                src={cardImage}
                 alt={data.title}
                 fill
+                sizes="(max-width: 640px) 96px, 144px"
                 className="object-cover transition-transform duration-500 pointer-events-none"
                 draggable={false}
                 onContextMenu={(e) => e.preventDefault()}
@@ -153,15 +177,15 @@ export default function UniversalCard({
           <div className="flex flex-col justify-between flex-1 py-1 overflow-hidden">
             <div className="space-y-1.5 overflow-hidden">
               {categoryText && (
-                <span className="text-sm sm:text-base font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
+                <span className="text-xs sm:text-sm font-normal text-[#10b981] font-abyan-title block overflow-hidden truncate">
                   {categoryText}
                 </span>
               )}
-              <h3 className="font-abyan-title text-lg md:text-xl font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
+              <h3 className="font-abyan-title text-base md:text-lg font-normal leading-snug text-slate-900 group-hover:text-sky-600 transition-colors overflow-hidden break-words">
                 {data.title}
               </h3>
               {data.subtitle && (
-                <span className="text-sm sm:text-base font-normal text-slate-700 font-abyan-body block break-words leading-snug">
+                <span className="text-xs sm:text-sm font-normal text-slate-700 font-abyan-body block break-words leading-snug">
                   {data.subtitle}
                 </span>
               )}
@@ -195,11 +219,11 @@ export default function UniversalCard({
     >
       <div className="space-y-1 overflow-hidden">
         {categoryText && (
-          <span className="text-sm md:text-base font-normal text-[#10b981] font-abyan-title block">
+          <span className="text-xs md:text-sm font-normal text-[#10b981] font-abyan-title block">
             {categoryText}
           </span>
         )}
-        <h3 className="font-abyan-title text-lg md:text-xl text-slate-900 font-normal group-hover:text-sky-600 transition-colors leading-snug">
+        <h3 className="font-abyan-title text-base md:text-lg text-slate-900 font-normal group-hover:text-sky-600 transition-colors leading-snug">
           {data.title}
         </h3>
       </div>

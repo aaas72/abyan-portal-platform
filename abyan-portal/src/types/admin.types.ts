@@ -46,8 +46,8 @@ export interface AdminDistrict {
   sourceName?: string;
   sourceUrl?: string;
   sources?: ContentSource[];
-  crops: string[];
-  landmarks: string[];
+  crops?: string[];
+  landmarks?: string[];
   villages: string[];
   description: string;
   geography: string;

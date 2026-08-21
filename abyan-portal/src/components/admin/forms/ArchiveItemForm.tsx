@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import AdminInput from '../form-fields/AdminInput';
 import AdminSelect from '../form-fields/AdminSelect';
-import AdminParagraphsInput from '../form-fields/AdminParagraphsInput';
+import AdminRichTextEditor from '../form-fields/AdminRichTextEditor';
 import AdminMediaUpload from '../form-fields/AdminMediaUpload';
 import AdminSourcesInput from '../form-fields/AdminSourcesInput';
 import { ArchiveItemFormDataSchema, ArchiveItemFormData } from '@/types/schemas';
@@ -241,25 +241,24 @@ export default function ArchiveItemForm({ id, initialData, categories = [], dist
             )}
           </div>
         </div>
+      </div>
 
-        {/* FULL WIDTH: DESCRIPTION & SOURCES */}
-        <div className="col-span-1 md:col-span-2 space-y-4">
-          <AdminParagraphsInput
-            label="الشرح والقيد التوثيقي للأرشيف (فقرات)"
-            required
-            value={formData.description}
-            onChange={(description) => handleFieldChange('description', description)}
-            error={errors.description}
-            placeholder="اكتب تفاصيل القيد، مصدر الوثيقة، والأهمية الوطنية..."
-            containerClassName="mt-2"
-          />
+      {/* FULL WIDTH: DESCRIPTION & SOURCES */}
+      <div className="space-y-4">
+        <AdminRichTextEditor
+          label="الشرح والقيد التوثيقي للأرشيف"
+          required
+          value={formData.description}
+          onChange={(description) => handleFieldChange('description', description)}
+          error={errors.description}
+          placeholder="اكتب تفاصيل القيد، مصدر الوثيقة، والأهمية الوطنية..."
+        />
 
-          <AdminSourcesInput
-            sources={formData.sources || []}
-            onChange={(sources) => handleFieldChange('sources', sources)}
-            containerClassName="mt-2"
-          />
-        </div>
+        <AdminSourcesInput
+          sources={formData.sources || []}
+          onChange={(sources) => handleFieldChange('sources', sources)}
+          containerClassName="mt-2"
+        />
       </div>
     </form>
   );

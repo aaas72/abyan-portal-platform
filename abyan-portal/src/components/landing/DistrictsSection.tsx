@@ -13,6 +13,7 @@ import {
 } from "@/lib/animations";
 import { DistrictItem } from "@/types/schemas";
 import { AdminLandingSection } from "@/types/admin.types";
+import RichTextRenderer from "@/components/ui/RichTextRenderer";
 
 const MAP_GEOMETRY = [
 // ... we will use AllowMultiple = false, so this doesn't need to match perfectly, wait I should use StartLine correctly
@@ -54,8 +55,8 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
       displayName: backendData.name,
       category: backendData.regionLabel || "",
       capital: backendData.capital || "",
-      crops: backendData.crops || [],
-      landmarks: backendData.landmarks || [],
+      crops: (backendData.crops && backendData.crops.length > 0) ? backendData.crops : (backendData.cropsCardList?.map((c: any) => c.title) || []),
+      landmarks: (backendData.landmarks && backendData.landmarks.length > 0) ? backendData.landmarks : (backendData.sitesCardList?.map((s: any) => s.title) || []),
       description: backendData.description || "",
       pathD: geometry.pathD,
       anchorX: geometry.anchorX,
@@ -242,7 +243,6 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
                 >
                   المركز الإداري: {activeDistrict.capital}
                 </motion.span>
-                <div className="mb-8">
                 <motion.h3
                   {...itemFadeInRight(0.12)}
                   className="text-2xl md:text-3xl lg:text-4xl font-abyan-title text-slate-900 mb-2"
@@ -250,53 +250,12 @@ export default function DistrictsSection({ districts = [], sectionData }: { dist
                   مديرية <span className="text-sky-600">{activeDistrict.displayName}</span>
                 </motion.h3>
 
-                {activeDistrict.description ? (
-                  <motion.p
-                    {...itemFadeInRight(0.16)}
-                    className="text-sm md:text-base text-slate-700 font-abyan-body font-normal leading-relaxed pt-0.5 max-w-2xl"
-                  >
-                    {activeDistrict.description}
-                  </motion.p>
-                ) : (
-                  <motion.p
-                    {...itemFadeInRight(0.16)}
-                    className="text-sm md:text-base text-slate-400 font-abyan-body font-normal leading-relaxed pt-0.5 max-w-2xl italic"
-                  >
-                    تفاصيل هذه المديرية لم تتوفر بعد.
-                  </motion.p>
-                )}
-                </div>
-
                 <motion.div
-                  {...itemFadeInRight(0.2)}
-                  className="pt-2 space-y-1"
-                >
-                  <span className="text-sm sm:text-base text-slate-900 font-abyan-title font-normal block">
-                    المحاصيل والخيرات الإنتاجية:
-                  </span>
-                  <p className="text-sm md:text-base text-sky-600 font-abyan-body font-normal leading-relaxed">
-                    {activeDistrict.crops.length > 0 ? activeDistrict.crops.join(" • ") : "غير محددة"}
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  {...itemFadeInRight(0.24)}
-                  className="pt-1 space-y-1"
-                >
-                  <span className="text-sm sm:text-base text-slate-900 font-abyan-title font-normal block">
-                    أبرز المعالم والجغرافيا:
-                  </span>
-                  <p className="text-sm md:text-base text-sky-600 font-abyan-body font-normal leading-relaxed">
-                    {activeDistrict.landmarks.length > 0 ? activeDistrict.landmarks.join(" • ") : "غير محددة"}
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  {...itemFadeInRight(0.28)}
+                  {...itemFadeInRight(0.16)}
                   className="pt-3"
                 >
                   <Link
-                    href={`/districts?id=${activeDistrict.id}`}
+                    href={`/districts?district=${activeDistrict.id}&tab=history`}
                     className="inline-flex items-center text-sm md:text-base font-normal text-sky-600 hover:text-[#10b981] font-abyan-title transition-colors no-underline cursor-pointer group"
                   >
                     استكشف المزيد عن مديرية {activeDistrict.displayName}

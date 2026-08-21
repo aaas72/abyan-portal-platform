@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import AdminInput from "../form-fields/AdminInput";
 import AdminSelect from "../form-fields/AdminSelect";
 import AdminMediaUpload from "../form-fields/AdminMediaUpload";
-import AdminParagraphsInput from "../form-fields/AdminParagraphsInput";
+import AdminRichTextEditor from "../form-fields/AdminRichTextEditor";
 import AdminSourcesInput from "../form-fields/AdminSourcesInput";
 import {
   CultureItemFormDataSchema,
@@ -109,7 +109,7 @@ export default function CultureItemForm({
         {/* RIGHT COLUMN: ALL INPUTS */}
         <div className="space-y-4">
           <AdminSelect
-            label="الفئة الثقافية"
+            label="الفئة الثقافية والتراثية"
             required
             options={categories}
             value={formData.category}
@@ -119,12 +119,13 @@ export default function CultureItemForm({
           />
 
           <AdminInput
-            label="عنوان العنصر"
+            label="اسم العنصر التراثي أو الفلكلوري"
             type="text"
+            required
             value={formData.title}
             onChange={(e) => handleFieldChange("title", e.target.value)}
             error={errors.title}
-            placeholder="مثال: رقصة الشرح، المزمار، الحناء، الجلّ،..."
+            placeholder="مثال: رقصة الشرح، الدان الأبيني، المزمار..."
           />
 
           <AdminInput
@@ -137,30 +138,21 @@ export default function CultureItemForm({
           />
 
           <AdminInput
-            label="النوع / التصنيف الفرعي"
+            label="اللقب أو الوصف الموجز"
             type="text"
             value={formData.tag}
             onChange={(e) => handleFieldChange("tag", e.target.value)}
             error={errors.tag}
-            placeholder="مثال: فنون أداء، عادات وتقاليد،..."
+            placeholder="مثال: فنون أداء شعبية • دلتا أبين"
           />
 
           <AdminInput
-            label="الموقع أو المنشأة"
+            label="النطاق الجغرافي أو المنشأ"
             type="text"
             value={formData.location}
             onChange={(e) => handleFieldChange("location", e.target.value)}
             error={errors.location}
             placeholder="مثال: مديرية لودر، كافة أنحاء المحافظة..."
-          />
-
-          <AdminParagraphsInput
-            label="الوصف والشرح التوثيقي"
-            required
-            value={formData.description}
-            onChange={(val) => handleFieldChange("description", val)}
-            error={errors.description}
-            placeholder="اكتب تفاصيل هذا الموروث..."
           />
         </div>
 
@@ -214,15 +206,24 @@ export default function CultureItemForm({
             )}
           </div>
         </div>
+      </div>
 
-        {/* FULL WIDTH: SOURCES */}
-        <div className="col-span-1 md:col-span-2">
-          <AdminSourcesInput
-            sources={formData.sources || []}
-            onChange={(sources) => handleFieldChange("sources", sources)}
-            containerClassName="mt-2"
-          />
-        </div>
+      {/* FULL WIDTH: DESCRIPTION & SOURCES */}
+      <div className="space-y-4">
+        <AdminRichTextEditor
+          label="الوصف والشرح التوثيقي"
+          required
+          value={formData.description}
+          onChange={(val) => handleFieldChange("description", val)}
+          error={errors.description}
+          placeholder="اكتب الشرح التوثيقي والتفاصيل التراثية..."
+        />
+
+        <AdminSourcesInput
+          sources={formData.sources || []}
+          onChange={(sources) => handleFieldChange("sources", sources)}
+          containerClassName="mt-2"
+        />
       </div>
     </form>
   );

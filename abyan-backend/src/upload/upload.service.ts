@@ -18,13 +18,22 @@ export class UploadService {
     }
 
     const folder = folderName ? `abyan-portal/${folderName}` : 'abyan-portal/general';
+    const isImage = file.mimetype?.startsWith('image/');
+
+    const uploadOptions: any = {
+      folder,
+      resource_type: 'auto',
+    };
+
+    if (isImage) {
+      uploadOptions.transformation = [
+        { width: 1920, height: 1920, crop: 'limit', quality: 'auto:good', fetch_format: 'auto' },
+      ];
+    }
 
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder,
-          resource_type: 'auto',
-        },
+        uploadOptions,
         (error, result) => {
           if (error) {
             console.error('Cloudinary Upload Error:', error);

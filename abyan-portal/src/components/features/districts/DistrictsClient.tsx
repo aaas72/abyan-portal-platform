@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { SmartContainer } from "@/components/layout";
@@ -73,6 +73,7 @@ export default function DistrictsClient({
   const [selectedMediaItem, setSelectedMediaItem] = useState<MediaItem | null>(
     null,
   );
+  const contentTopRef = useRef<HTMLDivElement>(null);
 
   // Sync from URL on mount
   useEffect(() => {
@@ -83,7 +84,6 @@ export default function DistrictsClient({
       );
       if (matched) {
         setSelectedDistrictId(matched.id);
-        setSelectedRegionFilter(matched.region || "all");
       }
     }
 
@@ -112,8 +112,17 @@ export default function DistrictsClient({
 
   const handleSelectDistrict = (districtId: string) => {
     setSelectedDistrictId(districtId);
-    setActiveSubTab("history");
-    updateUrlParams({ district: districtId, tab: "history", item: null });
+    updateUrlParams({ district: districtId, tab: activeSubTab, item: null });
+    setTimeout(() => {
+      if (contentTopRef.current) {
+        contentTopRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      } else if (typeof window !== "undefined") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }, 20);
   };
 
   const handleSelectRegion = (regionId: string) => {
@@ -293,7 +302,7 @@ export default function DistrictsClient({
         </div>
 
         {/* DESKTOP VIEW: 2-COLUMN SIDE-BY-SIDE LAYOUT */}
-        <div className="hidden lg:flex gap-8 items-start">
+        <div ref={contentTopRef} className="hidden lg:flex gap-8 items-start scroll-mt-48">
           <DistrictDesktopSidebar 
             filteredDistricts={filteredDistricts} 
             selectedDistrictId={selectedDistrictId} 

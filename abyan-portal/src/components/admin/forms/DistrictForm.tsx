@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import AdminInput from '../form-fields/AdminInput';
 import AdminSelect from '../form-fields/AdminSelect';
 import AdminTagsInput from '../form-fields/AdminTagsInput';
-import AdminParagraphsInput from '../form-fields/AdminParagraphsInput';
+import AdminRichTextEditor from '../form-fields/AdminRichTextEditor';
 import AdminMediaUpload from '../form-fields/AdminMediaUpload';
 import AdminSourcesInput from '../form-fields/AdminSourcesInput';
 import { DistrictFormDataSchema, DistrictFormData } from '@/types/schemas';
@@ -28,8 +28,6 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
     areaKm2: '',
     areaPercentage: '',
     authorName: '',
-    crops: [],
-    landmarks: [],
     villages: [],
     description: '',
     geography: '',
@@ -56,8 +54,6 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
         areaKm2: '',
         areaPercentage: '',
         authorName: '',
-        crops: [],
-        landmarks: [],
         villages: [],
         description: '',
         geography: '',
@@ -183,7 +179,7 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <AdminSelect
-            label="التقسيم العُرفي"
+            label="النطاق الجغرافي / التقسيم العُرفي"
             options={regions?.map((region) => ({
               value: region.id,
               label: region.label,
@@ -204,13 +200,13 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
                 });
               }
             }}
-            placeholder="اختر التقسيم العُرفي..."
+            placeholder="اختر النطاق الجغرافي..."
             error={errors.region}
             allowCustom={false}
           />
 
           <AdminInput
-            label="عاصمة المديرية"
+            label="المركز الإداري للمديرية"
             type="text"
             required
             value={formData.capital}
@@ -231,7 +227,7 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
       />
 
       <AdminInput
-        label="النسبة المئوية للمساحة"
+        label="النسبة المئوية من مساحة المحافظة"
         type="text"
         required
         value={formData.areaPercentage}
@@ -241,31 +237,15 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
       />
 
       <AdminTagsInput 
-        label="أهم المحاصيل والمنتجات"
-        required
-        tags={formData.crops}
-        onChange={(tags) => handleFieldChange('crops', tags)}
-        error={errors.crops}
-      />
-
-      <AdminTagsInput 
-        label="أبرز المعالم والتضاريس"
-        required
-        tags={formData.landmarks}
-        onChange={(tags) => handleFieldChange('landmarks', tags)}
-        error={errors.landmarks}
-      />
-
-      <AdminTagsInput 
-        label="القرى والبلدات الرئيسية"
+        label="أبرز القرى والبلدات والمناطق بالمديرية"
         required
         tags={formData.villages}
         onChange={(tags) => handleFieldChange('villages', tags)}
         error={errors.villages}
       />
 
-      <AdminParagraphsInput
-        label="التضاريس والموقع الجغرافي (فقرات)"
+      <AdminRichTextEditor
+        label="التضاريس والموقع الجغرافي"
         required
         value={formData.geography}
         onChange={(geography) => handleFieldChange('geography', geography)}
@@ -274,8 +254,8 @@ export default function DistrictForm({ id, initialData, regions = [], isPublishe
         containerClassName="md:col-span-2"
       />
 
-      <AdminParagraphsInput
-        label="الشرح التوثيقي والتاريخي للمديرية (فقرات)"
+      <AdminRichTextEditor
+        label="الشرح التوثيقي والتاريخي للمديرية"
         required
         value={formData.description}
         onChange={(description) => handleFieldChange('description', description)}

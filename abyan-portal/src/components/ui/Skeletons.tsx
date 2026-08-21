@@ -716,3 +716,109 @@ export function CopyrightPageSkeleton() {
     </>
   );
 }
+
+/* =============================================================================
+   📜 TERMS OF SERVICE PAGE SKELETON (/terms)
+   ============================================================================= */
+
+export function TermsPageSkeleton() {
+  return (
+    <>
+      <SubpageHeroSkeleton />
+      
+      {/* Intro Section Skeleton */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-8 mt-12 text-right" dir="rtl">
+        <div className="space-y-4">
+          <SkeletonTextLine height="h-3" width="w-24" />
+          <SkeletonTextLine height="h-8" width="w-64" />
+          <SkeletonParagraph lines={3} />
+        </div>
+      </div>
+
+      {/* Usage Rules Skeleton */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-6 mt-16 text-right" dir="rtl">
+        <div className="space-y-3">
+          <SkeletonTextLine height="h-3" width="w-28" />
+          <SkeletonTextLine height="h-6" width="w-56" />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="p-5 sm:p-6 bg-slate-50/60 rounded-2xl space-y-3">
+              <SkeletonTextLine height="h-5" width="w-40" />
+              <SkeletonParagraph lines={2} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Intellectual Property & Disclaimer Skeleton */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-6 mt-16 text-right" dir="rtl">
+        <div className="space-y-3">
+          <SkeletonTextLine height="h-3" width="w-24" />
+          <SkeletonTextLine height="h-6" width="w-48" />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="p-5 sm:p-6 bg-slate-50/60 rounded-2xl space-y-3">
+              <SkeletonTextLine height="h-5" width="w-36" />
+              <SkeletonParagraph lines={2} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* =============================================================================
+   🔒 PRIVACY POLICY PAGE SKELETON (/privacy)
+   ============================================================================= */
+
+export function PrivacyPageSkeleton() {
+  return (
+    <>
+      <SubpageHeroSkeleton />
+      
+      {/* Intro Section Skeleton */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-8 mt-12 text-right" dir="rtl">
+        <div className="space-y-4">
+          <SkeletonTextLine height="h-3" width="w-24" />
+          <SkeletonTextLine height="h-8" width="w-64" />
+          <SkeletonParagraph lines={3} />
+        </div>
+      </div>
+
+      {/* Data Collection Skeleton */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-6 mt-16 text-right" dir="rtl">
+        <div className="space-y-3">
+          <SkeletonTextLine height="h-3" width="w-28" />
+          <SkeletonTextLine height="h-6" width="w-56" />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="p-5 sm:p-6 bg-slate-50/60 rounded-2xl space-y-3">
+              <SkeletonTextLine height="h-5" width="w-40" />
+              <SkeletonParagraph lines={2} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Usage & Protection Skeleton */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-6 mt-16 text-right" dir="rtl">
+        <div className="space-y-3">
+          <SkeletonTextLine height="h-3" width="w-24" />
+          <SkeletonTextLine height="h-6" width="w-48" />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="p-5 sm:p-6 bg-slate-50/60 rounded-2xl space-y-3">
+              <SkeletonTextLine height="h-5" width="w-36" />
+              <SkeletonParagraph lines={2} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
