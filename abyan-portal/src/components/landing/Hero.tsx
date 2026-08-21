@@ -2,11 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { sectionFadeUpVariants, itemFadeInRight } from "@/lib/animations";
-
-const MotionImage = motion.create(Image);
 import { AdminLandingSection } from "@/types/admin.types";
 
 export default function Hero({ data }: { data?: AdminLandingSection }) {
@@ -50,22 +48,19 @@ export default function Hero({ data }: { data?: AdminLandingSection }) {
         {...sectionFadeUpVariants}
         className="relative w-full h-full rounded-[20px] sm:rounded-[24px] lg:rounded-[32px] overflow-hidden border-none shadow-none flex-1 group bg-slate-950"
       >
-        {/* Background Image Slider */}
-        <AnimatePresence>
-          <MotionImage
+        {/* Background Image Slider with Instant LCP Paint */}
+        <div className="absolute inset-0 w-full h-full">
+          <Image
             key={currentImageIndex}
             src={images[currentImageIndex]}
             alt="صورة خلفية أبين"
             fill
             priority
-            quality={85}
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="object-cover"
+            sizes="100vw"
+            quality={75}
+            className="object-cover transition-all duration-700 ease-out"
           />
-        </AnimatePresence>
+        </div>
 
         {/* Light Overlay for Contrast */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-slate-950/20 to-slate-950/20"></div>
